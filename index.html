@@ -1299,5 +1299,29 @@
         }
         init();
     </script>
+<!-- 引入 Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // 用你刚才复制的那两个值替换下面的占位符
+  const SUPABASE_URL = 'https://prmhoyvyxthqlrjkeoho.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybWhveXZ5eHRocWxyamtlb2hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTY3NzQsImV4cCI6MjA5Nzk3Mjc3NH0.DWkUXWzNnA_MmBcLZ7tiPXUUyMLqmJEtxc2Nk-q_O44';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 测试：读取 feedbacks 表的数据（如果表是空的，会返回空数组）
+  async function testConnection() {
+    const { data, error } = await supabase
+      .from('feedbacks')
+      .select('*')
+      .limit(1);
+    if (error) {
+      console.error('连接失败:', error.message);
+    } else {
+      console.log('连接成功！', data);
+    }
+  }
+
+  // 页面加载后自动测试
+  testConnection();
+</script>
 </body>
 </html>
