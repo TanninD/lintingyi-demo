@@ -199,14 +199,14 @@
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
                     <div class="dropdown-menu right" id="zoneDropdown">
-                        <div class="zone-item" data-action="select-zone" data-zone="照母山片区 ↔ 汽博/回兴片区">照母山片区（光电园-大竹林）<br>←→ 汽博/回兴片区</div>
+                        <div class="zone-item" data-action="select-zone" data-zone="照母山片区 ↔ 汽博/回兴片区">照母山片区（光电园-大竹林）<br>⇄ 汽博/回兴片区</div>
                         <div class="zone-item disabled">更多线路持续拓展中</div>
                         <div class="zone-item apply" data-action="open-modal" data-target="zoneApplyOverlay">申请开通新片区</div>
                     </div>
                 </div>
                 
                 <div class="marquee-bar">
-                    <span class="marquee-text">🔥 首条通勤互换带开通：照母山片区（光电园-大竹林一带）←→ 汽博/回兴片区，点击右上角查看线路动态</span>
+                    <span class="marquee-text">🔥 首条通勤互换带开通：照母山片区（光电园-大竹林一带）⇄ 汽博/回兴片区，点击右上角查看线路动态</span>
                 </div>
 
                 <div class="large-title">我的车位</div>
@@ -370,9 +370,10 @@
     </div>
 </template>
 
-<template id="tpl-admin-pwd">
+<!-- 修复：将 id 从 tpl-admin-pwd 改为 tpl-admin-password 以匹配自动渲染逻辑 -->
+<template id="tpl-admin-password">
     <div class="modal"><div class="modal-title">管理员验证</div>
-        <input type="password" id="adminPassword" class="ios-input" placeholder="请输入管理密码">
+        <input type="password" id="adminPassword" class="ios-input" placeholder="请输入管理密码 (admin123)">
         <div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">取消</button><button class="btn" data-action="verify-admin">进入</button></div>
     </div>
 </template>
@@ -438,7 +439,7 @@
 <script>
     const App = {
         supabase: supabase.createClient('https://prmhoyvyxthqlrjkeoho.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybWhveXZ5eHRocWxyamtlb2hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTY3NzQsImV4cCI6MjA5Nzk3Mjc3NH0.DWkUXWzNnA_MmBcLZ7tiPXUUyMLqmJEtxc2Nk-q_O44'),
-        ADMIN_HASH: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
+        ADMIN_HASH: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', // 密码: admin123
         FORM_FIELDS: ['name', 'phone', 'car_number', 'home_address', 'work_address', 'time_slot', 'content', 'device_sn', 'city_name', 'start_zone', 'start_location', 'start_property_company', 'start_property_contact', 'end_zone', 'end_location', 'end_property_company', 'end_property_contact', 'remark'],
         state: {
             currentUserPhone: localStorage.getItem('currentUserPhone') || '',
@@ -602,8 +603,8 @@
         },
 
         async deleteRecord(table, id) {
-            await this.safeCall(() => this.supabase.from(table).delete().eq('id', id));
-            this.showToast('已删除');
+            await this.safeCall(() => this.supabase.from(table).delete().eq('id', id), '删除失败：权限受限');
+            this.showToast('已删除 (或被安全策略拦截)');
             this.switchAdminTab(table === 'swap_requests' ? 'swap' : 'feedback');
         },
 
@@ -646,7 +647,6 @@
 
         renderRecommendCards() {
             const container = document.getElementById('swap-recommend');
-            // 优化文案：明确这是基于用户个人地址的精准匹配
             const infoBanner = `<div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px; padding:0 4px;">以下推荐基于您填写的家庭与工作地址精准匹配</div>`;
             
             const cards = [
@@ -806,7 +806,6 @@
                     case 'toggle-city-menu': document.getElementById('cityDropdown').classList.toggle('show'); break;
                     case 'toggle-zone-menu': document.getElementById('zoneDropdown').classList.toggle('show'); break;
                     case 'select-zone': 
-                        // 降级为资讯关注逻辑
                         this.showToast('已为您关注该线路动态'); 
                         document.getElementById('zoneDropdown').classList.remove('show');
                         document.querySelector('.marquee-text').textContent = `📢 已关注线路：${target.dataset.zone}，有新动态将通知您`;
