@@ -2,9 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 三、移动端适配：增加 viewport-fit=cover 以支持安全区 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <!-- 三、移动端适配：PWA 添加到主屏幕配置 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="邻停易">
@@ -12,9 +10,9 @@
     <style>
         :root {
             --brand-green: #34C759;
-            --brand-green-dark: #2EA84C;
             --brand-blue: #007AFF;
             --warning: #FF3B30;
+            --orange: #FF9500;
             --bg: #F2F2F7;
             --card: #FFFFFF;
             --text-primary: #1C1C1E;
@@ -23,63 +21,28 @@
             --border: #E5E5EA;
             --shadow: 0 2px 10px rgba(0,0,0,0.03);
             --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
-            --radius: 12px;
             --radius-xl: 16px;
-            --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+            --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', sans-serif;
         }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: var(--font-family);
-            background: #000;
-            display: flex; align-items: center; justify-content: center;
-            min-height: 100vh; user-select: none; -webkit-user-select: none; padding: 10px;
-        }
-        .phone-frame {
-            width: 390px; max-width: 100%; height: 844px; max-height: 95vh;
-            background: #000; border-radius: 48px; padding: 12px;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.5); border: 2px solid #333;
-        }
-        .phone-screen {
-            width: 100%; height: 100%; background: var(--bg);
-            border-radius: 36px; overflow: hidden; display: flex; flex-direction: column;
-            position: relative;
-        }
-        .status-bar {
-            height: 44px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 24px 0 32px; font-size: 15px; font-weight: 600; flex-shrink: 0;
-            background: rgba(242, 242, 247, 0.8); backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px); z-index: 10;
-            /* 三、适配顶部安全区 */
-            padding-top: env(safe-area-inset-top);
-            height: calc(44px + env(safe-area-inset-top));
-        }
+        body { font-family: var(--font-family); background: #000; display: flex; align-items: center; justify-content: center; min-height: 100vh; user-select: none; padding: 10px; }
+        .phone-frame { width: 390px; max-width: 100%; height: 844px; max-height: 95vh; background: #000; border-radius: 48px; padding: 12px; box-shadow: 0 30px 80px rgba(0,0,0,0.5); border: 2px solid #333; }
+        .phone-screen { width: 100%; height: 100%; background: var(--bg); border-radius: 36px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        
+        .status-bar { height: calc(44px + env(safe-area-inset-top)); padding: env(safe-area-inset-top) 24px 0 32px; display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 600; flex-shrink: 0; background: rgba(242, 242, 247, 0.8); backdrop-filter: saturate(180%) blur(20px); z-index: 10; }
         .status-bar svg { width: 18px; height: 18px; fill: var(--text-primary); margin-left: 5px; }
         .status-right { display: flex; align-items: center; }
         
-        /* 二、页面切换动画优化：Tab交叉淡入 */
-        .main-content { flex:1; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; padding: 0 16px; 
-            /* 三、适配底部安全区 */
-            padding-bottom: calc(100px + env(safe-area-inset-bottom)); 
-        }
+        .main-content { flex:1; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; padding: 0 16px calc(100px + env(safe-area-inset-bottom)); }
         .page { display:none; }
         .page.active { display:block; animation: crossFade 0.3s ease forwards; }
         @keyframes crossFade { from { opacity:0.5; } to { opacity:1; } }
-        @keyframes popIn { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
         
         .large-title { font-size: 32px; font-weight: 800; color: var(--text-primary); padding: 16px 4px 12px; letter-spacing: -0.5px; }
         .section-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; margin-top: 24px; padding-left: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        /* 三、底部导航适配安全区 */
-        .bottom-nav {
-            position: absolute; bottom:0; left:0; right:0;
-            background: rgba(255, 255, 255, 0.72); backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            display: flex; align-items: flex-start; justify-content: space-around;
-            padding-top: 8px; z-index: 20; border-top: 0.5px solid var(--border);
-            height: calc(83px + env(safe-area-inset-bottom));
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px 12px; transition: 0.2s; min-width: 52px; position: relative; color: var(--text-secondary); }
+        .bottom-nav { position: absolute; bottom:0; left:0; right:0; background: rgba(255, 255, 255, 0.72); backdrop-filter: saturate(180%) blur(20px); display: flex; align-items: flex-start; justify-content: space-around; padding-top: 8px; z-index: 20; border-top: 0.5px solid var(--border); height: calc(83px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px 12px; color: var(--text-secondary); }
         .nav-item svg { width: 26px; height: 26px; stroke-width: 1.5; transition: 0.2s; }
         .nav-item .nav-label { font-size: 10px; font-weight: 500; }
         .nav-item.active { color: var(--brand-green); }
@@ -94,44 +57,45 @@
         
         .city-bar { display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 600; margin-bottom: 8px; cursor: pointer; width: fit-content; padding: 6px 10px; margin-left: -6px; border-radius: 10px; }
         .city-bar:active { background: rgba(0,0,0,0.05); }
-        .parking-status-card { text-align: center; cursor: pointer; transition: 0.2s; padding: 24px 16px; }
-        .parking-status-card:active { transform: scale(0.98); }
-        .status-ring { width: 80px; height: 80px; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; transition: 0.3s; background: #E8F8EE; }
+        .parking-card { text-align: center; cursor: pointer; padding: 24px 16px; }
+        .parking-card:active { transform: scale(0.98); }
+        .status-ring { width: 80px; height: 80px; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; background: #E8F8EE; }
         .status-ring.free svg { stroke: var(--brand-green); }
         .status-ring.occupied { background: #E8F0FE; }
         .status-ring.occupied svg { stroke: var(--brand-blue); }
         .status-ring.swapping { background: #FFF4E6; }
-        .status-ring.swapping svg { stroke: #FF9500; }
+        .status-ring.swapping svg { stroke: var(--orange); }
         .status-ring svg { width: 36px; height: 36px; fill: none; stroke-width: 1.5; }
         
-        .status-title { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; letter-spacing: -0.3px; }
+        .status-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.3px; }
         .status-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
         
         .quick-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-        .quick-action-chip { display: flex; align-items: center; gap: 8px; background: var(--card); padding: 10px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; color: var(--text-primary); box-shadow: var(--shadow); cursor: pointer; transition: 0.2s; border: 0.5px solid var(--border); }
-        .quick-action-chip:active { transform: scale(0.95); background: #f0f0f5; }
-        .quick-action-chip svg { width: 18px; height: 18px; fill: var(--brand-blue); }
+        .quick-chip { display: flex; align-items: center; gap: 8px; background: var(--card); padding: 10px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; box-shadow: var(--shadow); cursor: pointer; border: 0.5px solid var(--border); }
+        .quick-chip:active { transform: scale(0.95); background: #f0f0f5; }
+        .quick-chip svg { width: 18px; height: 18px; fill: var(--brand-blue); }
 
         .timeline-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
         .timeline-scroll::-webkit-scrollbar { display: none; }
         .timeline-card { min-width: 160px; background: var(--card); border-radius: 12px; padding: 14px; border: 0.5px solid var(--border); }
         .tl-time { font-size: 12px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
-        .tl-text { font-size: 13px; color: var(--text-primary); line-height: 1.4; }
+        .tl-text { font-size: 13px; line-height: 1.4; }
 
         .ios-list { background: var(--card); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow); margin-top: 8px; border: 0.5px solid rgba(0,0,0,0.04); }
-        .ios-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 0.5px solid var(--border); font-size: 16px; color: var(--text-primary); min-height: 58px; }
+        .ios-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 0.5px solid var(--border); font-size: 16px; min-height: 58px; }
         .ios-item:last-child { border-bottom: none; }
         .ios-item:active { background: #f0f0f5; }
-        .ios-item .icon-box { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .ios-item .icon-box svg { width: 18px; height: 18px; stroke: #fff; stroke-width: 2; fill: none; }
-        .ios-item .menu-arrow { margin-left: auto; color: var(--text-muted); }
-        .ios-item .menu-arrow svg { width: 12px; height: 12px; stroke: var(--text-muted); stroke-width: 2.5; fill: none; }
+        .icon-box { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .icon-box svg { width: 18px; height: 18px; stroke: #fff; stroke-width: 2; fill: none; }
+        .menu-arrow { margin-left: auto; color: var(--text-muted); }
+        .menu-arrow svg { width: 12px; height: 12px; stroke: var(--text-muted); stroke-width: 2.5; fill: none; }
+        .badge-right { margin-left: auto; font-weight: 600; font-size: 13px; }
+        .badge-right.locked { color: var(--text-secondary); opacity: 0.5; }
 
         .tab-switch { display: flex; background: #EDEDF0; border-radius: 10px; padding: 3px; margin: 16px 0; }
-        .tab-btn { flex: 1; padding: 8px; border-radius: 8px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: var(--text-secondary); transition: 0.2s; cursor: pointer; }
+        .tab-btn { flex: 1; padding: 8px; border-radius: 8px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; }
         .tab-btn.active { background: #fff; color: var(--text-primary); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
-        /* 二、互换卡片：增加绝对定位以支持滑动消失 */
         .swap-card { padding: 18px; position: relative; transition: transform 0.4s ease, opacity 0.4s ease; touch-action: pan-y; }
         .match-badge { background: #E8F8EE; color: var(--brand-green); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 8px; float: right; }
         .user-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
@@ -140,37 +104,40 @@
         .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
         .tag { font-size: 11px; padding: 4px 10px; border-radius: 6px; background: #F0F0F5; color: var(--text-secondary); font-weight: 500; }
         .card-actions { display: flex; gap: 10px; margin-top: 16px; }
-        .btn-pass, .btn-like { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;}
+        .btn-pass, .btn-like { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;}
         .btn-pass { background: var(--bg); color: var(--text-secondary); }
         .btn-like { background: var(--brand-green); color: #fff; }
-        .btn-pass:active, .btn-like:active { transform: scale(0.97); }
 
-        .overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index:100; display:flex; align-items:center; justify-content:center; padding: 20px; }
-        .overlay.hidden { display:none; }
-        .modal { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; width: 100%; max-width: 340px; animation: popIn 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards; box-shadow: var(--shadow-lg); max-height: 85vh; overflow-y: auto; }
-        .modal-title { font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 20px; color: var(--text-primary); }
+        .overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index:100; display:flex; align-items:center; justify-content:center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; }
+        .overlay.show { opacity: 1; visibility: visible; }
+        .modal { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; width: 100%; max-width: 340px; box-shadow: var(--shadow-lg); max-height: 85vh; overflow-y: auto; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1); }
+        .overlay.show .modal { transform: scale(1); }
+        .modal-title { font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 20px; }
         .form-group { margin-bottom: 16px; }
         .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; padding-left: 4px; }
-        .ios-input { width: 100%; padding: 14px 16px; background: #F2F2F7; border: 1px solid transparent; border-radius: 12px; font-size: 16px; color: var(--text-primary); outline: none; font-family: inherit; transition: 0.2s; }
+        .ios-input { width: 100%; padding: 14px 16px; background: #F2F2F7; border: 1px solid transparent; border-radius: 12px; font-size: 16px; outline: none; font-family: inherit; transition: 0.2s; }
         .ios-input:focus { border-color: var(--brand-blue); background: #fff; box-shadow: 0 0 0 4px rgba(0,122,255,0.1); }
         textarea.ios-input { resize: none; min-height: 80px; }
         .modal-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
         
         .msg-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
         .msg-item:last-child { border: none; }
-        .msg-item:active { opacity: 0.6; }
         .msg-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .msg-icon svg { width: 20px; height: 20px; fill: #fff; }
         .msg-content { flex: 1; min-width: 0; }
-        .msg-title { font-weight: 600; font-size: 15px; color: var(--text-primary); margin-bottom: 2px; }
+        .msg-title { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
         .msg-preview { font-size: 13px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .msg-time { font-size: 12px; color: var(--text-secondary); flex-shrink: 0; }
 
-        .credit-score-circle { width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(var(--brand-green) 0% 85%, #E5E5EA 85% 100%); display: flex; align-items: center; justify-content: center; margin: 20px auto 16px; position: relative; }
-        .credit-score-circle::before { content: ''; position: absolute; width: 110px; height: 110px; background: #fff; border-radius: 50%; }
+        .credit-circle { width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(var(--brand-green) 0% 85%, #E5E5EA 85% 100%); display: flex; align-items: center; justify-content: center; margin: 20px auto 16px; position: relative; }
+        .credit-circle::before { content: ''; position: absolute; width: 110px; height: 110px; background: #fff; border-radius: 50%; }
         .score-inner { position: relative; z-index: 1; text-align: center; }
-        .score-num { font-size: 40px; font-weight: 800; color: var(--text-primary); line-height: 1; }
+        .score-num { font-size: 40px; font-weight: 800; line-height: 1; }
         .score-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+        .conn-status { text-align: center; padding: 8px; font-size: 12px; font-weight: 600; border-radius: 10px; margin-bottom: 12px; }
+        .conn-status.loading { background: #FFF4E6; color: var(--orange); }
+        .conn-status.error { background: #FFF0F0; color: var(--warning); }
+        .conn-status.success { background: #E8F8EE; color: var(--brand-green); }
 
         @media (max-width: 420px) {
             body { padding: 0; background: var(--bg); }
@@ -192,17 +159,17 @@
         </div>
 
         <div class="main-content" id="mainContent">
-            <div id="connection-status" style="text-align: center; padding: 8px; font-size: 12px; font-weight: 600; border-radius: 10px; margin-bottom: 12px; background: #FFF4E6; color: #FF9500;">连接数据库...</div>
+            <div id="conn-status" class="conn-status loading">连接数据库...</div>
             
             <div class="page active" id="page-home">
-                <div class="city-bar" data-action="show-city">
+                <div class="city-bar" data-action="show-toast" data-msg="当前城市：重庆">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                     重庆
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </div>
                 <div class="large-title">我的车位</div>
                 
-                <div class="card parking-status-card" data-action="toggle-parking">
+                <div class="card parking-card" data-action="toggle-parking">
                     <div class="status-ring free" id="statusRing"></div>
                     <div class="status-title" id="statusTitle">空闲中</div>
                     <div class="status-subtitle" id="statusSubtitle">可共享时段 8:30 - 18:50</div>
@@ -229,11 +196,11 @@
 
                 <div class="section-title">快捷操作</div>
                 <div class="quick-actions">
-                    <div class="quick-action-chip" data-action="show-scan">
+                    <div class="quick-chip" data-action="open-modal" data-target="scanOverlay">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><rect x="7" y="7" width="10" height="10" rx="1"></rect></svg>
                         扫码降锁
                     </div>
-                    <div class="quick-action-chip" data-action="open-booking">
+                    <div class="quick-chip" data-action="open-modal" data-target="bookingOverlay">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         预约互换
                     </div>
@@ -242,7 +209,7 @@
 
             <div class="page" id="page-swap">
                 <div class="large-title">互换中心</div>
-                <div class="tab-switch">
+                <div class="tab-switch" id="swapTabs">
                     <button class="tab-btn active" data-tab="recommend">推荐</button>
                     <button class="tab-btn" data-tab="ongoing">进行中</button>
                     <button class="tab-btn" data-tab="history">历史</button>
@@ -257,8 +224,8 @@
             
             <div class="page" id="page-me">
                 <div class="large-title">我的</div>
-                <div class="card" style="display:flex; align-items:center; gap:16px; cursor:pointer; margin-bottom: 24px;" data-action="open-profile">
-                    <div class="profile-avatar" id="profileAvatar" style="width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg, #34C759, #00C7BE); display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; font-weight:700;">邻</div>
+                <div class="card" style="display:flex; align-items:center; gap:16px; cursor:pointer; margin-bottom: 24px;" data-action="open-modal" data-target="profileOverlay">
+                    <div class="avatar" id="profileAvatar" style="width:64px; height:64px; background:linear-gradient(135deg, #34C759, #00C7BE); font-size:24px;">邻</div>
                     <div style="flex:1;">
                         <div style="font-weight:700;font-size:20px;" id="profileName">邻停易用户</div>
                         <div style="font-size:14px;color:var(--text-secondary); margin-top:4px;" id="profilePhone">138****6789</div>
@@ -270,34 +237,30 @@
                 <div class="ios-list">
                     <div class="ios-item" data-action="load-my-swaps">
                         <div class="icon-box" style="background:#007AFF;"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-                        我的互换订单
-                        <span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+                        我的互换订单<span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
                     </div>
-                    <div class="ios-item" data-action="open-feedback">
+                    <div class="ios-item" data-action="open-modal" data-target="feedbackOverlay">
                         <div class="icon-box" style="background:#FF9500;"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
-                        意见反馈
-                        <span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+                        意见反馈<span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
                     </div>
-                    <div class="ios-item" data-action="open-invite">
+                    <div class="ios-item" data-action="open-modal" data-target="inviteOverlay">
                         <div class="icon-box" style="background:#AF52DE;"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"></path><path d="M2 7h20v5H2z"></path><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg></div>
-                        邀请好友
-                        <span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+                        邀请好友<span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
                     </div>
                 </div>
 
                 <div class="section-title">管理</div>
                 <div class="ios-list">
-                    <div class="ios-item" data-action="open-admin">
+                    <div class="ios-item" data-action="open-modal" data-target="adminPasswordOverlay">
                         <div class="icon-box" style="background:#8E8E93;"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
-                        管理后台
-                        <span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+                        管理后台<span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
                     </div>
                 </div>
                 <div id="mySwapsList" style="margin-top:16px;"></div>
             </div>
         </div>
 
-        <div class="bottom-nav">
+        <div class="bottom-nav" id="bottomNav">
             <div class="nav-item active" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span class="nav-label">首页</span></div>
             <div class="nav-item" data-page="swap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg><span class="nav-label">互换</span></div>
             <div class="nav-item" data-page="msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg><span class="nav-label">消息</span></div>
@@ -307,485 +270,475 @@
     </div>
 </div>
 
-<div class="overlay hidden" id="bookingOverlay"></div>
-<div class="overlay hidden" id="feedbackOverlay"></div>
-<div class="overlay hidden" id="scanOverlay"></div>
-<div class="overlay hidden" id="profileOverlay"></div>
-<div class="overlay hidden" id="adminPasswordOverlay"></div>
-<div class="overlay hidden" id="adminPanelOverlay"></div>
-<div class="overlay hidden" id="inviteOverlay"></div>
-<div class="overlay hidden" id="historyDetailOverlay"></div>
+<template id="tpl-booking">
+    <div class="modal"><div class="modal-title">预约互换车位</div>
+        <form data-form="booking">
+            <div class="form-group"><label>姓名 *</label><input type="text" name="name" class="ios-input" required></div>
+            <div class="form-group"><label>手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div>
+            <div class="form-group"><label>车牌号</label><input type="text" name="car_number" class="ios-input"></div>
+            <div class="form-group"><label>家庭地址 *</label><input type="text" name="home_address" class="ios-input" required></div>
+            <div class="form-group"><label>工作地址 *</label><input type="text" name="work_address" class="ios-input" required></div>
+            <div class="form-group"><label>可互换时段 *</label><input type="text" name="time_slot" class="ios-input" required></div>
+            <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交预约</button></div>
+        </form>
+    </div>
+</template>
+
+<template id="tpl-feedback">
+    <div class="modal"><div class="modal-title">意见反馈</div>
+        <form data-form="feedback">
+            <div class="form-group"><label>反馈内容 *</label><textarea name="content" rows="3" class="ios-input" required></textarea></div>
+            <div class="form-group"><label>评分</label><div class="star-rating" id="starRating" style="display:flex;gap:8px;font-size:28px;cursor:pointer;color:#FFCC00;">
+                <span class="star active" data-value="1" data-action="rate-star">★</span><span class="star active" data-value="2" data-action="rate-star">★</span><span class="star active" data-value="3" data-action="rate-star">★</span><span class="star active" data-value="4" data-action="rate-star">★</span><span class="star active" data-value="5" data-action="rate-star">★</span>
+            </div></div>
+            <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交反馈</button></div>
+        </form>
+    </div>
+</template>
+
+<template id="tpl-scan">
+    <div class="modal"><div class="modal-title">扫码降锁</div>
+        <div style="text-align:center;padding:20px 0;color:var(--text-secondary);">将摄像头对准地锁二维码<br><span style="font-size:12px;">(演示模式)</span></div>
+        <div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">取消</button><button class="btn" data-action="mock-scan">模拟扫码成功</button></div>
+    </div>
+</template>
+
+<template id="tpl-profile">
+    <div class="modal"><div class="modal-title">编辑个人信息</div>
+        <form data-form="profile">
+            <div class="form-group"><label>姓名</label><input type="text" name="name" class="ios-input"></div>
+            <div class="form-group"><label>手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div>
+            <div class="form-group"><label>车牌号</label><input type="text" name="car_number" class="ios-input"></div>
+            <div class="form-group"><label>家庭地址</label><input type="text" name="home_address" class="ios-input"></div>
+            <div class="form-group"><label>工作地址</label><input type="text" name="work_address" class="ios-input"></div>
+            <div class="form-group"><label>设备编号</label><input type="text" name="device_sn" class="ios-input"></div>
+            <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">保存</button></div>
+        </form>
+    </div>
+</template>
+
+<template id="tpl-invite">
+    <div class="modal"><div class="modal-title">邀请好友</div>
+        <div style="text-align:center;margin-bottom:20px;">
+            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:8px;">您的邀请码</p>
+            <strong id="inviteCode" style="font-size:20px;letter-spacing:1px;"></strong>
+            <img src="https://tannind.github.io/lintingyi-demo/qrcode.png" alt="邀请二维码" style="width:180px;height:180px;margin-top:16px;border-radius:12px;box-shadow:var(--shadow);" onerror="this.style.display='none'">
+        </div>
+        <button class="btn" data-action="copy-invite">复制邀请码</button>
+    </div>
+</template>
+
+<template id="tpl-admin-pwd">
+    <div class="modal"><div class="modal-title">管理员验证</div>
+        <input type="password" id="adminPassword" class="ios-input" placeholder="请输入管理密码">
+        <div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">取消</button><button class="btn" data-action="verify-admin">进入</button></div>
+    </div>
+</template>
+
+<template id="tpl-admin-panel">
+    <div class="modal" style="max-width:500px;"><div class="modal-title">管理后台</div>
+        <div class="tab-switch" id="adminTabs" style="margin-bottom:16px;">
+            <button class="tab-btn active" data-admin-tab="swap">预约管理</button>
+            <button class="tab-btn" data-admin-tab="feedback">反馈管理</button>
+        </div>
+        <div id="adminTableContainer" style="max-height:400px;overflow-y:auto;"></div>
+        <button class="btn btn-cancel" style="margin-top:12px;" data-action="close-modal">关闭</button>
+    </div>
+</template>
+
+<!-- 新增：消息详情弹窗模板 -->
+<template id="tpl-msg-detail">
+    <div class="modal"><div class="modal-title" id="msgDetailTitle">消息详情</div>
+        <div id="msgDetailContent" style="line-height:1.6; color:var(--text-primary); font-size:14px;"></div>
+        <button class="btn btn-cancel" style="margin-top:20px;" data-action="close-modal">关闭</button>
+    </div>
+</template>
+
+<!-- 弹窗容器 -->
+<div class="overlay" id="bookingOverlay"></div>
+<div class="overlay" id="feedbackOverlay"></div>
+<div class="overlay" id="scanOverlay"></div>
+<div class="overlay" id="profileOverlay"></div>
+<div class="overlay" id="adminPasswordOverlay"></div>
+<div class="overlay" id="adminPanelOverlay"></div>
+<div class="overlay" id="inviteOverlay"></div>
+<div class="overlay" id="msgDetailOverlay"></div> <!-- 新增容器 -->
 <div class="toast" id="toast" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.8); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); color: #fff; padding: 16px 24px; border-radius: 16px; font-size: 14px; z-index:200; opacity:0; pointer-events:none; transition:0.3s; white-space:nowrap;"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const SUPABASE_URL = 'https://prmhoyvyxthqlrjkeoho.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybWhveXZ5eHRocWxyamtlb2hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTY3NzQsImV4cCI6MjA5Nzk3Mjc3NH0.DWkUXWzNnA_MmBcLZ7tiPXUUyMLqmJEtxc2Nk-q_O44';
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const ADMIN_PASSWORD = 'admin123';
-    let currentUserPhone = localStorage.getItem('currentUserPhone') || '';
-    let feedbackRating = 5;
-    let parkingStatus = 'free';
+    const App = {
+        supabase: supabase.createClient('https://prmhoyvyxthqlrjkeoho.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybWhveXZ5eHRocWxyamtlb2hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTY3NzQsImV4cCI6MjA5Nzk3Mjc3NH0.DWkUXWzNnA_MmBcLZ7tiPXUUyMLqmJEtxc2Nk-q_O44'),
+        ADMIN_HASH: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
+        FORM_FIELDS: ['name', 'phone', 'car_number', 'home_address', 'work_address', 'time_slot', 'content', 'device_sn'],
+        state: {
+            currentUserPhone: localStorage.getItem('currentUserPhone') || '',
+            feedbackRating: 5,
+            parkingStatus: 'free',
+            cachedPages: {}
+        },
+        icons: {
+            car: '<svg viewBox="0 0 24 24"><path d="M5 17H3v-5l2-5h12l2 5v5h-2M5 17h14M5 17v2h2v-2M17 17v2h2v-2M7 12h10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            park: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><text x="12" y="16" font-size="10" text-anchor="middle" fill="currentColor" stroke="none">P</text></svg>',
+            swap: '<svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>'
+        },
 
-    const icons = {
-        car: '<svg viewBox="0 0 24 24"><path d="M5 17H3v-5l2-5h12l2 5v5h-2M5 17h14M5 17v2h2v-2M17 17v2h2v-2M7 12h10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        park: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><text x="12" y="16" font-size="10" text-anchor="middle" fill="currentColor" stroke="none">P</text></svg>',
-        swap: '<svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>'
+        init() {
+            document.getElementById('statusRing').innerHTML = this.icons.park;
+            this.checkConnection();
+            this.loadUserProfile();
+            this.bindEvents();
+        },
+
+        async safeCall(fn, errorMsg = '操作失败') {
+            try { return await fn(); } 
+            catch (err) { console.error(err); this.showToast('⚠️ ' + errorMsg); return { data: null, error: err }; }
+        },
+
+        showToast(msg) {
+            const toast = document.getElementById('toast');
+            clearTimeout(this.toastTimer);
+            toast.textContent = msg;
+            toast.style.opacity = 1;
+            toast.style.transform = 'translate(-50%,-50%) scale(1)';
+            if (navigator.vibrate) navigator.vibrate(15);
+            this.toastTimer = setTimeout(() => {
+                toast.style.opacity = 0;
+                toast.style.transform = 'translate(-50%,-50%) scale(0.8)';
+            }, 2000);
+        },
+
+        async checkConnection() {
+            const el = document.getElementById('conn-status');
+            const { error } = await this.safeCall(() => this.supabase.from('feedbacks').select('*').limit(1), '连接超时');
+            el.className = 'conn-status ' + (error ? 'error' : 'success');
+            el.textContent = error ? '⚠️ 连接失败' : '✅ 数据库已连接';
+        },
+
+        openModal(targetId) {
+            const overlay = document.getElementById(targetId);
+            if (!overlay) return;
+            if (overlay.children.length === 0) {
+                const tplId = 'tpl-' + targetId.replace('Overlay', '');
+                const tpl = document.getElementById(tplId);
+                if (tpl) overlay.appendChild(tpl.content.cloneNode(true));
+            }
+            if (targetId === 'profileOverlay') this.fillProfileForm();
+            if (targetId === 'inviteOverlay') document.getElementById('inviteCode').textContent = this.state.currentUserPhone || '未设置手机号';
+            overlay.classList.add('show');
+        },
+
+        closeModal(targetEl) {
+            const overlay = targetEl.closest('.overlay');
+            if (overlay) overlay.classList.remove('show');
+        },
+
+        getFormData(formEl) {
+            const data = {};
+            this.FORM_FIELDS.forEach(field => {
+                const el = formEl.querySelector(`[name="${field}"]`);
+                if (el) data[field] = el.value.trim();
+            });
+            return data;
+        },
+
+        async handleSubmit(formEl) {
+            const type = formEl.dataset.form;
+            if (type === 'booking') return this.submitBooking(formEl);
+            if (type === 'feedback') return this.submitFeedback(formEl);
+            if (type === 'profile') return this.saveProfile(formEl);
+        },
+
+        async submitBooking(form) {
+            const data = this.getFormData(form);
+            const { error } = await this.safeCall(() => this.supabase.from('swap_requests').insert([data]));
+            if (!error) { this.showToast('✅ 预约成功！'); this.closeModal(form); }
+        },
+
+        async submitFeedback(form) {
+            const data = this.getFormData(form);
+            const payload = { content: data.content, rating: this.state.feedbackRating, user_id: this.state.currentUserPhone || 'anonymous' };
+            const { error } = await this.safeCall(() => this.supabase.from('feedbacks').insert([payload]));
+            if (!error) { this.showToast('✅ 感谢反馈！'); this.closeModal(form); }
+        },
+
+        async fillProfileForm() {
+            if (!this.state.currentUserPhone) return;
+            const { data } = await this.safeCall(() => this.supabase.from('user_profiles').select('*').eq('phone', this.state.currentUserPhone).single());
+            const form = document.querySelector('#profileOverlay form');
+            if (data && form) {
+                this.FORM_FIELDS.forEach(f => { if (form[f]) form[f].value = data[f] || ''; });
+            }
+        },
+
+        async saveProfile(form) {
+            const data = this.getFormData(form);
+            const { error } = await this.safeCall(() => this.supabase.from('user_profiles').upsert(data, { onConflict: 'phone' }));
+            if (!error) {
+                this.state.currentUserPhone = data.phone;
+                localStorage.setItem('currentUserPhone', data.phone);
+                this.loadUserProfile();
+                this.showToast('✅ 保存成功！');
+                this.closeModal(form);
+            }
+        },
+
+        async loadUserProfile() {
+            if (!this.state.currentUserPhone) return;
+            const { data } = await this.safeCall(() => this.supabase.from('user_profiles').select('*').eq('phone', this.state.currentUserPhone).single());
+            if (data) {
+                document.getElementById('profileName').textContent = data.name || '邻停易用户';
+                document.getElementById('profilePhone').textContent = data.phone;
+                document.getElementById('profileAvatar').textContent = (data.name || '邻')[0];
+            }
+        },
+
+        async verifyAdmin() {
+            const input = document.getElementById('adminPassword').value;
+            const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
+            const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+            if (hashHex === this.ADMIN_HASH) {
+                this.closeModal(document.getElementById('adminPassword'));
+                this.openModal('adminPanelOverlay');
+                this.switchAdminTab('swap');
+            } else { this.showToast('❌ 密码错误'); }
+        },
+
+        async switchAdminTab(tab) {
+            document.querySelectorAll('#adminTabs .tab-btn').forEach(b => b.classList.toggle('active', b.dataset.adminTab === tab));
+            const table = tab === 'swap' ? 'swap_requests' : 'feedbacks';
+            const { data } = await this.safeCall(() => this.supabase.from(table).select('*').order('created_at', { ascending: false }));
+            const container = document.getElementById('adminTableContainer');
+            if (!data || data.length === 0) { container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;">暂无记录</div>'; return; }
+            container.innerHTML = data.map(item => {
+                if (tab === 'swap') return `<div class="card" style="padding:14px;margin-bottom:8px;"><b>${item.name}</b> · ${item.phone}<br><span style="font-size:13px;color:var(--text-secondary);">${item.home_address} → ${item.work_address}</span><br><button style="color:var(--warning);margin-top:8px;font-size:13px;border:none;background:none;" data-action="delete-record" data-table="swap_requests" data-id="${item.id}">删除</button></div>`;
+                else return `<div class="card" style="padding:14px;margin-bottom:8px;"><b>${item.user_id || '匿名'}</b> · 评分：${item.rating}<br><span style="font-size:13px;color:var(--text-secondary);">${item.content}</span><br><button style="color:var(--warning);margin-top:8px;font-size:13px;border:none;background:none;" data-action="delete-record" data-table="feedbacks" data-id="${item.id}">删除</button></div>`;
+            }).join('');
+        },
+
+        async deleteRecord(table, id) {
+            await this.safeCall(() => this.supabase.from(table).delete().eq('id', id));
+            this.showToast('已删除');
+            this.switchAdminTab(table === 'swap_requests' ? 'swap' : 'feedback');
+        },
+
+        async loadMySwaps() {
+            const container = document.getElementById('mySwapsList');
+            container.innerHTML = '<div class="card" style="text-align:center;color:var(--text-muted);">加载中...</div>';
+            const { data } = await this.safeCall(() => this.supabase.from('swap_requests').select('*').order('created_at', { ascending: false }));
+            if (!data || data.length === 0) { container.innerHTML = '<div class="card" style="text-align:center;color:var(--text-muted);">暂无预约记录</div>'; return; }
+            container.innerHTML = '<div class="section-title">我的预约</div>' + data.map(item => `
+                <div class="card" style="padding:14px;"><b>${item.name}</b> · ${item.phone}<br>
+                <span style="color:var(--text-secondary);font-size:13px;">${item.home_address} → ${item.work_address}</span><br>
+                <span style="font-size:12px;color:var(--text-muted);">${item.time_slot}</span></div>`).join('');
+        },
+
+        toggleParking() {
+            if (navigator.vibrate) navigator.vibrate(10);
+            const ring = document.getElementById('statusRing');
+            const title = document.getElementById('statusTitle');
+            const subtitle = document.getElementById('statusSubtitle');
+            const btn = document.getElementById('statusBtn');
+            const s = this.state.parkingStatus;
+            
+            if (s === 'free') {
+                this.state.parkingStatus = 'occupied';
+                ring.className = 'status-ring occupied'; ring.innerHTML = this.icons.car;
+                title.textContent = '李女士正在使用'; subtitle.textContent = '占用中 · 剩余 3小时15分';
+                btn.textContent = '查看详情'; btn.className = 'btn btn-outline';
+            } else if (s === 'occupied') {
+                this.state.parkingStatus = 'swapping';
+                ring.className = 'status-ring swapping'; ring.innerHTML = this.icons.swap;
+                title.textContent = '你正在使用张先生的车位'; subtitle.textContent = '需在 17:30 前驶离';
+                btn.textContent = '导航至该车位'; btn.className = 'btn';
+            } else {
+                this.state.parkingStatus = 'free';
+                ring.className = 'status-ring free'; ring.innerHTML = this.icons.park;
+                title.textContent = '空闲中'; subtitle.textContent = '可共享时段 8:30 - 18:50';
+                btn.textContent = '一键发布闲置'; btn.className = 'btn';
+            }
+        },
+
+        // 恢复多个推荐卡片数据
+        renderRecommendCards() {
+            const container = document.getElementById('swap-recommend');
+            const cards = [
+                { name:'李女士', credit:4.9, match:89, mySpot:'A小区12号', theirSpot:'B写字楼B2-15', myTime:'8:30-18:50', theirTime:'8:00-18:30', tags:['步行3分钟','时间重叠96%'] },
+                { name:'王先生', credit:4.7, match:82, mySpot:'A小区12号', theirSpot:'C园区D3-08', myTime:'8:30-18:50', theirTime:'9:00-19:00', tags:['步行5分钟','时间重叠88%'] },
+                { name:'刘女士', credit:4.8, match:78, mySpot:'A小区12号', theirSpot:'D写字楼E1-22', myTime:'8:30-18:50', theirTime:'8:00-18:00', tags:['步行7分钟','充电桩可用'] }
+            ];
+            container.innerHTML = cards.map((c,i) => `
+                <div class="card swap-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span>
+                    <div class="user-row"><div class="avatar">${c.name[0]}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div>
+                    <div class="swap-route">🅰️ 我的车位：${c.mySpot} ⇄ 🅱️ 对方车位：${c.theirSpot}</div>
+                    <div class="swap-route" style="background:transparent;padding:4px 0;">⏱️ 我的可用：${c.myTime} | 对方可用：${c.theirTime}</div>
+                    <div class="tag-row">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+                    <div class="card-actions"><button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button><button class="btn-like" data-action="swipe-card" data-type="like" data-id="swapCard${i}">想换</button></div>
+                </div>`).join('');
+            this.bindSwipeGestures();
+        },
+
+        bindSwipeGestures() {
+            document.querySelectorAll('.swap-card').forEach(card => {
+                let startX = 0, moveX = 0;
+                card.addEventListener('touchstart', (e) => {
+                    if (e.target.closest('button')) return;
+                    startX = e.touches[0].clientX;
+                    card.style.transition = 'none';
+                }, { passive: true });
+                
+                card.addEventListener('touchmove', (e) => {
+                    if (e.target.closest('button')) return;
+                    moveX = e.touches[0].clientX - startX;
+                    card.style.transform = `translateX(${moveX}px) rotate(${moveX/20}deg)`;
+                }, { passive: true });
+                
+                card.addEventListener('touchend', () => {
+                    card.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+                    if (moveX > 100) this.swipeCard('like', card.id);
+                    else if (moveX < -100) this.swipeCard('pass', card.id);
+                    else card.style.transform = 'translateX(0) rotate(0)';
+                });
+            });
+        },
+
+        swipeCard(type, id) {
+            const card = document.getElementById(id);
+            if (!card) return;
+            card.style.transform = type === 'like' ? 'translateX(120%) rotate(10deg)' : 'translateX(-120%) rotate(-10deg)';
+            card.style.opacity = '0';
+            setTimeout(() => card.remove(), 400);
+            if (type === 'like') { if (navigator.vibrate) navigator.vibrate(30); this.showToast('🎉 配对成功！'); }
+        },
+
+        // 扩充消息内容，支持点击查看详情
+        renderMessages() {
+            document.getElementById('page-msg').innerHTML = `
+                <div class="large-title">消息</div>
+                <div class="section-title">系统通知</div>
+                <div class="card" style="padding:0 16px;">
+                    <div class="msg-item" data-action="show-msg-detail" data-title="配对成功！" data-content="恭喜！您与李女士（信用分4.9）成功配对。\n互换时间：今日 8:30-18:30\n互换位置：B写字楼B2-15\n请按时到达指定车位，祝您使用愉快！">
+                        <div class="msg-icon" style="background:#FF9500;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+                        <div class="msg-content"><div class="msg-title">配对成功！</div><div class="msg-preview">你与李女士配对成功</div></div><div class="msg-time">10分前</div>
+                    </div>
+                    <div class="msg-item" data-action="show-msg-detail" data-title="降锁确认" data-content="张先生已到达您的车位并扫码签到，地锁已成功降下。\n您的车位当前处于互换使用状态，请放心使用对方车位。">
+                        <div class="msg-icon" style="background:#34C759;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                        <div class="msg-content"><div class="msg-title">降锁确认</div><div class="msg-preview">张先生已签到，车位锁降下</div></div><div class="msg-time">30分前</div>
+                    </div>
+                    <div class="msg-item" data-action="show-msg-detail" data-title="信用分提升" data-content="因您在近期的互换中表现良好并获得好评，您的信用分增加了 5 分。\n当前信用分：632分\n继续保持良好的互换习惯，解锁更多特权！">
+                        <div class="msg-icon" style="background:#007AFF;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+                        <div class="msg-content"><div class="msg-title">信用分提升</div><div class="msg-preview">+5 分，当前 632 分</div></div><div class="msg-time">昨天</div>
+                    </div>
+                </div>
+                <div class="section-title">车友私信</div>
+                <div class="card" style="padding:0 16px;">
+                    <div class="msg-item" data-action="show-msg-detail" data-title="张先生" data-content="好的，我准时到。\n如果你那边地锁降不下来，可以随时给我打电话，我远程帮你开。">
+                        <div class="msg-icon" style="background:#007AFF;font-weight:600;font-size:16px;color:#fff;">张</div>
+                        <div class="msg-content"><div class="msg-title">张先生</div><div class="msg-preview">好的，我准时到</div></div><div class="msg-time">昨天</div>
+                    </div>
+                    <div class="msg-item" data-action="show-msg-detail" data-title="李女士" data-content="谢谢你把车位换给我，今天下雨，离公司近多了，太感谢啦！\n下次有需要再找你换~">
+                        <div class="msg-icon" style="background:#FF9500;font-weight:600;font-size:16px;color:#fff;">李</div>
+                        <div class="msg-content"><div class="msg-title">李女士</div><div class="msg-preview">谢谢换车位，太方便了</div></div><div class="msg-time">3天前</div>
+                    </div>
+                </div>
+                <div class="section-title">官方公告</div>
+                <div class="card" style="padding:0 16px;">
+                    <div class="msg-item" data-action="show-msg-detail" data-title="邻停易 V1.2 更新公告" data-content="本次更新内容：\n1. 新增信用分特权体系，高信用用户享免押金等权益；\n2. 优化了互换卡片的滑动体验；\n3. 修复了部分机型无法降锁的问题。\n感谢您的支持！">
+                        <div class="msg-icon" style="background:#8E8E93;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+                        <div class="msg-content"><div class="msg-title">邻停易 V1.2 更新</div><div class="msg-preview">新增信用分体系，体验优化</div></div><div class="msg-time">2天前</div>
+                    </div>
+                </div>`;
+        },
+
+        // 补全信用特权列表（恢复800分免罚）
+        renderCreditPage() {
+            document.getElementById('page-credit').innerHTML = `
+                <div class="large-title">信用中心</div>
+                <div class="card" style="text-align:center;padding:30px 16px;">
+                    <div class="credit-circle"><div class="score-inner"><div class="score-num">632</div><div class="score-label">信用分</div></div></div>
+                    <div style="display:inline-block;padding:6px 16px;background:#FFF4E6;color:var(--orange);border-radius:12px;font-weight:700;font-size:14px;margin-top:8px;">⭐ 信用优秀</div>
+                </div>
+                <div class="section-title">我的特权</div>
+                <div class="ios-list">
+                    <div class="ios-item"><div class="icon-box" style="background:#34C759;"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>优先匹配权<span class="badge-right" style="color:var(--brand-green);">已解锁</span></div>
+                    <div class="ios-item" style="opacity:0.5;"><div class="icon-box" style="background:#8E8E93;"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>免押金互换<span class="badge-right locked">700分解锁</span></div>
+                    <div class="ios-item" style="opacity:0.5;"><div class="icon-box" style="background:#8E8E93;"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>每月1次超时免罚<span class="badge-right locked">800分解锁</span></div>
+                </div>`;
+        },
+
+        switchPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-'+page).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === page));
+            document.getElementById('mainContent').scrollTop = 0;
+            
+            if (page === 'swap' && !this.state.cachedPages.swap) { this.renderRecommendCards(); this.state.cachedPages.swap = true; }
+            if (page === 'msg' && !this.state.cachedPages.msg) { this.renderMessages(); this.state.cachedPages.msg = true; }
+            if (page === 'credit' && !this.state.cachedPages.credit) { this.renderCreditPage(); this.state.cachedPages.credit = true; }
+        },
+
+        switchSwapTab(tab) {
+            document.querySelectorAll('#swapTabs .tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+            document.getElementById('swap-recommend').style.display = tab === 'recommend' ? 'block' : 'none';
+            document.getElementById('swap-ongoing').style.display = tab === 'ongoing' ? 'block' : 'none';
+            document.getElementById('swap-history').style.display = tab === 'history' ? 'block' : 'none';
+        },
+
+        bindEvents() {
+            document.body.addEventListener('click', (e) => {
+                const target = e.target.closest('[data-action]');
+                if (!target) return;
+                const action = target.dataset.action;
+
+                switch(action) {
+                    case 'show-toast': this.showToast(target.dataset.msg); break;
+                    case 'show-msg-detail': 
+                        this.openModal('msgDetailOverlay');
+                        document.getElementById('msgDetailTitle').textContent = target.dataset.title;
+                        // 将文本中的 \n 替换为 <br> 以实现换行
+                        document.getElementById('msgDetailContent').innerHTML = target.dataset.content.replace(/\n/g, '<br>');
+                        break;
+                    case 'toggle-parking': this.toggleParking(); break;
+                    case 'handle-status': e.stopPropagation(); this.showToast('📢 闲置时段已发布！'); break;
+                    case 'open-modal': this.openModal(target.dataset.target); break;
+                    case 'close-modal': this.closeModal(target); break;
+                    case 'mock-scan': this.closeModal(target); this.showToast('✅ 验证通过，地锁已降下'); break;
+                    case 'verify-admin': this.verifyAdmin(); break;
+                    case 'delete-record': this.deleteRecord(target.dataset.table, target.dataset.id); break;
+                    case 'load-my-swaps': this.loadMySwaps(); break;
+                    case 'swipe-card': this.swipeCard(target.dataset.type, target.dataset.id); break;
+                    case 'rate-star': 
+                        this.state.feedbackRating = parseInt(target.dataset.value);
+                        document.querySelectorAll('#starRating .star').forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= this.state.feedbackRating));
+                        break;
+                    case 'copy-invite': 
+                        navigator.clipboard?.writeText(document.getElementById('inviteCode').textContent).then(() => this.showToast('已复制邀请码')); 
+                        break;
+                }
+            });
+
+            document.getElementById('bottomNav').addEventListener('click', (e) => {
+                const item = e.target.closest('.nav-item'); if (item) this.switchPage(item.dataset.page);
+            });
+            document.getElementById('swapTabs').addEventListener('click', (e) => {
+                const btn = e.target.closest('.tab-btn'); if (btn) this.switchSwapTab(btn.dataset.tab);
+            });
+            document.getElementById('adminPanelOverlay').addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-admin-tab]'); if (btn) this.switchAdminTab(btn.dataset.adminTab);
+            });
+
+            document.body.addEventListener('submit', (e) => {
+                const form = e.target.closest('form[data-form]');
+                if (form) { e.preventDefault(); this.handleSubmit(form); }
+            });
+
+            document.querySelectorAll('.overlay').forEach(ov => {
+                ov.addEventListener('click', (e) => { if (e.target === ov) ov.classList.remove('show'); });
+            });
+        }
     };
 
-    // 二、触觉反馈封装
-    function hapticFeedback(duration = 10) {
-        if (navigator.vibrate) navigator.vibrate(duration);
-    }
-
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        clearTimeout(window.toastTimer);
-        toast.textContent = msg;
-        toast.classList.add('show');
-        toast.style.opacity = 1;
-        toast.style.transform = 'translate(-50%,-50%) scale(1)';
-        hapticFeedback(15); // 触发Toast时震动
-        window.toastTimer = setTimeout(() => {
-            toast.style.opacity = 0;
-            toast.style.transform = 'translate(-50%,-50%) scale(0.8)';
-        }, 2000);
-    }
-
-    async function checkConnection() {
-        const el = document.getElementById('connection-status');
-        const { error } = await client.from('feedbacks').select('*').limit(1);
-        if (error) {
-            el.textContent = '⚠️ 连接失败';
-            el.style.background = '#FFF0F0'; el.style.color = '#FF3B30';
-        } else {
-            el.textContent = '✅ 数据库已连接';
-            el.style.background = '#E8F8EE'; el.style.color = '#34C759';
-        }
-    }
-
-    function buildModals() {
-        // ... (此处代码与上一版相同，为节省篇幅未展示，实际使用时请保留上一版的 buildModals 逻辑)
-        document.getElementById('bookingOverlay').innerHTML = `
-            <div class="modal"><div class="modal-title">预约互换车位</div>
-                <form onsubmit="return submitBooking(event)">
-                    <div class="form-group"><label>姓名 *</label><input type="text" id="name" class="ios-input" required></div>
-                    <div class="form-group"><label>手机号 *</label><input type="tel" id="phone" class="ios-input" required pattern="[0-9]{11}"></div>
-                    <div class="form-group"><label>车牌号</label><input type="text" id="car_number" class="ios-input"></div>
-                    <div class="form-group"><label>家庭地址 *</label><input type="text" id="home_address" class="ios-input" required></div>
-                    <div class="form-group"><label>工作地址 *</label><input type="text" id="work_address" class="ios-input" required></div>
-                    <div class="form-group"><label>可互换时段 *</label><input type="text" id="time_slot" class="ios-input" required></div>
-                    <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-booking">取消</button><button type="submit" class="btn">提交预约</button></div>
-                </form></div>`;
-        document.getElementById('feedbackOverlay').innerHTML = `
-            <div class="modal"><div class="modal-title">意见反馈</div>
-                <form onsubmit="return submitFeedback(event)">
-                    <div class="form-group"><label>反馈内容 *</label><textarea id="feedbackContent" rows="3" class="ios-input" required></textarea></div>
-                    <div class="form-group"><label>评分</label><div class="star-rating" id="starRating" style="display:flex;gap:8px;font-size:28px;cursor:pointer;color:#FFCC00;">
-                        <span class="star active" data-value="1">★</span><span class="star active" data-value="2">★</span><span class="star active" data-value="3">★</span><span class="star active" data-value="4">★</span><span class="star active" data-value="5">★</span>
-                    </div></div>
-                    <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-feedback">取消</button><button type="submit" class="btn">提交反馈</button></div>
-                </form></div>`;
-        document.getElementById('scanOverlay').innerHTML = `
-            <div class="modal"><div class="modal-title">扫码降锁</div>
-                <div style="text-align:center;padding:20px 0;color:var(--text-secondary);">将摄像头对准地锁二维码<br><span style="font-size:12px;">(演示模式)</span></div>
-                <div class="modal-btns"><button class="btn btn-cancel" data-action="close-scan">取消</button><button class="btn" data-action="mock-scan">模拟扫码成功</button></div></div>`;
-        document.getElementById('profileOverlay').innerHTML = `
-            <div class="modal"><div class="modal-title">编辑个人信息</div>
-                <form onsubmit="return saveProfile(event)">
-                    <div class="form-group"><label>姓名</label><input type="text" id="profileNameInput" class="ios-input"></div>
-                    <div class="form-group"><label>手机号 *</label><input type="tel" id="profilePhoneInput" class="ios-input" required pattern="[0-9]{11}"></div>
-                    <div class="form-group"><label>车牌号</label><input type="text" id="profileCarNumber" class="ios-input"></div>
-                    <div class="form-group"><label>家庭地址</label><input type="text" id="profileHomeAddress" class="ios-input"></div>
-                    <div class="form-group"><label>工作地址</label><input type="text" id="profileWorkAddress" class="ios-input"></div>
-                    <div class="form-group"><label>设备编号</label><input type="text" id="profileDeviceSN" class="ios-input"></div>
-                    <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-profile">取消</button><button type="submit" class="btn">保存</button></div>
-                </form></div>`;
-        document.getElementById('inviteOverlay').innerHTML = `
-            <div class="modal"><div class="modal-title">邀请好友</div>
-                <div style="text-align:center;margin-bottom:20px;">
-                    <p style="color:var(--text-secondary);font-size:14px;margin-bottom:8px;">您的邀请码</p>
-                    <strong id="inviteCode" style="font-size:20px;letter-spacing:1px;">${currentUserPhone || '未设置手机号'}</strong>
-                    <img src="https://tannind.github.io/lintingyi-demo/qrcode.png" alt="邀请二维码" style="width:180px;height:180px;margin-top:16px;border-radius:12px;box-shadow:var(--shadow);" onerror="this.style.display='none'">
-                </div>
-                <button class="btn" data-action="copy-invite">复制邀请码</button></div>`;
-        document.getElementById('adminPasswordOverlay').innerHTML = `
-            <div class="modal"><div class="modal-title">管理员验证</div>
-                <input type="password" id="adminPassword" class="ios-input" placeholder="请输入管理密码">
-                <div class="modal-btns"><button class="btn btn-cancel" data-action="close-admin-pwd">取消</button><button class="btn" data-action="verify-admin">进入</button></div></div>`;
-        document.getElementById('adminPanelOverlay').innerHTML = `
-            <div class="modal" style="max-width:500px;"><div class="modal-title">管理后台</div>
-                <div class="tab-switch" style="margin-bottom:16px;">
-                    <button id="tabSwapBtn" class="tab-btn active" data-admin-tab="swap">预约管理</button>
-                    <button id="tabFeedbackBtn" class="tab-btn" data-admin-tab="feedback">反馈管理</button>
-                </div>
-                <div id="adminTableContainer" style="max-height:400px;overflow-y:auto;"></div>
-                <button class="btn btn-cancel" style="margin-top:12px;" data-action="close-admin-panel">关闭</button></div>`;
-        document.getElementById('historyDetailOverlay').innerHTML = `
-            <div class="modal"><div class="modal-title">订单详情</div><div id="historyDetailContent" style="line-height:2; color:var(--text-primary);"></div>
-                <button class="btn btn-cancel" style="margin-top:20px;" data-action="close-history">关闭</button></div>`;
-    }
-
-    function toggleParkingStatus() {
-        hapticFeedback(10);
-        const ring = document.getElementById('statusRing');
-        const title = document.getElementById('statusTitle');
-        const subtitle = document.getElementById('statusSubtitle');
-        const btn = document.getElementById('statusBtn');
-        
-        if (parkingStatus === 'free') {
-            parkingStatus = 'occupied';
-            ring.className = 'status-ring occupied';
-            ring.innerHTML = icons.car;
-            title.textContent = '李女士正在使用';
-            subtitle.textContent = '占用中 · 剩余 3小时15分';
-            btn.textContent = '查看详情';
-            btn.style.background = 'rgba(0,122,255,0.08)';
-            btn.style.color = 'var(--brand-blue)';
-        } else if (parkingStatus === 'occupied') {
-            parkingStatus = 'swapping';
-            ring.className = 'status-ring swapping';
-            ring.innerHTML = icons.swap;
-            title.textContent = '你正在使用张先生的车位';
-            subtitle.textContent = '需在 17:30 前驶离';
-            btn.textContent = '导航至该车位';
-            btn.style.background = 'var(--brand-green)';
-            btn.style.color = '#fff';
-        } else {
-            parkingStatus = 'free';
-            ring.className = 'status-ring free';
-            ring.innerHTML = icons.park;
-            title.textContent = '空闲中';
-            subtitle.textContent = '可共享时段 8:30 - 18:50';
-            btn.textContent = '一键发布闲置';
-            btn.style.background = 'var(--brand-green)';
-            btn.style.color = '#fff';
-        }
-    }
-
-    function handleStatusBtn() {
-        hapticFeedback(10);
-        if (parkingStatus === 'free') showToast('📢 闲置时段已发布！');
-        else if (parkingStatus === 'occupied') showToast('📋 查看互换详情');
-        else showToast('🗺️ 正在导航至张先生车位...');
-    }
-
-    function renderRecommendCards() {
-        const container = document.getElementById('swap-recommend');
-        const cards = [
-            { name:'李女士', credit:4.9, match:89, mySpot:'A小区12号', theirSpot:'B写字楼B2-15', myTime:'8:30-18:50', theirTime:'8:00-18:30', tags:['步行3分钟','时间重叠96%'] },
-            { name:'王先生', credit:4.7, match:82, mySpot:'A小区12号', theirSpot:'C园区D3-08', myTime:'8:30-18:50', theirTime:'9:00-19:00', tags:['步行5分钟','时间重叠88%'] }
-        ];
-        container.innerHTML = cards.map((c,i) => `
-            <div class="card swap-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span>
-                <div class="user-row"><div class="avatar">${c.name.charAt(0)}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div>
-                <div class="swap-route">🅰️ 我的车位：${c.mySpot} ⇄ 🅱️ 对方车位：${c.theirSpot}</div>
-                <div class="swap-route" style="background:transparent;padding:4px 0;">⏱️ 我的可用：${c.myTime} | 对方可用：${c.theirTime}</div>
-                <div class="tag-row">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-                <div class="card-actions"><button class="btn-pass" data-action="swipe-pass" data-card-id="swapCard${i}">忽略</button><button class="btn-like" data-action="swipe-like" data-card-id="swapCard${i}">想换</button></div>
-            </div>`).join('');
-        bindSwipeGestures(); // 绑定手势
-    }
-
-    // 二、左滑右滑手势逻辑
-    let touchStartX = 0, touchMoveX = 0, isSwiping = false, currentSwipeCard = null;
-    function bindSwipeGestures() {
-        document.querySelectorAll('.swap-card').forEach(card => {
-            card.addEventListener('touchstart', (e) => {
-                if (e.target.closest('button')) return; // 点击按钮不触发拖拽
-                currentSwipeCard = card;
-                touchStartX = e.touches[0].clientX;
-                isSwiping = true;
-                card.style.transition = 'none';
-            }, { passive: true });
-
-            card.addEventListener('touchmove', (e) => {
-                if (!isSwiping || currentSwipeCard !== card) return;
-                touchMoveX = e.touches[0].clientX - touchStartX;
-                const rotate = touchMoveX / 20;
-                card.style.transform = `translateX(${touchMoveX}px) rotate(${rotate}deg)`;
-            }, { passive: true });
-
-            card.addEventListener('touchend', () => {
-                if (!isSwiping || currentSwipeCard !== card) return;
-                card.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
-                if (touchMoveX > 100) {
-                    swipeCard('like', card.id); // 右滑喜欢
-                } else if (touchMoveX < -100) {
-                    swipeCard('pass', card.id); // 左滑忽略
-                } else {
-                    card.style.transform = 'translateX(0) rotate(0)';
-                }
-                isSwiping = false; currentSwipeCard = null; touchMoveX = 0;
-            });
-        });
-    }
-
-    function swipeCard(action, id) {
-        const card = document.getElementById(id);
-        if (!card) return;
-        card.style.transition = '0.4s';
-        card.style.transform = action==='like' ? 'translateX(120%) rotate(10deg)' : 'translateX(-120%) rotate(-10deg)';
-        card.style.opacity = '0';
-        setTimeout(() => card.remove(), 400);
-        if (action==='like') {
-            hapticFeedback(30); // 匹配成功强烈震动
-            showToast('🎉 配对成功！');
-        } else {
-            hapticFeedback(10);
-        }
-    }
-
-    function switchSwapTab(tab) {
-        document.querySelectorAll('#page-swap .tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-        document.getElementById('swap-recommend').style.display = tab==='recommend' ? 'block' : 'none';
-        document.getElementById('swap-ongoing').style.display = tab==='ongoing' ? 'block' : 'none';
-        document.getElementById('swap-history').style.display = tab==='history' ? 'block' : 'none';
-        
-        if (tab==='ongoing') {
-            document.getElementById('swap-ongoing').innerHTML = `<div class="card" style="text-align:center;padding:30px 16px;">
-                <div style="font-size:40px;margin-bottom:10px;">🔄</div>
-                <div style="font-weight:700;font-size:18px;margin-bottom:6px;">1个进行中的互换</div>
-                <div style="color:var(--text-secondary);margin-bottom:20px;">与张先生 · 剩余3小时15分</div>
-                <button class="btn btn-outline" data-action="contact-user">联系车友</button></div>`;
-        }
-        if (tab==='history') {
-            const data = [{ partner:'李女士', date:'2026-06-20', time:'8:00-18:30', spot:'B2-15', rating:5 }];
-            document.getElementById('swap-history').innerHTML = data.map((h, i) => `
-                <div class="card swap-card" data-action="show-history" data-partner="${h.partner}" data-date="${h.date}" data-time="${h.time}" data-spot="${h.spot}" data-rating="${h.rating}" style="cursor:pointer;">
-                    <div style="font-weight:700;font-size:16px;">${h.partner} <span style="color:#FFCC00;font-size:14px;">★ ${h.rating}</span></div>
-                    <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">${h.date} ${h.time}</div>
-                    <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">车位：${h.spot}</div>
-                </div>`).join('');
-        }
-    }
-
-    function showHistoryDetail(partner, date, time, spot, rating) {
-        document.getElementById('historyDetailContent').innerHTML = `<p><b>互换伙伴：</b>${partner}</p><p><b>日期：</b>${date}</p><p><b>时段：</b>${time}</p><p><b>车位：</b>${spot}</p><p><b>评分：</b>${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</p>`;
-        document.getElementById('historyDetailOverlay').classList.remove('hidden');
-    }
-
-    function renderMessages() {
-        document.getElementById('page-msg').innerHTML = `
-            <div class="large-title">消息</div>
-            <div class="section-title">系统通知</div>
-            <div class="card" style="padding:0 16px;">
-                <div class="msg-item" data-action="show-toast" data-msg="查看详情"><div class="msg-icon" style="background:#FF9500;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div><div class="msg-content"><div class="msg-title">配对成功！</div><div class="msg-preview">你与李女士配对成功</div></div><div class="msg-time">10分前</div></div>
-                <div class="msg-item"><div class="msg-icon" style="background:#34C759;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></div><div class="msg-content"><div class="msg-title">降锁确认</div><div class="msg-preview">张先生已签到，车位锁降下</div></div><div class="msg-time">30分前</div></div>
-            </div>
-            <div class="section-title">车友私信</div>
-            <div class="card" style="padding:0 16px;">
-                <div class="msg-item" data-action="show-toast" data-msg="打开对话"><div class="msg-icon" style="background:#007AFF;font-weight:600;font-size:16px;color:#fff;">张</div><div class="msg-content"><div class="msg-title">张先生</div><div class="msg-preview">好的，我准时到</div></div><div class="msg-time">昨天</div></div>
-            </div>`;
-    }
-
-    function renderCreditPage() {
-        document.getElementById('page-credit').innerHTML = `
-            <div class="large-title">信用中心</div>
-            <div class="card" style="text-align:center;padding:30px 16px;">
-                <div class="credit-score-circle"><div class="score-inner"><div class="score-num">632</div><div class="score-label">信用分</div></div></div>
-                <div style="display:inline-block;padding:6px 16px;background:#FFF4E6;color:#FF9500;border-radius:12px;font-weight:700;font-size:14px;margin-top:8px;">⭐ 信用优秀</div>
-            </div>
-            <div class="section-title">我的特权</div>
-            <div class="ios-list">
-                <div class="ios-item"><div class="icon-box" style="background:#34C759;"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>优先匹配权<span style="margin-left:auto;color:var(--brand-green);font-weight:600;">已解锁</span></div>
-                <div class="ios-item" style="opacity:0.5;"><div class="icon-box" style="background:#8E8E93;"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>免押金互换<span style="margin-left:auto;color:var(--text-secondary);">700分解锁</span></div>
-            </div>`;
-    }
-
-    function switchPage(page) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page-'+page).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === page));
-        document.getElementById('mainContent').scrollTop = 0;
-        if (page === 'swap') renderRecommendCards();
-    }
-
-    // 五、代码工程化：统一事件委托机制
-    document.addEventListener('click', function(e) {
-        const target = e.target.closest('[data-action]');
-        if (!target) return;
-        const action = target.dataset.action;
-
-        switch(action) {
-            case 'show-city': showToast('当前城市：重庆'); break;
-            case 'toggle-parking': toggleParkingStatus(); break;
-            case 'handle-status': e.stopPropagation(); handleStatusBtn(); break;
-            case 'show-scan': document.getElementById('scanOverlay').classList.remove('hidden'); break;
-            case 'close-scan': document.getElementById('scanOverlay').classList.add('hidden'); break;
-            case 'mock-scan': document.getElementById('scanOverlay').classList.add('hidden'); showToast('✅ 验证通过，地锁已降下'); break;
-            case 'open-booking': document.getElementById('bookingOverlay').classList.remove('hidden'); break;
-            case 'close-booking': document.getElementById('bookingOverlay').classList.add('hidden'); break;
-            case 'open-feedback': document.getElementById('feedbackOverlay').classList.remove('hidden'); break;
-            case 'close-feedback': document.getElementById('feedbackOverlay').classList.add('hidden'); break;
-            case 'open-profile': openProfileEditor(); break;
-            case 'close-profile': document.getElementById('profileOverlay').classList.add('hidden'); break;
-            case 'open-invite': document.getElementById('inviteOverlay').classList.remove('hidden'); break;
-            case 'copy-invite': navigator.clipboard?.writeText(document.getElementById('inviteCode').textContent).then(() => showToast('已复制邀请码')); break;
-            case 'load-my-swaps': loadMySwaps(); break;
-            case 'open-admin': document.getElementById('adminPasswordOverlay').classList.remove('hidden'); break;
-            case 'close-admin-pwd': document.getElementById('adminPasswordOverlay').classList.add('hidden'); break;
-            case 'verify-admin': verifyAdminPassword(); break;
-            case 'close-admin-panel': document.getElementById('adminPanelOverlay').classList.add('hidden'); break;
-            case 'close-history': document.getElementById('historyDetailOverlay').classList.add('hidden'); break;
-            case 'show-history': showHistoryDetail(target.dataset.partner, target.dataset.date, target.dataset.time, target.dataset.spot, parseInt(target.dataset.rating)); break;
-            case 'swipe-pass': swipeCard('pass', target.dataset.cardId); break;
-            case 'swipe-like': swipeCard('like', target.dataset.cardId); break;
-            case 'show-toast': showToast(target.dataset.msg); break;
-            case 'contact-user': showToast('📞 联系车友'); break;
-        }
-    });
-
-    // 底部导航委托
-    document.querySelector('.bottom-nav').addEventListener('click', function(e) {
-        const navItem = e.target.closest('.nav-item');
-        if (navItem) switchPage(navItem.dataset.page);
-    });
-
-    // 互换页Tab委托
-    document.querySelector('#page-swap .tab-switch').addEventListener('click', function(e) {
-        const tabBtn = e.target.closest('.tab-btn');
-        if (tabBtn) switchSwapTab(tabBtn.dataset.tab);
-    });
-
-    // 后台管理Tab委托
-    document.getElementById('adminPanelOverlay').addEventListener('click', function(e) {
-        const tabBtn = e.target.closest('[data-admin-tab]');
-        if (tabBtn) switchAdminTab(tabBtn.dataset.adminTab);
-    });
-
-    // 星级评分委托
-    document.addEventListener('click', e => {
-        if (e.target.classList.contains('star')) {
-            feedbackRating = parseInt(e.target.dataset.value);
-            document.querySelectorAll('#starRating .star').forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= feedbackRating));
-        }
-    });
-
-    // 点击遮罩关闭弹窗
-    document.querySelectorAll('.overlay').forEach(ov => {
-        ov.addEventListener('click', function(e) { if (e.target === this) this.classList.add('hidden'); });
-    });
-
-    // 表单提交逻辑保留
-    async function submitBooking(e) {
-        e.preventDefault();
-        const btn = e.target.querySelector('button[type=submit]');
-        btn.disabled = true; btn.textContent = '提交中...';
-        const formData = {
-            name: document.getElementById('name').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
-            car_number: document.getElementById('car_number').value.trim() || null,
-            home_address: document.getElementById('home_address').value.trim(),
-            work_address: document.getElementById('work_address').value.trim(),
-            time_slot: document.getElementById('time_slot').value.trim()
-        };
-        const { error } = await client.from('swap_requests').insert([formData]);
-        btn.disabled = false; btn.textContent = '提交预约';
-        if (error) showToast('提交失败');
-        else { showToast('✅ 预约成功！'); document.getElementById('bookingOverlay').classList.add('hidden'); }
-        return false;
-    }
-    async function submitFeedback(e) {
-        e.preventDefault();
-        const content = document.getElementById('feedbackContent').value.trim();
-        const { error } = await client.from('feedbacks').insert([{ content, rating: feedbackRating, user_id: currentUserPhone || 'anonymous' }]);
-        if (error) showToast('提交失败');
-        else { showToast('✅ 感谢反馈！'); document.getElementById('feedbackOverlay').classList.add('hidden'); }
-        return false;
-    }
-
-    function openProfileEditor() {
-        if (currentUserPhone) {
-            client.from('user_profiles').select('*').eq('phone', currentUserPhone).single().then(({ data }) => {
-                if (data) {
-                    document.getElementById('profileNameInput').value = data.name || '';
-                    document.getElementById('profilePhoneInput').value = data.phone;
-                    document.getElementById('profileCarNumber').value = data.car_number || '';
-                    document.getElementById('profileHomeAddress').value = data.home_address || '';
-                    document.getElementById('profileWorkAddress').value = data.work_address || '';
-                    document.getElementById('profileDeviceSN').value = data.device_sn || '';
-                }
-            });
-        }
-        document.getElementById('profileOverlay').classList.remove('hidden');
-    }
-    async function saveProfile(e) {
-        e.preventDefault();
-        const profileData = {
-            phone: document.getElementById('profilePhoneInput').value.trim(),
-            name: document.getElementById('profileNameInput').value.trim() || null,
-            car_number: document.getElementById('profileCarNumber').value.trim() || null,
-            home_address: document.getElementById('profileHomeAddress').value.trim() || null,
-            work_address: document.getElementById('profileWorkAddress').value.trim() || null,
-            device_sn: document.getElementById('profileDeviceSN').value.trim() || null
-        };
-        const { error } = await client.from('user_profiles').upsert(profileData, { onConflict: 'phone' });
-        if (error) showToast('保存失败');
-        else {
-            currentUserPhone = profileData.phone;
-            localStorage.setItem('currentUserPhone', currentUserPhone);
-            loadCurrentUserProfile();
-            showToast('✅ 保存成功！');
-            document.getElementById('profileOverlay').classList.add('hidden');
-        }
-        return false;
-    }
-    async function loadCurrentUserProfile() {
-        if (!currentUserPhone) return;
-        const { data } = await client.from('user_profiles').select('*').eq('phone', currentUserPhone).single();
-        if (data) {
-            document.getElementById('profileName').textContent = data.name || '邻停易用户';
-            document.getElementById('profilePhone').textContent = data.phone;
-            document.getElementById('profileAvatar').textContent = (data.name || '邻').charAt(0);
-        }
-    }
-    function verifyAdminPassword() {
-        if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
-            document.getElementById('adminPasswordOverlay').classList.add('hidden');
-            document.getElementById('adminPanelOverlay').classList.remove('hidden');
-            switchAdminTab('swap');
-        } else showToast('❌ 密码错误');
-    }
-    async function switchAdminTab(tab) {
-        document.getElementById('tabSwapBtn').classList.toggle('active', tab==='swap');
-        document.getElementById('tabFeedbackBtn').classList.toggle('active', tab==='feedback');
-        const table = tab==='swap' ? 'swap_requests' : 'feedbacks';
-        const { data } = await client.from(table).select('*').order('created_at', { ascending: false });
-        const container = document.getElementById('adminTableContainer');
-        if (!data || data.length===0) { container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;">暂无记录</div>'; return; }
-        container.innerHTML = data.map(item => {
-            if (tab==='swap') return `<div class="card" style="padding:14px;margin-bottom:8px;"><b>${item.name}</b> · ${item.phone}<br><span style="font-size:13px;color:var(--text-secondary);">${item.home_address} → ${item.work_address}</span><br><span style="font-size:12px;color:var(--text-muted);">${item.time_slot}</span><br><button style="color:var(--warning);margin-top:8px;font-size:13px;border:none;background:none;" onclick="deleteRecord('swap_requests','${item.id}')">删除</button></div>`;
-            else return `<div class="card" style="padding:14px;margin-bottom:8px;"><b>${item.user_id || '匿名'}</b> · 评分：${item.rating}<br><span style="font-size:13px;color:var(--text-secondary);">${item.content}</span><br><button style="color:var(--warning);margin-top:8px;font-size:13px;border:none;background:none;" onclick="deleteRecord('feedbacks','${item.id}')">删除</button></div>`;
-        }).join('');
-    }
-    async function deleteRecord(table, id) {
-        await client.from(table).delete().eq('id', id);
-        showToast('已删除');
-        switchAdminTab(table==='swap_requests'?'swap':'feedback');
-    }
-    async function loadMySwaps() {
-        const container = document.getElementById('mySwapsList');
-        container.innerHTML = '<div class="card" style="text-align:center;color:var(--text-muted);">加载中...</div>';
-        const { data } = await client.from('swap_requests').select('*').order('created_at', { ascending: false });
-        if (!data || data.length===0) { container.innerHTML = '<div class="card" style="text-align:center;color:var(--text-muted);">暂无预约记录</div>'; return; }
-        container.innerHTML = '<div class="section-title">我的预约</div>' + data.map(item => `
-            <div class="card" style="padding:14px;">
-                <b>${item.name}</b> · ${item.phone}<br>
-                <span style="color:var(--text-secondary);font-size:13px;">${item.home_address} → ${item.work_address}</span><br>
-                <span style="font-size:12px;color:var(--text-muted);">${item.time_slot}</span>
-            </div>`).join('');
-    }
-
-    window.addEventListener('load', () => {
-        document.getElementById('statusRing').innerHTML = icons.park;
-        checkConnection();
-        loadCurrentUserProfile();
-        buildModals();
-        renderRecommendCards();
-        renderMessages();
-        renderCreditPage();
-    });
+    window.addEventListener('load', () => App.init());
 </script>
 </body>
 </html>
