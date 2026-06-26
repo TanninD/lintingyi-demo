@@ -41,6 +41,24 @@
         .large-title { font-size: 32px; font-weight: 800; color: var(--text-primary); padding: 16px 4px 12px; letter-spacing: -0.5px; }
         .section-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; margin-top: 24px; padding-left: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
         
+        .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; position: relative; }
+        .city-bar { display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 600; cursor: pointer; width: fit-content; padding: 6px 10px; margin-left: -6px; border-radius: 10px; }
+        .city-bar:active { background: rgba(0,0,0,0.05); }
+        .zone-selector { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: var(--brand-blue); cursor: pointer; padding: 6px 10px; border-radius: 10px; }
+        .zone-selector:active { background: rgba(0,122,255,0.05); }
+        .marquee-bar { background: rgba(0,122,255,0.1); color: var(--brand-blue); padding: 8px 0; border-radius: 10px; overflow: hidden; margin-bottom: 12px; font-size: 12px; font-weight: 600; position: relative; white-space: nowrap; }
+        .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 18s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        
+        .dropdown-menu { position: absolute; top: 40px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-radius: 14px; box-shadow: var(--shadow-lg); padding: 8px; width: 260px; z-index: 50; border: 0.5px solid var(--border); display: none; }
+        .dropdown-menu.show { display: block; animation: crossFade 0.2s ease; }
+        .dropdown-menu.left { left: 0; }
+        .dropdown-menu.right { right: 0; }
+        .zone-item { padding: 12px 14px; border-radius: 10px; font-size: 13px; cursor: pointer; color: var(--text-primary); }
+        .zone-item:active { background: #f0f0f5; }
+        .zone-item.disabled { color: var(--text-muted); cursor: not-allowed; }
+        .zone-item.apply { color: var(--brand-blue); font-weight: 600; border-top: 0.5px solid var(--border); margin-top: 4px; padding-top: 12px; }
+
         .bottom-nav { position: absolute; bottom:0; left:0; right:0; background: rgba(255, 255, 255, 0.72); backdrop-filter: saturate(180%) blur(20px); display: flex; align-items: flex-start; justify-content: space-around; padding-top: 8px; z-index: 20; border-top: 0.5px solid var(--border); height: calc(83px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom); }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px 12px; color: var(--text-secondary); }
         .nav-item svg { width: 26px; height: 26px; stroke-width: 1.5; transition: 0.2s; }
@@ -55,8 +73,6 @@
         .btn-outline { background: rgba(0,122,255,0.08); color: var(--brand-blue); }
         .btn-cancel { background: var(--bg); color: var(--brand-blue); }
         
-        .city-bar { display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 600; margin-bottom: 8px; cursor: pointer; width: fit-content; padding: 6px 10px; margin-left: -6px; border-radius: 10px; }
-        .city-bar:active { background: rgba(0,0,0,0.05); }
         .parking-card { text-align: center; cursor: pointer; padding: 24px 16px; }
         .parking-card:active { transform: scale(0.98); }
         .status-ring { width: 80px; height: 80px; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; background: #E8F8EE; }
@@ -80,6 +96,7 @@
         .timeline-card { min-width: 160px; background: var(--card); border-radius: 12px; padding: 14px; border: 0.5px solid var(--border); }
         .tl-time { font-size: 12px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
         .tl-text { font-size: 13px; line-height: 1.4; }
+        .map-link { color: var(--brand-blue); text-decoration: underline; }
 
         .ios-list { background: var(--card); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow); margin-top: 8px; border: 0.5px solid rgba(0,0,0,0.04); }
         .ios-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 0.5px solid var(--border); font-size: 16px; min-height: 58px; }
@@ -119,6 +136,7 @@
         .ios-input:focus { border-color: var(--brand-blue); background: #fff; box-shadow: 0 0 0 4px rgba(0,122,255,0.1); }
         textarea.ios-input { resize: none; min-height: 80px; }
         .modal-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+        .form-divider { border: 0; border-top: 0.5px solid var(--border); margin: 20px 0; }
         
         .msg-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
         .msg-item:last-child { border: none; }
@@ -150,7 +168,7 @@
 <div class="phone-frame">
     <div class="phone-screen">
         <div class="status-bar">
-            <span>9:41</span>
+            <span id="clock">9:41</span>
             <div class="status-right">
                 <svg viewBox="0 0 20 14"><path d="M2 12h2v2H2zM6 8h2v6H6zM10 4h2v10h-2zM14 0h2v14h-2z"/></svg>
                 <svg viewBox="0 0 18 14"><path d="M9 3c2.2 0 4.2.8 5.7 2.3l1.4-1.4C14.3 2.1 11.8 1 9 1S3.7 2.1 1.9 3.9l1.4 1.4C4.8 3.8 6.8 3 9 3zm0 4c1.1 0 2.1.4 2.8 1.2l1.4-1.4C12.2 5.9 10.7 5 9 5s-3.2.9-4.2 1.8l1.4 1.4C7 7.4 7.9 7 9 7zm0 4l2-2c-.5-.5-1.2-.8-2-.8s-1.5.3-2 .8l2 2z"/></svg>
@@ -162,11 +180,35 @@
             <div id="conn-status" class="conn-status loading">连接数据库...</div>
             
             <div class="page active" id="page-home">
-                <div class="city-bar" data-action="show-toast" data-msg="当前城市：重庆">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                    重庆
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                <div class="top-bar">
+                    <div class="city-bar" data-action="toggle-city-menu">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        重庆
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="dropdown-menu left" id="cityDropdown">
+                        <div class="zone-item" style="color:var(--brand-green); font-weight:600;">重庆 (当前)</div>
+                        <div class="zone-item" data-action="open-modal" data-target="zoneApplyOverlay">北京 (敬请期待)</div>
+                        <div class="zone-item" data-action="open-modal" data-target="zoneApplyOverlay">上海 (敬请期待)</div>
+                        <div class="zone-item" data-action="open-modal" data-target="zoneApplyOverlay">成都 (敬请期待)</div>
+                        <div class="zone-item disabled">更多城市敬请期待</div>
+                    </div>
+
+                    <div class="zone-selector" data-action="toggle-zone-menu">
+                        线路动态
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <div class="dropdown-menu right" id="zoneDropdown">
+                        <div class="zone-item" data-action="select-zone" data-zone="照母山片区 ↔ 汽博/回兴片区">照母山片区（光电园-大竹林）<br>←→ 汽博/回兴片区</div>
+                        <div class="zone-item disabled">更多线路持续拓展中</div>
+                        <div class="zone-item apply" data-action="open-modal" data-target="zoneApplyOverlay">申请开通新片区</div>
+                    </div>
                 </div>
+                
+                <div class="marquee-bar">
+                    <span class="marquee-text">🔥 首条通勤互换带开通：照母山片区（光电园-大竹林一带）←→ 汽博/回兴片区，点击右上角查看线路动态</span>
+                </div>
+
                 <div class="large-title">我的车位</div>
                 
                 <div class="card parking-card" data-action="toggle-parking">
@@ -183,7 +225,7 @@
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             8:00
                         </div>
-                        <div class="tl-text">出发 · 你将停在B小区12号位</div>
+                        <div class="tl-text">出发 · 你将停在 <span class="map-link" data-action="open-map" data-addr="B小区12号位">B小区12号位</span></div>
                     </div>
                     <div class="timeline-card" style="border-left: 3px solid var(--brand-blue);">
                         <div class="tl-time" style="color: var(--brand-blue);">
@@ -346,7 +388,6 @@
     </div>
 </template>
 
-<!-- 新增：消息详情弹窗模板 -->
 <template id="tpl-msg-detail">
     <div class="modal"><div class="modal-title" id="msgDetailTitle">消息详情</div>
         <div id="msgDetailContent" style="line-height:1.6; color:var(--text-primary); font-size:14px;"></div>
@@ -354,7 +395,34 @@
     </div>
 </template>
 
-<!-- 弹窗容器 -->
+<template id="tpl-zone-apply">
+    <div class="modal"><div class="modal-title">申请开通新片区</div>
+        <form data-form="zoneApply">
+            <div class="form-group"><label>期望开通的城市 *</label><input type="text" name="city_name" class="ios-input" placeholder="如：成都市" required></div>
+            
+            <hr class="form-divider">
+            
+            <div class="form-group"><label>起点片区名称 *</label><input type="text" name="start_zone" class="ios-input" placeholder="如：照母山片区" required></div>
+            <div class="form-group"><label>起点具体小区/写字楼 *</label><input type="text" name="start_location" class="ios-input" placeholder="如：龙湖悠山郡" required></div>
+            <div class="form-group"><label>起点物业公司名称</label><input type="text" name="start_property_company" class="ios-input" placeholder="如：龙湖物业"></div>
+            <div class="form-group"><label>起点物业联系方式</label><input type="tel" name="start_property_contact" class="ios-input" placeholder="物业联系电话"></div>
+            
+            <hr class="form-divider">
+
+            <div class="form-group"><label>终点片区名称 *</label><input type="text" name="end_zone" class="ios-input" placeholder="如：光电园片区" required></div>
+            <div class="form-group"><label>终点具体小区/写字楼 *</label><input type="text" name="end_location" class="ios-input" placeholder="如：西永微电园" required></div>
+            <div class="form-group"><label>终点物业公司名称</label><input type="text" name="end_property_company" class="ios-input" placeholder="如：万科物业"></div>
+            <div class="form-group"><label>终点物业联系方式</label><input type="tel" name="end_property_contact" class="ios-input" placeholder="物业联系电话"></div>
+
+            <hr class="form-divider">
+
+            <div class="form-group"><label>您的手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div>
+            <div class="form-group"><label>备注说明</label><textarea name="remark" rows="2" class="ios-input" placeholder="如：该片区大概有多少人需要互换..."></textarea></div>
+            <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交申请</button></div>
+        </form>
+    </div>
+</template>
+
 <div class="overlay" id="bookingOverlay"></div>
 <div class="overlay" id="feedbackOverlay"></div>
 <div class="overlay" id="scanOverlay"></div>
@@ -362,7 +430,8 @@
 <div class="overlay" id="adminPasswordOverlay"></div>
 <div class="overlay" id="adminPanelOverlay"></div>
 <div class="overlay" id="inviteOverlay"></div>
-<div class="overlay" id="msgDetailOverlay"></div> <!-- 新增容器 -->
+<div class="overlay" id="msgDetailOverlay"></div>
+<div class="overlay" id="zoneApplyOverlay"></div>
 <div class="toast" id="toast" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.8); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); color: #fff; padding: 16px 24px; border-radius: 16px; font-size: 14px; z-index:200; opacity:0; pointer-events:none; transition:0.3s; white-space:nowrap;"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -370,7 +439,7 @@
     const App = {
         supabase: supabase.createClient('https://prmhoyvyxthqlrjkeoho.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybWhveXZ5eHRocWxyamtlb2hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTY3NzQsImV4cCI6MjA5Nzk3Mjc3NH0.DWkUXWzNnA_MmBcLZ7tiPXUUyMLqmJEtxc2Nk-q_O44'),
         ADMIN_HASH: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
-        FORM_FIELDS: ['name', 'phone', 'car_number', 'home_address', 'work_address', 'time_slot', 'content', 'device_sn'],
+        FORM_FIELDS: ['name', 'phone', 'car_number', 'home_address', 'work_address', 'time_slot', 'content', 'device_sn', 'city_name', 'start_zone', 'start_location', 'start_property_company', 'start_property_contact', 'end_zone', 'end_location', 'end_property_company', 'end_property_contact', 'remark'],
         state: {
             currentUserPhone: localStorage.getItem('currentUserPhone') || '',
             feedbackRating: 5,
@@ -385,9 +454,18 @@
 
         init() {
             document.getElementById('statusRing').innerHTML = this.icons.park;
+            this.updateClock();
+            setInterval(() => this.updateClock(), 10000); 
             this.checkConnection();
             this.loadUserProfile();
             this.bindEvents();
+        },
+
+        updateClock() {
+            const now = new Date();
+            const h = now.getHours().toString().padStart(2, '0');
+            const m = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = `${h}:${m}`;
         },
 
         async safeCall(fn, errorMsg = '操作失败') {
@@ -419,7 +497,7 @@
             const overlay = document.getElementById(targetId);
             if (!overlay) return;
             if (overlay.children.length === 0) {
-                const tplId = 'tpl-' + targetId.replace('Overlay', '');
+                const tplId = 'tpl-' + targetId.replace('Overlay', '').replace(/([A-Z])/g, '-$1').toLowerCase();
                 const tpl = document.getElementById(tplId);
                 if (tpl) overlay.appendChild(tpl.content.cloneNode(true));
             }
@@ -447,6 +525,7 @@
             if (type === 'booking') return this.submitBooking(formEl);
             if (type === 'feedback') return this.submitFeedback(formEl);
             if (type === 'profile') return this.saveProfile(formEl);
+            if (type === 'zoneApply') return this.submitZoneApply(formEl);
         },
 
         async submitBooking(form) {
@@ -460,6 +539,12 @@
             const payload = { content: data.content, rating: this.state.feedbackRating, user_id: this.state.currentUserPhone || 'anonymous' };
             const { error } = await this.safeCall(() => this.supabase.from('feedbacks').insert([payload]));
             if (!error) { this.showToast('✅ 感谢反馈！'); this.closeModal(form); }
+        },
+
+        async submitZoneApply(form) {
+            const data = this.getFormData(form);
+            const { error } = await this.safeCall(() => this.supabase.from('zone_applications').insert([data]));
+            if (!error) { this.showToast('✅ 申请已提交，我们将尽快评估！'); this.closeModal(form); }
         },
 
         async fillProfileForm() {
@@ -559,18 +644,20 @@
             }
         },
 
-        // 恢复多个推荐卡片数据
         renderRecommendCards() {
             const container = document.getElementById('swap-recommend');
+            // 优化文案：明确这是基于用户个人地址的精准匹配
+            const infoBanner = `<div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px; padding:0 4px;">以下推荐基于您填写的家庭与工作地址精准匹配</div>`;
+            
             const cards = [
-                { name:'李女士', credit:4.9, match:89, mySpot:'A小区12号', theirSpot:'B写字楼B2-15', myTime:'8:30-18:50', theirTime:'8:00-18:30', tags:['步行3分钟','时间重叠96%'] },
-                { name:'王先生', credit:4.7, match:82, mySpot:'A小区12号', theirSpot:'C园区D3-08', myTime:'8:30-18:50', theirTime:'9:00-19:00', tags:['步行5分钟','时间重叠88%'] },
-                { name:'刘女士', credit:4.8, match:78, mySpot:'A小区12号', theirSpot:'D写字楼E1-22', myTime:'8:30-18:50', theirTime:'8:00-18:00', tags:['步行7分钟','充电桩可用'] }
+                { name:'李女士', credit:4.9, match:89, mySpot:'我的家(A小区12号)', theirSpot:'我的公司(B写字楼B2-15)', myTime:'8:30-18:50', theirTime:'8:00-18:30', tags:['步行3分钟','时间重叠96%'] },
+                { name:'王先生', credit:4.7, match:82, mySpot:'我的家(A小区12号)', theirSpot:'我的公司(C园区D3-08)', myTime:'8:30-18:50', theirTime:'9:00-19:00', tags:['步行5分钟','时间重叠88%'] },
+                { name:'刘女士', credit:4.8, match:78, mySpot:'我的家(A小区12号)', theirSpot:'我的公司(D写字楼E1-22)', myTime:'8:30-18:50', theirTime:'8:00-18:00', tags:['步行7分钟','充电桩可用'] }
             ];
-            container.innerHTML = cards.map((c,i) => `
+            container.innerHTML = infoBanner + cards.map((c,i) => `
                 <div class="card swap-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span>
                     <div class="user-row"><div class="avatar">${c.name[0]}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div>
-                    <div class="swap-route">🅰️ 我的车位：${c.mySpot} ⇄ 🅱️ 对方车位：${c.theirSpot}</div>
+                    <div class="swap-route">🅰️ <span class="map-link" data-action="open-map" data-addr="${c.mySpot}">${c.mySpot}</span> ⇄ 🅱️ <span class="map-link" data-action="open-map" data-addr="${c.theirSpot}">${c.theirSpot}</span></div>
                     <div class="swap-route" style="background:transparent;padding:4px 0;">⏱️ 我的可用：${c.myTime} | 对方可用：${c.theirTime}</div>
                     <div class="tag-row">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
                     <div class="card-actions"><button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button><button class="btn-like" data-action="swipe-card" data-type="like" data-id="swapCard${i}">想换</button></div>
@@ -582,13 +669,13 @@
             document.querySelectorAll('.swap-card').forEach(card => {
                 let startX = 0, moveX = 0;
                 card.addEventListener('touchstart', (e) => {
-                    if (e.target.closest('button')) return;
+                    if (e.target.closest('button') || e.target.closest('.map-link')) return;
                     startX = e.touches[0].clientX;
                     card.style.transition = 'none';
                 }, { passive: true });
                 
                 card.addEventListener('touchmove', (e) => {
-                    if (e.target.closest('button')) return;
+                    if (e.target.closest('button') || e.target.closest('.map-link')) return;
                     moveX = e.touches[0].clientX - startX;
                     card.style.transform = `translateX(${moveX}px) rotate(${moveX/20}deg)`;
                 }, { passive: true });
@@ -611,7 +698,6 @@
             if (type === 'like') { if (navigator.vibrate) navigator.vibrate(30); this.showToast('🎉 配对成功！'); }
         },
 
-        // 扩充消息内容，支持点击查看详情
         renderMessages() {
             document.getElementById('page-msg').innerHTML = `
                 <div class="large-title">消息</div>
@@ -650,7 +736,6 @@
                 </div>`;
         },
 
-        // 补全信用特权列表（恢复800分免罚）
         renderCreditPage() {
             document.getElementById('page-credit').innerHTML = `
                 <div class="large-title">信用中心</div>
@@ -682,25 +767,67 @@
             document.getElementById('swap-recommend').style.display = tab === 'recommend' ? 'block' : 'none';
             document.getElementById('swap-ongoing').style.display = tab === 'ongoing' ? 'block' : 'none';
             document.getElementById('swap-history').style.display = tab === 'history' ? 'block' : 'none';
+            
+            if (tab === 'ongoing') {
+                document.getElementById('swap-ongoing').innerHTML = `<div class="card" style="text-align:center;padding:30px 16px;">
+                    <div style="font-size:40px;margin-bottom:10px;">🔄</div>
+                    <div style="font-weight:700;font-size:18px;margin-bottom:6px;">1个进行中的互换</div>
+                    <div style="color:var(--text-secondary);margin-bottom:20px;">与张先生 · 剩余3小时15分</div>
+                    <button class="btn btn-outline" data-action="show-toast" data-msg="📞 联系车友">联系车友</button>
+                </div>`;
+            }
+            if (tab === 'history') {
+                const data = [{ partner:'李女士', date:'2026-06-20', time:'8:00-18:30', spot:'B2-15', rating:5 }];
+                document.getElementById('swap-history').innerHTML = data.map(h => `
+                    <div class="card swap-card" data-action="show-toast" data-msg="查看历史详情" style="cursor:pointer;">
+                        <div style="font-weight:700;font-size:16px;">${h.partner} <span style="color:#FFCC00;font-size:14px;">★ ${h.rating}</span></div>
+                        <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">${h.date} ${h.time}</div>
+                        <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">车位：${h.spot}</div>
+                    </div>`).join('');
+            }
         },
 
         bindEvents() {
             document.body.addEventListener('click', (e) => {
                 const target = e.target.closest('[data-action]');
+                
+                if (!e.target.closest('.city-bar') && !e.target.closest('#cityDropdown')) {
+                    document.getElementById('cityDropdown')?.classList.remove('show');
+                }
+                if (!e.target.closest('.zone-selector') && !e.target.closest('#zoneDropdown')) {
+                    document.getElementById('zoneDropdown')?.classList.remove('show');
+                }
+
                 if (!target) return;
                 const action = target.dataset.action;
 
                 switch(action) {
                     case 'show-toast': this.showToast(target.dataset.msg); break;
+                    case 'toggle-city-menu': document.getElementById('cityDropdown').classList.toggle('show'); break;
+                    case 'toggle-zone-menu': document.getElementById('zoneDropdown').classList.toggle('show'); break;
+                    case 'select-zone': 
+                        // 降级为资讯关注逻辑
+                        this.showToast('已为您关注该线路动态'); 
+                        document.getElementById('zoneDropdown').classList.remove('show');
+                        document.querySelector('.marquee-text').textContent = `📢 已关注线路：${target.dataset.zone}，有新动态将通知您`;
+                        break;
+                    case 'open-map': 
+                        e.stopPropagation();
+                        const addr = target.dataset.addr;
+                        window.open(`https://uri.amap.com/search?keyword=${encodeURIComponent(addr)}`, '_blank');
+                        break;
                     case 'show-msg-detail': 
                         this.openModal('msgDetailOverlay');
                         document.getElementById('msgDetailTitle').textContent = target.dataset.title;
-                        // 将文本中的 \n 替换为 <br> 以实现换行
                         document.getElementById('msgDetailContent').innerHTML = target.dataset.content.replace(/\n/g, '<br>');
                         break;
                     case 'toggle-parking': this.toggleParking(); break;
                     case 'handle-status': e.stopPropagation(); this.showToast('📢 闲置时段已发布！'); break;
-                    case 'open-modal': this.openModal(target.dataset.target); break;
+                    case 'open-modal': 
+                        document.getElementById('zoneDropdown').classList.remove('show');
+                        document.getElementById('cityDropdown').classList.remove('show');
+                        this.openModal(target.dataset.target); 
+                        break;
                     case 'close-modal': this.closeModal(target); break;
                     case 'mock-scan': this.closeModal(target); this.showToast('✅ 验证通过，地锁已降下'); break;
                     case 'verify-admin': this.verifyAdmin(); break;
