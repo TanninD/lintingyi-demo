@@ -387,6 +387,12 @@
 <div class="overlay" id="historyDetailOverlay"></div>
 <div class="overlay" id="zoneApplyOverlay"></div>
 <div class="toast" id="toast" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.8); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); color: #fff; padding: 16px 24px; border-radius: 16px; font-size: 14px; z-index:200; opacity:0; pointer-events:none; transition:0.3s; white-space:nowrap;"></div>
+<!-- 添加到桌面提示条 -->
+<div id="installBanner" style="position: fixed; bottom: 90px; left: 10px; right: 10px; background: rgba(44, 44, 46, 0.95); backdrop-filter: blur(20px); color: #fff; padding: 14px 16px; border-radius: 14px; font-size: 13px; z-index: 150; display: none; align-items: center; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+  <span style="font-size: 24px;">📲</span>
+  <span style="flex: 1; line-height: 1.4;">点击底部菜单 <b>「添加到主屏幕」</b>，即可像 App 一样全屏使用</span>
+  <button id="closeInstallBanner" style="background: none; border: none; color: #fff; font-size: 18px; padding: 4px 8px; cursor: pointer; opacity: 0.7;">✕</button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -404,6 +410,22 @@
             document.getElementById('statusRing').innerHTML = this.icons.park;
             this.updateClock(); setInterval(() => this.updateClock(), 10000);
             this.checkConnection(); this.loadUserProfile(); this.bindEvents();
+            this.showInstallPrompt(); // ← 新增这一行
+        },
+        showInstallPrompt() {
+            // 仅安卓手机且非独立模式（未从桌面打开）时显示
+            const isAndroid = /android/i.test(navigator.userAgent);
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+            if (!isAndroid || isStandalone) return;
+            // 如果之前已经关闭过，不再显示
+            if (localStorage.getItem('installBannerClosed')) return;
+
+            const banner = document.getElementById('installBanner');
+            banner.style.display = 'flex';
+            document.getElementById('closeInstallBanner').addEventListener('click', () => {
+                banner.style.display = 'none';
+                localStorage.setItem('installBannerClosed', '1');
+            });
         },
         updateClock() { const n=new Date(); document.getElementById('clock').textContent = `${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}`; },
         async safeCall(fn, msg='操作失败') { try { return await fn(); } catch(e) { console.error(e); this.showToast('⚠️ '+msg); return { data:null, error:e }; } },
