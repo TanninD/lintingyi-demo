@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- iOS 与 安卓 PWA 全屏支持 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#F2F2F7">
     <meta name="apple-mobile-web-app-title" content="邻停易">
     <title>邻停易 - 车位互换共享平台</title>
     <style>
@@ -164,28 +167,51 @@ html, body {
     overflow: hidden;
 }
 
-@media (max-width: 420px) {
-    body { 
-        padding: 0; 
-        background: var(--bg); 
-        position: fixed; /* 防止页面整体上下滑动 */
-        width: 100%; 
-        top: 0; 
-        bottom: 0; 
-    }
-    .phone-frame { 
-        width: 100vw; 
-        height: 100vh; /* 老浏览器回退 */
-        height: 100dvh; /* 动态视口高度，完美避开底部工具栏 */
-        max-height: none; 
-        border-radius: 0; 
-        padding: 0; 
-        box-shadow: none; 
-        border: none; 
-    }
-    .phone-screen { 
-        border-radius: 0; 
-        height: 100%; 
+        @media (max-width: 420px) {
+            body { 
+                padding: 0; 
+                margin: 0;
+                background: var(--bg); /* 强制覆盖黑色背景 */
+                position: fixed; 
+                width: 100%; 
+                top: 0; 
+                bottom: 0; 
+                display: block; /* 取消居中弹性布局 */
+            }
+            .phone-frame { 
+                width: 100vw; 
+                height: 100vh; 
+                height: 100dvh; /* 动态视口高度，避开底部工具栏 */
+                max-height: none; 
+                border-radius: 0; 
+                padding: 0; 
+                box-shadow: none; 
+                border: none; 
+                background: var(--bg); /* 强制覆盖黑色背景 */
+            }
+            .phone-screen { 
+                border-radius: 0; 
+                height: 100%; 
+            }
+        }
+
+        /* 安卓 PWA 全屏模式专属优化 */
+        @media all and (display-mode: standalone) {
+            body {
+                background: var(--bg);
+            }
+            .phone-frame {
+                width: 100vw;
+                height: 100vh;
+                height: 100dvh;
+                border-radius: 0;
+                border: none;
+                padding: 0;
+                box-shadow: none;
+            }
+            .phone-screen {
+                border-radius: 0;
+            }
         }
     </style>
 </head>
