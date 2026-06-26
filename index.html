@@ -661,5 +661,28 @@
     // 其他函数（预约、反馈、个人信息、管理后台等）保留原实现，此处为了简洁不再重复，但实际文件中已包含之前所有逻辑。
     // 实际部署时需要确保这些函数存在：openBookingForm, closeBookingForm, submitBooking, openFeedbackForm, closeFeedbackForm, submitFeedback, openProfileEditor, closeProfileEditor, saveProfile, loadCurrentUserProfile, promptAdminPassword, verifyAdminPassword, 等等。
 </script>
+    <script>
+  // 紧急修复：数据库连接检测
+  window.addEventListener('load', function() {
+    const statusEl = document.getElementById('connection-status');
+    if (!statusEl) return;
+    const supabaseUrl = 'https://prmhoyvyxthqlrjkeoho.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybWhveXZ5eHRocWxyamtlb2hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTY3NzQsImV4cCI6MjA5Nzk3Mjc3NH0.DWkUXWzNnA_MmBcLZ7tiPXUUyMLqmJEtxc2Nk-q_O44';
+    const client = supabase.createClient(supabaseUrl, supabaseKey);
+    client.from('feedbacks').select('*').limit(1).then(({ error }) => {
+      if (error) {
+        statusEl.textContent = '⚠️ 连接失败: ' + error.message;
+        statusEl.style.background = '#fff0ef';
+        statusEl.style.color = '#d63031';
+      } else {
+        statusEl.textContent = '✅ 数据库已连接';
+        statusEl.style.background = '#e6f9f4';
+        statusEl.style.color = '#00a381';
+      }
+    }).catch(err => {
+      statusEl.textContent = '⚠️ 异常: ' + err.message;
+    });
+  });
+</script>
 </body>
 </html>
