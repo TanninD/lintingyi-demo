@@ -158,10 +158,34 @@
         .conn-status.error { background: #FFF0F0; color: var(--warning); }
         .conn-status.success { background: #E8F8EE; color: var(--brand-green); }
 
-        @media (max-width: 420px) {
-            body { padding: 0; background: var(--bg); }
-            .phone-frame { width: 100%; height: 100vh; max-height: 100vh; border-radius: 0; padding: 0; box-shadow: none; border: none; }
-            .phone-screen { border-radius: 0; }
+        /* 锁定页面整体不滚动，解决移动端橡皮筋效果 */
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+@media (max-width: 420px) {
+    body { 
+        padding: 0; 
+        background: var(--bg); 
+        position: fixed; /* 防止页面整体上下滑动 */
+        width: 100%; 
+        top: 0; 
+        bottom: 0; 
+    }
+    .phone-frame { 
+        width: 100vw; 
+        height: 100vh; /* 老浏览器回退 */
+        height: 100dvh; /* 动态视口高度，完美避开底部工具栏 */
+        max-height: none; 
+        border-radius: 0; 
+        padding: 0; 
+        box-shadow: none; 
+        border: none; 
+    }
+    .phone-screen { 
+        border-radius: 0; 
+        height: 100%; 
         }
     </style>
 </head>
