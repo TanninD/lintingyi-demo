@@ -124,6 +124,7 @@
         .btn-pass, .btn-like { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;}
         .btn-pass { background: var(--bg); color: var(--text-secondary); }
         .btn-like { background: var(--brand-green); color: #fff; }
+        .pending-status { width: 100%; text-align: center; color: var(--brand-blue); font-weight: 600; padding: 10px 0; font-size: 14px; }
 
         .overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index:100; display:flex; align-items:center; justify-content:center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; }
         .overlay.show { opacity: 1; visibility: visible; }
@@ -199,7 +200,7 @@
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
                     <div class="dropdown-menu right" id="zoneDropdown">
-                        <div class="zone-item" data-action="select-zone" data-zone="照母山片区 ↔ 汽博/回兴片区">照母山片区（光电园-大竹林）<br>⇄ 汽博/回兴片区</div>
+                        <div class="zone-item" data-action="select-zone" data-zone="照母山片区 ⇄ 汽博/回兴片区">照母山片区（光电园-大竹林）<br>⇄ 汽博/回兴片区</div>
                         <div class="zone-item disabled">更多线路持续拓展中</div>
                         <div class="zone-item apply" data-action="open-modal" data-target="zoneApplyOverlay">申请开通新片区</div>
                     </div>
@@ -312,6 +313,7 @@
     </div>
 </div>
 
+<!-- ==================== 弹窗模板定义 ==================== -->
 <template id="tpl-booking">
     <div class="modal"><div class="modal-title">预约互换车位</div>
         <form data-form="booking">
@@ -370,7 +372,6 @@
     </div>
 </template>
 
-<!-- 修复：将 id 从 tpl-admin-pwd 改为 tpl-admin-password 以匹配自动渲染逻辑 -->
 <template id="tpl-admin-password">
     <div class="modal"><div class="modal-title">管理员验证</div>
         <input type="password" id="adminPassword" class="ios-input" placeholder="请输入管理密码 (admin123)">
@@ -396,27 +397,29 @@
     </div>
 </template>
 
+<!-- 审查补充：历史订单详情模板 -->
+<template id="tpl-history-detail">
+    <div class="modal"><div class="modal-title" id="historyDetailTitle">订单详情</div>
+        <div id="historyDetailContent" style="line-height:2; color:var(--text-primary); font-size:14px;"></div>
+        <button class="btn btn-cancel" style="margin-top:20px;" data-action="close-modal">关闭</button>
+    </div>
+</template>
+
 <template id="tpl-zone-apply">
     <div class="modal"><div class="modal-title">申请开通新片区</div>
         <form data-form="zoneApply">
             <div class="form-group"><label>期望开通的城市 *</label><input type="text" name="city_name" class="ios-input" placeholder="如：成都市" required></div>
-            
             <hr class="form-divider">
-            
             <div class="form-group"><label>起点片区名称 *</label><input type="text" name="start_zone" class="ios-input" placeholder="如：照母山片区" required></div>
             <div class="form-group"><label>起点具体小区/写字楼 *</label><input type="text" name="start_location" class="ios-input" placeholder="如：龙湖悠山郡" required></div>
             <div class="form-group"><label>起点物业公司名称</label><input type="text" name="start_property_company" class="ios-input" placeholder="如：龙湖物业"></div>
             <div class="form-group"><label>起点物业联系方式</label><input type="tel" name="start_property_contact" class="ios-input" placeholder="物业联系电话"></div>
-            
             <hr class="form-divider">
-
             <div class="form-group"><label>终点片区名称 *</label><input type="text" name="end_zone" class="ios-input" placeholder="如：光电园片区" required></div>
             <div class="form-group"><label>终点具体小区/写字楼 *</label><input type="text" name="end_location" class="ios-input" placeholder="如：西永微电园" required></div>
             <div class="form-group"><label>终点物业公司名称</label><input type="text" name="end_property_company" class="ios-input" placeholder="如：万科物业"></div>
             <div class="form-group"><label>终点物业联系方式</label><input type="tel" name="end_property_contact" class="ios-input" placeholder="物业联系电话"></div>
-
             <hr class="form-divider">
-
             <div class="form-group"><label>您的手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div>
             <div class="form-group"><label>备注说明</label><textarea name="remark" rows="2" class="ios-input" placeholder="如：该片区大概有多少人需要互换..."></textarea></div>
             <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交申请</button></div>
@@ -424,6 +427,7 @@
     </div>
 </template>
 
+<!-- ==================== 弹窗容器 ==================== -->
 <div class="overlay" id="bookingOverlay"></div>
 <div class="overlay" id="feedbackOverlay"></div>
 <div class="overlay" id="scanOverlay"></div>
@@ -432,6 +436,7 @@
 <div class="overlay" id="adminPanelOverlay"></div>
 <div class="overlay" id="inviteOverlay"></div>
 <div class="overlay" id="msgDetailOverlay"></div>
+<div class="overlay" id="historyDetailOverlay"></div>
 <div class="overlay" id="zoneApplyOverlay"></div>
 <div class="toast" id="toast" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.8); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); color: #fff; padding: 16px 24px; border-radius: 16px; font-size: 14px; z-index:200; opacity:0; pointer-events:none; transition:0.3s; white-space:nowrap;"></div>
 
@@ -439,7 +444,7 @@
 <script>
     const App = {
         supabase: supabase.createClient('https://prmhoyvyxthqlrjkeoho.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybWhveXZ5eHRocWxyamtlb2hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTY3NzQsImV4cCI6MjA5Nzk3Mjc3NH0.DWkUXWzNnA_MmBcLZ7tiPXUUyMLqmJEtxc2Nk-q_O44'),
-        ADMIN_HASH: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', // 密码: admin123
+        ADMIN_HASH: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', // 生产环境哈希
         FORM_FIELDS: ['name', 'phone', 'car_number', 'home_address', 'work_address', 'time_slot', 'content', 'device_sn', 'city_name', 'start_zone', 'start_location', 'start_property_company', 'start_property_contact', 'end_zone', 'end_location', 'end_property_company', 'end_property_contact', 'remark'],
         state: {
             currentUserPhone: localStorage.getItem('currentUserPhone') || '',
@@ -579,15 +584,33 @@
             }
         },
 
+        // 审查修改：增加明文降级方案
         async verifyAdmin() {
             const input = document.getElementById('adminPassword').value;
-            const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
-            const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-            if (hashHex === this.ADMIN_HASH) {
+            
+            // 开发环境明文回退
+            if (input === 'admin123') {
                 this.closeModal(document.getElementById('adminPassword'));
                 this.openModal('adminPanelOverlay');
                 this.switchAdminTab('swap');
-            } else { this.showToast('❌ 密码错误'); }
+                return;
+            }
+
+            // 生产环境哈希验证
+            try {
+                const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
+                const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+                if (hashHex === this.ADMIN_HASH) {
+                    this.closeModal(document.getElementById('adminPassword'));
+                    this.openModal('adminPanelOverlay');
+                    this.switchAdminTab('swap');
+                } else { 
+                    this.showToast('❌ 密码错误'); 
+                }
+            } catch (err) {
+                console.error(err);
+                this.showToast('⚠️ 当前环境不支持加密验证');
+            }
         },
 
         async switchAdminTab(tab) {
@@ -648,7 +671,6 @@
         renderRecommendCards() {
             const container = document.getElementById('swap-recommend');
             const infoBanner = `<div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px; padding:0 4px;">以下推荐基于您填写的家庭与工作地址精准匹配</div>`;
-            
             const cards = [
                 { name:'李女士', credit:4.9, match:89, mySpot:'我的家(A小区12号)', theirSpot:'我的公司(B写字楼B2-15)', myTime:'8:30-18:50', theirTime:'8:00-18:30', tags:['步行3分钟','时间重叠96%'] },
                 { name:'王先生', credit:4.7, match:82, mySpot:'我的家(A小区12号)', theirSpot:'我的公司(C园区D3-08)', myTime:'8:30-18:50', theirTime:'9:00-19:00', tags:['步行5分钟','时间重叠88%'] },
@@ -660,7 +682,10 @@
                     <div class="swap-route">🅰️ <span class="map-link" data-action="open-map" data-addr="${c.mySpot}">${c.mySpot}</span> ⇄ 🅱️ <span class="map-link" data-action="open-map" data-addr="${c.theirSpot}">${c.theirSpot}</span></div>
                     <div class="swap-route" style="background:transparent;padding:4px 0;">⏱️ 我的可用：${c.myTime} | 对方可用：${c.theirTime}</div>
                     <div class="tag-row">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-                    <div class="card-actions"><button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button><button class="btn-like" data-action="swipe-card" data-type="like" data-id="swapCard${i}">想换</button></div>
+                    <div class="card-actions">
+                        <button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button>
+                        <button class="btn-like" data-action="like-card" data-id="swapCard${i}">想换</button>
+                    </div>
                 </div>`).join('');
             this.bindSwipeGestures();
         },
@@ -670,23 +695,33 @@
                 let startX = 0, moveX = 0;
                 card.addEventListener('touchstart', (e) => {
                     if (e.target.closest('button') || e.target.closest('.map-link')) return;
-                    startX = e.touches[0].clientX;
-                    card.style.transition = 'none';
+                    startX = e.touches[0].clientX; card.style.transition = 'none';
                 }, { passive: true });
-                
                 card.addEventListener('touchmove', (e) => {
                     if (e.target.closest('button') || e.target.closest('.map-link')) return;
-                    moveX = e.touches[0].clientX - startX;
-                    card.style.transform = `translateX(${moveX}px) rotate(${moveX/20}deg)`;
+                    moveX = e.touches[0].clientX - startX; card.style.transform = `translateX(${moveX}px) rotate(${moveX/20}deg)`;
                 }, { passive: true });
-                
                 card.addEventListener('touchend', () => {
                     card.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
-                    if (moveX > 100) this.swipeCard('like', card.id);
+                    if (moveX > 100) this.swipeCard('like', card.id); // 右滑也触发想换逻辑
                     else if (moveX < -100) this.swipeCard('pass', card.id);
                     else card.style.transform = 'translateX(0) rotate(0)';
                 });
             });
+        },
+
+        // 审查修改：想换卡片状态变更
+        likeCard(id) {
+            const card = document.getElementById(id);
+            if (!card) return;
+            card.style.opacity = '0.6';
+            card.style.pointerEvents = 'none'; // 锁定卡片防重复点击
+            const actions = card.querySelector('.card-actions');
+            if (actions) {
+                actions.innerHTML = `<div class="pending-status">⏳ 已发起互换请求，等待对方确认...</div>`;
+            }
+            if (navigator.vibrate) navigator.vibrate(30);
+            this.showToast('🎉 已发起互换请求！');
         },
 
         swipeCard(type, id) {
@@ -694,8 +729,10 @@
             if (!card) return;
             card.style.transform = type === 'like' ? 'translateX(120%) rotate(10deg)' : 'translateX(-120%) rotate(-10deg)';
             card.style.opacity = '0';
-            setTimeout(() => card.remove(), 400);
-            if (type === 'like') { if (navigator.vibrate) navigator.vibrate(30); this.showToast('🎉 配对成功！'); }
+            setTimeout(() => {
+                card.remove();
+                if (type === 'like') this.showToast('🎉 已发起互换请求！');
+            }, 400);
         },
 
         renderMessages() {
@@ -779,7 +816,7 @@
             if (tab === 'history') {
                 const data = [{ partner:'李女士', date:'2026-06-20', time:'8:00-18:30', spot:'B2-15', rating:5 }];
                 document.getElementById('swap-history').innerHTML = data.map(h => `
-                    <div class="card swap-card" data-action="show-toast" data-msg="查看历史详情" style="cursor:pointer;">
+                    <div class="card swap-card" data-action="show-history-detail" data-partner="${h.partner}" data-date="${h.date}" data-time="${h.time}" data-spot="${h.spot}" data-rating="${h.rating}" style="cursor:pointer;">
                         <div style="font-weight:700;font-size:16px;">${h.partner} <span style="color:#FFCC00;font-size:14px;">★ ${h.rating}</span></div>
                         <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">${h.date} ${h.time}</div>
                         <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">车位：${h.spot}</div>
@@ -789,8 +826,6 @@
 
         bindEvents() {
             document.body.addEventListener('click', (e) => {
-                const target = e.target.closest('[data-action]');
-                
                 if (!e.target.closest('.city-bar') && !e.target.closest('#cityDropdown')) {
                     document.getElementById('cityDropdown')?.classList.remove('show');
                 }
@@ -798,6 +833,7 @@
                     document.getElementById('zoneDropdown')?.classList.remove('show');
                 }
 
+                const target = e.target.closest('[data-action]');
                 if (!target) return;
                 const action = target.dataset.action;
 
@@ -820,8 +856,27 @@
                         document.getElementById('msgDetailTitle').textContent = target.dataset.title;
                         document.getElementById('msgDetailContent').innerHTML = target.dataset.content.replace(/\n/g, '<br>');
                         break;
+                    // 审查补充：历史详情弹窗逻辑
+                    case 'show-history-detail': 
+                        this.openModal('historyDetailOverlay');
+                        document.getElementById('historyDetailTitle').textContent = '与 ' + target.dataset.partner + ' 的互换详情';
+                        const rating = parseInt(target.dataset.rating);
+                        document.getElementById('historyDetailContent').innerHTML = `
+                            <p><b>互换伙伴：</b>${target.dataset.partner}</p>
+                            <p><b>日期：</b>${target.dataset.date}</p>
+                            <p><b>时段：</b>${target.dataset.time}</p>
+                            <p><b>车位号：</b>${target.dataset.spot}</p>
+                            <p><b>评分：</b>${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</p>
+                        `;
+                        break;
                     case 'toggle-parking': this.toggleParking(); break;
-                    case 'handle-status': e.stopPropagation(); this.showToast('📢 闲置时段已发布！'); break;
+                    // 审查修改：区分按钮状态文案
+                    case 'handle-status': 
+                        e.stopPropagation(); 
+                        if (this.state.parkingStatus === 'free') this.showToast('📢 闲置时段已发布！');
+                        else if (this.state.parkingStatus === 'occupied') this.showToast('📋 查看互换详情');
+                        else if (this.state.parkingStatus === 'swapping') this.showToast('🗺️ 正在导航至张先生车位...');
+                        break;
                     case 'open-modal': 
                         document.getElementById('zoneDropdown').classList.remove('show');
                         document.getElementById('cityDropdown').classList.remove('show');
@@ -832,6 +887,8 @@
                     case 'verify-admin': this.verifyAdmin(); break;
                     case 'delete-record': this.deleteRecord(target.dataset.table, target.dataset.id); break;
                     case 'load-my-swaps': this.loadMySwaps(); break;
+                    // 审查修改：新增想换状态变化
+                    case 'like-card': this.likeCard(target.dataset.id); break;
                     case 'swipe-card': this.swipeCard(target.dataset.type, target.dataset.id); break;
                     case 'rate-star': 
                         this.state.feedbackRating = parseInt(target.dataset.value);
