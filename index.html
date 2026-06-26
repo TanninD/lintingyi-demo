@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <!-- iOS 与 安卓 PWA 全屏支持 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -27,15 +26,47 @@
             --radius-xl: 16px;
             --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', sans-serif;
         }
+        /* 深色模式（自动跟随系统） */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --brand-green: #30D158;
+                --brand-blue: #0A84FF;
+                --warning: #FF453A;
+                --orange: #FF9F0A;
+                --bg: #1C1C1E;
+                --card: #2C2C2E;
+                --text-primary: #FFFFFF;
+                --text-secondary: #EBEBF5;
+                --text-muted: #98989D;
+                --border: #38383A;
+                --shadow: 0 2px 10px rgba(0,0,0,0.3);
+                --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
+            }
+            .status-bar { background: rgba(28, 28, 30, 0.8); }
+            .bottom-nav { background: rgba(28, 28, 30, 0.72); border-top-color: var(--border); }
+            .ios-input { background: #3A3A3C; color: var(--text-primary); }
+            .dropdown-menu { background: rgba(44, 44, 46, 0.95); }
+            .modal { background: rgba(44, 44, 46, 0.95); }
+            .tab-switch { background: #3A3A3C; }
+            .tab-btn.active { background: #48484A; color: var(--text-primary); }
+            .conn-status.loading { background: #3A2E00; }
+            .conn-status.error { background: #3A0000; }
+            .conn-status.success { background: #003A1C; }
+            .status-ring.free { background: rgba(48, 209, 88, 0.15); }
+            .status-ring.occupied { background: rgba(10, 132, 255, 0.15); }
+            .status-ring.swapping { background: rgba(255, 159, 10, 0.15); }
+            .credit-circle::before { background: #2C2C2E; }
+        }
+
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
 
-        /* 1. 默认即移动端全屏 App 样式 */
+        /* 默认：移动端全屏样式 */
         html, body {
             margin: 0;
             padding: 0;
             height: 100%;
             overflow: hidden;
-            background: var(--bg); /* 强制背景为浅灰色，避免黑边 */
+            background: var(--bg);
         }
         body {
             font-family: var(--font-family);
@@ -63,8 +94,8 @@
             position: relative;
         }
 
-        /* 2. 仅在 PC 端或大屏幕设备上，恢复模拟手机外壳 */
-        @media (min-width: 600px) {
+        /* 桌面端：恢复手机外壳（仅在大屏幕上） */
+        @media (min-width: 800px) {
             body {
                 background: #000;
                 display: flex;
@@ -87,19 +118,15 @@
             }
         }
 
-        /* 保留原有的其他所有样式，下面未列出部分保持不变 */
         .status-bar { height: calc(44px + env(safe-area-inset-top)); padding: env(safe-area-inset-top) 24px 0 32px; display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 600; flex-shrink: 0; background: rgba(242, 242, 247, 0.8); backdrop-filter: saturate(180%) blur(20px); z-index: 10; }
         .status-bar svg { width: 18px; height: 18px; fill: var(--text-primary); margin-left: 5px; }
         .status-right { display: flex; align-items: center; }
-        
         .main-content { flex:1; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; padding: 0 16px calc(100px + env(safe-area-inset-bottom)); }
         .page { display:none; }
         .page.active { display:block; animation: crossFade 0.3s ease forwards; }
         @keyframes crossFade { from { opacity:0.5; } to { opacity:1; } }
-        
         .large-title { font-size: 32px; font-weight: 800; color: var(--text-primary); padding: 16px 4px 12px; letter-spacing: -0.5px; }
         .section-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; margin-top: 24px; padding-left: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-        
         .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; position: relative; }
         .city-bar { display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 600; cursor: pointer; width: fit-content; padding: 6px 10px; margin-left: -6px; border-radius: 10px; }
         .city-bar:active { background: rgba(0,0,0,0.05); }
@@ -108,7 +135,6 @@
         .marquee-bar { background: rgba(0,122,255,0.1); color: var(--brand-blue); padding: 8px 0; border-radius: 10px; overflow: hidden; margin-bottom: 12px; font-size: 12px; font-weight: 600; position: relative; white-space: nowrap; }
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 18s linear infinite; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-        
         .dropdown-menu { position: absolute; top: 40px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-radius: 14px; box-shadow: var(--shadow-lg); padding: 8px; width: 260px; z-index: 50; border: 0.5px solid var(--border); display: none; }
         .dropdown-menu.show { display: block; animation: crossFade 0.2s ease; }
         .dropdown-menu.left { left: 0; }
@@ -117,7 +143,6 @@
         .zone-item:active { background: #f0f0f5; }
         .zone-item.disabled { color: var(--text-muted); cursor: not-allowed; }
         .zone-item.apply { color: var(--brand-blue); font-weight: 600; border-top: 0.5px solid var(--border); margin-top: 4px; padding-top: 12px; }
-
         .bottom-nav { position: absolute; bottom:0; left:0; right:0; background: rgba(255, 255, 255, 0.72); backdrop-filter: saturate(180%) blur(20px); display: flex; align-items: flex-start; justify-content: space-around; padding-top: 8px; z-index: 20; border-top: 0.5px solid var(--border); height: calc(83px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom); }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px 12px; color: var(--text-secondary); }
         .nav-item svg { width: 26px; height: 26px; stroke-width: 1.5; transition: 0.2s; }
@@ -125,13 +150,11 @@
         .nav-item.active { color: var(--brand-green); }
         .nav-item.active svg { stroke-width: 2.5; transform: translateY(-1px); }
         .nav-item.active .nav-label { font-weight: 600; }
-        
         .card { background: var(--card); border-radius: var(--radius-xl); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); border: 0.5px solid rgba(0,0,0,0.04); }
         .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 24px; border-radius: 14px; font-size: 16px; font-weight: 600; border: none; cursor: pointer; transition: 0.2s; width: 100%; background: var(--brand-green); color: #fff; }
         .btn:active { opacity: 0.7; transform: scale(0.98); }
         .btn-outline { background: rgba(0,122,255,0.08); color: var(--brand-blue); }
         .btn-cancel { background: var(--bg); color: var(--brand-blue); }
-        
         .parking-card { text-align: center; cursor: pointer; padding: 24px 16px; }
         .parking-card:active { transform: scale(0.98); }
         .status-ring { width: 80px; height: 80px; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; background: #E8F8EE; }
@@ -141,22 +164,18 @@
         .status-ring.swapping { background: #FFF4E6; }
         .status-ring.swapping svg { stroke: var(--orange); }
         .status-ring svg { width: 36px; height: 36px; fill: none; stroke-width: 1.5; }
-        
         .status-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.3px; }
         .status-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
-        
         .quick-actions { display: flex; gap: 10px; flex-wrap: wrap; }
         .quick-chip { display: flex; align-items: center; gap: 8px; background: var(--card); padding: 10px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; box-shadow: var(--shadow); cursor: pointer; border: 0.5px solid var(--border); }
         .quick-chip:active { transform: scale(0.95); background: #f0f0f5; }
         .quick-chip svg { width: 18px; height: 18px; fill: var(--brand-blue); }
-
         .timeline-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
         .timeline-scroll::-webkit-scrollbar { display: none; }
         .timeline-card { min-width: 160px; background: var(--card); border-radius: 12px; padding: 14px; border: 0.5px solid var(--border); }
         .tl-time { font-size: 12px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
         .tl-text { font-size: 13px; line-height: 1.4; }
         .map-link { color: var(--brand-blue); text-decoration: underline; }
-
         .ios-list { background: var(--card); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow); margin-top: 8px; border: 0.5px solid rgba(0,0,0,0.04); }
         .ios-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 0.5px solid var(--border); font-size: 16px; min-height: 58px; }
         .ios-item:last-child { border-bottom: none; }
@@ -167,11 +186,9 @@
         .menu-arrow svg { width: 12px; height: 12px; stroke: var(--text-muted); stroke-width: 2.5; fill: none; }
         .badge-right { margin-left: auto; font-weight: 600; font-size: 13px; }
         .badge-right.locked { color: var(--text-secondary); opacity: 0.5; }
-
         .tab-switch { display: flex; background: #EDEDF0; border-radius: 10px; padding: 3px; margin: 16px 0; }
         .tab-btn { flex: 1; padding: 8px; border-radius: 8px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; }
         .tab-btn.active { background: #fff; color: var(--text-primary); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-
         .swap-card { padding: 18px; position: relative; transition: transform 0.4s ease, opacity 0.4s ease; touch-action: pan-y; }
         .match-badge { background: #E8F8EE; color: var(--brand-green); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 8px; float: right; }
         .user-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
@@ -184,7 +201,6 @@
         .btn-pass { background: var(--bg); color: var(--text-secondary); }
         .btn-like { background: var(--brand-green); color: #fff; }
         .pending-status { width: 100%; text-align: center; color: var(--brand-blue); font-weight: 600; padding: 10px 0; font-size: 14px; }
-
         .overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index:100; display:flex; align-items:center; justify-content:center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; }
         .overlay.show { opacity: 1; visibility: visible; }
         .modal { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; width: 100%; max-width: 340px; box-shadow: var(--shadow-lg); max-height: 85vh; overflow-y: auto; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1); }
@@ -197,7 +213,6 @@
         textarea.ios-input { resize: none; min-height: 80px; }
         .modal-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
         .form-divider { border: 0; border-top: 0.5px solid var(--border); margin: 20px 0; }
-        
         .msg-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
         .msg-item:last-child { border: none; }
         .msg-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -205,13 +220,11 @@
         .msg-title { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
         .msg-preview { font-size: 13px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .msg-time { font-size: 12px; color: var(--text-secondary); flex-shrink: 0; }
-
         .credit-circle { width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(var(--brand-green) 0% 85%, #E5E5EA 85% 100%); display: flex; align-items: center; justify-content: center; margin: 20px auto 16px; position: relative; }
         .credit-circle::before { content: ''; position: absolute; width: 110px; height: 110px; background: #fff; border-radius: 50%; }
         .score-inner { position: relative; z-index: 1; text-align: center; }
         .score-num { font-size: 40px; font-weight: 800; line-height: 1; }
         .score-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-
         .conn-status { text-align: center; padding: 8px; font-size: 12px; font-weight: 600; border-radius: 10px; margin-bottom: 12px; }
         .conn-status.loading { background: #FFF4E6; color: var(--orange); }
         .conn-status.error { background: #FFF0F0; color: var(--warning); }
@@ -229,10 +242,8 @@
                 <svg viewBox="0 0 30 14"><rect x="1" y="1" width="25" height="12" rx="3" ry="3" fill="none" stroke="#1C1C1E" stroke-width="1"/><rect x="3" y="3" width="20" height="8" rx="1.5" ry="1.5"/><rect x="27" y="4" width="2" height="6" rx="1"/></svg>
             </div>
         </div>
-
         <div class="main-content" id="mainContent">
             <div id="conn-status" class="conn-status loading">连接数据库...</div>
-            
             <div class="page active" id="page-home">
                 <div class="top-bar">
                     <div class="city-bar" data-action="toggle-city-menu">
@@ -247,7 +258,6 @@
                         <div class="zone-item" data-action="open-modal" data-target="zoneApplyOverlay">成都 (敬请期待)</div>
                         <div class="zone-item disabled">更多城市敬请期待</div>
                     </div>
-
                     <div class="zone-selector" data-action="toggle-zone-menu">
                         线路动态
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -258,20 +268,16 @@
                         <div class="zone-item apply" data-action="open-modal" data-target="zoneApplyOverlay">申请开通新片区</div>
                     </div>
                 </div>
-                
                 <div class="marquee-bar">
                     <span class="marquee-text">🔥 首条通勤互换带开通：照母山片区（光电园-大竹林一带）⇄ 汽博/回兴片区，点击右上角查看线路动态</span>
                 </div>
-
                 <div class="large-title">我的车位</div>
-                
                 <div class="card parking-card" data-action="toggle-parking">
                     <div class="status-ring free" id="statusRing"></div>
                     <div class="status-title" id="statusTitle">空闲中</div>
                     <div class="status-subtitle" id="statusSubtitle">可共享时段 8:30 - 18:50</div>
                     <button class="btn" id="statusBtn" data-action="handle-status">一键发布闲置</button>
                 </div>
-
                 <div class="section-title">今日互换计划</div>
                 <div class="timeline-scroll">
                     <div class="timeline-card">
@@ -289,7 +295,6 @@
                         <div class="tl-text">到达 · 你的车位交付张先生</div>
                     </div>
                 </div>
-
                 <div class="section-title">快捷操作</div>
                 <div class="quick-actions">
                     <div class="quick-chip" data-action="open-modal" data-target="scanOverlay">
@@ -302,7 +307,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="page" id="page-swap">
                 <div class="large-title">互换中心</div>
                 <div class="tab-switch" id="swapTabs">
@@ -314,10 +318,8 @@
                 <div id="swap-ongoing" style="display:none;"></div>
                 <div id="swap-history" style="display:none;"></div>
             </div>
-
             <div class="page" id="page-msg"></div>
             <div class="page" id="page-credit"></div>
-            
             <div class="page" id="page-me">
                 <div class="large-title">我的</div>
                 <div class="card" style="display:flex; align-items:center; gap:16px; cursor:pointer; margin-bottom: 24px;" data-action="open-modal" data-target="profileOverlay">
@@ -328,7 +330,6 @@
                     </div>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </div>
-                
                 <div class="section-title">常用功能</div>
                 <div class="ios-list">
                     <div class="ios-item" data-action="load-my-swaps">
@@ -344,7 +345,6 @@
                         邀请好友<span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
                     </div>
                 </div>
-
                 <div class="section-title">管理</div>
                 <div class="ios-list">
                     <div class="ios-item" data-action="open-modal" data-target="adminPasswordOverlay">
@@ -355,7 +355,6 @@
                 <div id="mySwapsList" style="margin-top:16px;"></div>
             </div>
         </div>
-
         <div class="bottom-nav" id="bottomNav">
             <div class="nav-item active" data-page="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span class="nav-label">首页</span></div>
             <div class="nav-item" data-page="swap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg><span class="nav-label">互换</span></div>
@@ -366,109 +365,16 @@
     </div>
 </div>
 
-<!-- 弹窗模板及容器与之前完全一致，此处省略但实际已包含 -->
-<template id="tpl-booking">
-    <div class="modal"><div class="modal-title">预约互换车位</div>
-        <form data-form="booking">
-            <div class="form-group"><label>姓名 *</label><input type="text" name="name" class="ios-input" required></div>
-            <div class="form-group"><label>手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div>
-            <div class="form-group"><label>车牌号</label><input type="text" name="car_number" class="ios-input"></div>
-            <div class="form-group"><label>家庭地址 *</label><input type="text" name="home_address" class="ios-input" required></div>
-            <div class="form-group"><label>工作地址 *</label><input type="text" name="work_address" class="ios-input" required></div>
-            <div class="form-group"><label>可互换时段 *</label><input type="text" name="time_slot" class="ios-input" required></div>
-            <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交预约</button></div>
-        </form>
-    </div>
-</template>
-<template id="tpl-feedback">
-    <div class="modal"><div class="modal-title">意见反馈</div>
-        <form data-form="feedback">
-            <div class="form-group"><label>反馈内容 *</label><textarea name="content" rows="3" class="ios-input" required></textarea></div>
-            <div class="form-group"><label>评分</label><div class="star-rating" id="starRating" style="display:flex;gap:8px;font-size:28px;cursor:pointer;color:#FFCC00;">
-                <span class="star active" data-value="1" data-action="rate-star">★</span><span class="star active" data-value="2" data-action="rate-star">★</span><span class="star active" data-value="3" data-action="rate-star">★</span><span class="star active" data-value="4" data-action="rate-star">★</span><span class="star active" data-value="5" data-action="rate-star">★</span>
-            </div></div>
-            <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交反馈</button></div>
-        </form>
-    </div>
-</template>
-<template id="tpl-scan">
-    <div class="modal"><div class="modal-title">扫码降锁</div>
-        <div style="text-align:center;padding:20px 0;color:var(--text-secondary);">将摄像头对准地锁二维码<br><span style="font-size:12px;">(演示模式)</span></div>
-        <div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">取消</button><button class="btn" data-action="mock-scan">模拟扫码成功</button></div>
-    </div>
-</template>
-<template id="tpl-profile">
-    <div class="modal"><div class="modal-title">编辑个人信息</div>
-        <form data-form="profile">
-            <div class="form-group"><label>姓名</label><input type="text" name="name" class="ios-input"></div>
-            <div class="form-group"><label>手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div>
-            <div class="form-group"><label>车牌号</label><input type="text" name="car_number" class="ios-input"></div>
-            <div class="form-group"><label>家庭地址</label><input type="text" name="home_address" class="ios-input"></div>
-            <div class="form-group"><label>工作地址</label><input type="text" name="work_address" class="ios-input"></div>
-            <div class="form-group"><label>设备编号</label><input type="text" name="device_sn" class="ios-input"></div>
-            <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">保存</button></div>
-        </form>
-    </div>
-</template>
-<template id="tpl-invite">
-    <div class="modal"><div class="modal-title">邀请好友</div>
-        <div style="text-align:center;margin-bottom:20px;">
-            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:8px;">您的邀请码</p>
-            <strong id="inviteCode" style="font-size:20px;letter-spacing:1px;"></strong>
-            <img src="https://tannind.github.io/lintingyi-demo/qrcode.png" alt="邀请二维码" style="width:180px;height:180px;margin-top:16px;border-radius:12px;box-shadow:var(--shadow);" onerror="this.style.display='none'">
-        </div>
-        <button class="btn" data-action="copy-invite">复制邀请码</button>
-    </div>
-</template>
-<template id="tpl-admin-password">
-    <div class="modal"><div class="modal-title">管理员验证</div>
-        <input type="password" id="adminPassword" class="ios-input" placeholder="请输入管理密码 (admin123)">
-        <div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">取消</button><button class="btn" data-action="verify-admin">进入</button></div>
-    </div>
-</template>
-<template id="tpl-admin-panel">
-    <div class="modal" style="max-width:500px;"><div class="modal-title">管理后台</div>
-        <div class="tab-switch" id="adminTabs" style="margin-bottom:16px;">
-            <button class="tab-btn active" data-admin-tab="swap">预约管理</button>
-            <button class="tab-btn" data-admin-tab="feedback">反馈管理</button>
-        </div>
-        <div id="adminTableContainer" style="max-height:400px;overflow-y:auto;"></div>
-        <button class="btn btn-cancel" style="margin-top:12px;" data-action="close-modal">关闭</button>
-    </div>
-</template>
-<template id="tpl-msg-detail">
-    <div class="modal"><div class="modal-title" id="msgDetailTitle">消息详情</div>
-        <div id="msgDetailContent" style="line-height:1.6; color:var(--text-primary); font-size:14px;"></div>
-        <button class="btn btn-cancel" style="margin-top:20px;" data-action="close-modal">关闭</button>
-    </div>
-</template>
-<template id="tpl-history-detail">
-    <div class="modal"><div class="modal-title" id="historyDetailTitle">订单详情</div>
-        <div id="historyDetailContent" style="line-height:2; color:var(--text-primary); font-size:14px;"></div>
-        <button class="btn btn-cancel" style="margin-top:20px;" data-action="close-modal">关闭</button>
-    </div>
-</template>
-<template id="tpl-zone-apply">
-    <div class="modal"><div class="modal-title">申请开通新片区</div>
-        <form data-form="zoneApply">
-            <div class="form-group"><label>期望开通的城市 *</label><input type="text" name="city_name" class="ios-input" placeholder="如：成都市" required></div>
-            <hr class="form-divider">
-            <div class="form-group"><label>起点片区名称 *</label><input type="text" name="start_zone" class="ios-input" placeholder="如：照母山片区" required></div>
-            <div class="form-group"><label>起点具体小区/写字楼 *</label><input type="text" name="start_location" class="ios-input" placeholder="如：龙湖悠山郡" required></div>
-            <div class="form-group"><label>起点物业公司名称</label><input type="text" name="start_property_company" class="ios-input" placeholder="如：龙湖物业"></div>
-            <div class="form-group"><label>起点物业联系方式</label><input type="tel" name="start_property_contact" class="ios-input" placeholder="物业联系电话"></div>
-            <hr class="form-divider">
-            <div class="form-group"><label>终点片区名称 *</label><input type="text" name="end_zone" class="ios-input" placeholder="如：光电园片区" required></div>
-            <div class="form-group"><label>终点具体小区/写字楼 *</label><input type="text" name="end_location" class="ios-input" placeholder="如：西永微电园" required></div>
-            <div class="form-group"><label>终点物业公司名称</label><input type="text" name="end_property_company" class="ios-input" placeholder="如：万科物业"></div>
-            <div class="form-group"><label>终点物业联系方式</label><input type="tel" name="end_property_contact" class="ios-input" placeholder="物业联系电话"></div>
-            <hr class="form-divider">
-            <div class="form-group"><label>您的手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div>
-            <div class="form-group"><label>备注说明</label><textarea name="remark" rows="2" class="ios-input" placeholder="如：该片区大概有多少人需要互换..."></textarea></div>
-            <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交申请</button></div>
-        </form>
-    </div>
-</template>
+<template id="tpl-booking"><div class="modal"><div class="modal-title">预约互换车位</div><form data-form="booking"><div class="form-group"><label>姓名 *</label><input type="text" name="name" class="ios-input" required></div><div class="form-group"><label>手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div><div class="form-group"><label>车牌号</label><input type="text" name="car_number" class="ios-input"></div><div class="form-group"><label>家庭地址 *</label><input type="text" name="home_address" class="ios-input" required></div><div class="form-group"><label>工作地址 *</label><input type="text" name="work_address" class="ios-input" required></div><div class="form-group"><label>可互换时段 *</label><input type="text" name="time_slot" class="ios-input" required></div><div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交预约</button></div></form></div></template>
+<template id="tpl-feedback"><div class="modal"><div class="modal-title">意见反馈</div><form data-form="feedback"><div class="form-group"><label>反馈内容 *</label><textarea name="content" rows="3" class="ios-input" required></textarea></div><div class="form-group"><label>评分</label><div class="star-rating" id="starRating" style="display:flex;gap:8px;font-size:28px;cursor:pointer;color:#FFCC00;"><span class="star active" data-value="1" data-action="rate-star">★</span><span class="star active" data-value="2" data-action="rate-star">★</span><span class="star active" data-value="3" data-action="rate-star">★</span><span class="star active" data-value="4" data-action="rate-star">★</span><span class="star active" data-value="5" data-action="rate-star">★</span></div></div><div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交反馈</button></div></form></div></template>
+<template id="tpl-scan"><div class="modal"><div class="modal-title">扫码降锁</div><div style="text-align:center;padding:20px 0;color:var(--text-secondary);">将摄像头对准地锁二维码<br><span style="font-size:12px;">(演示模式)</span></div><div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">取消</button><button class="btn" data-action="mock-scan">模拟扫码成功</button></div></div></template>
+<template id="tpl-profile"><div class="modal"><div class="modal-title">编辑个人信息</div><form data-form="profile"><div class="form-group"><label>姓名</label><input type="text" name="name" class="ios-input"></div><div class="form-group"><label>手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div><div class="form-group"><label>车牌号</label><input type="text" name="car_number" class="ios-input"></div><div class="form-group"><label>家庭地址</label><input type="text" name="home_address" class="ios-input"></div><div class="form-group"><label>工作地址</label><input type="text" name="work_address" class="ios-input"></div><div class="form-group"><label>设备编号</label><input type="text" name="device_sn" class="ios-input"></div><div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">保存</button></div></form></div></template>
+<template id="tpl-invite"><div class="modal"><div class="modal-title">邀请好友</div><div style="text-align:center;margin-bottom:20px;"><p style="color:var(--text-secondary);font-size:14px;margin-bottom:8px;">您的邀请码</p><strong id="inviteCode" style="font-size:20px;letter-spacing:1px;"></strong><img src="https://tannind.github.io/lintingyi-demo/qrcode.png" alt="邀请二维码" style="width:180px;height:180px;margin-top:16px;border-radius:12px;box-shadow:var(--shadow);" onerror="this.style.display='none'"></div><button class="btn" data-action="copy-invite">复制邀请码</button></div></template>
+<template id="tpl-admin-password"><div class="modal"><div class="modal-title">管理员验证</div><input type="password" id="adminPassword" class="ios-input" placeholder="请输入管理密码 (admin123)"><div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">取消</button><button class="btn" data-action="verify-admin">进入</button></div></div></template>
+<template id="tpl-admin-panel"><div class="modal" style="max-width:500px;"><div class="modal-title">管理后台</div><div class="tab-switch" id="adminTabs" style="margin-bottom:16px;"><button class="tab-btn active" data-admin-tab="swap">预约管理</button><button class="tab-btn" data-admin-tab="feedback">反馈管理</button></div><div id="adminTableContainer" style="max-height:400px;overflow-y:auto;"></div><button class="btn btn-cancel" style="margin-top:12px;" data-action="close-modal">关闭</button></div></template>
+<template id="tpl-msg-detail"><div class="modal"><div class="modal-title" id="msgDetailTitle">消息详情</div><div id="msgDetailContent" style="line-height:1.6; color:var(--text-primary); font-size:14px;"></div><button class="btn btn-cancel" style="margin-top:20px;" data-action="close-modal">关闭</button></div></template>
+<template id="tpl-history-detail"><div class="modal"><div class="modal-title" id="historyDetailTitle">订单详情</div><div id="historyDetailContent" style="line-height:2; color:var(--text-primary); font-size:14px;"></div><button class="btn btn-cancel" style="margin-top:20px;" data-action="close-modal">关闭</button></div></template>
+<template id="tpl-zone-apply"><div class="modal"><div class="modal-title">申请开通新片区</div><form data-form="zoneApply"><div class="form-group"><label>期望开通的城市 *</label><input type="text" name="city_name" class="ios-input" placeholder="如：成都市" required></div><hr class="form-divider"><div class="form-group"><label>起点片区名称 *</label><input type="text" name="start_zone" class="ios-input" placeholder="如：照母山片区" required></div><div class="form-group"><label>起点具体小区/写字楼 *</label><input type="text" name="start_location" class="ios-input" placeholder="如：龙湖悠山郡" required></div><div class="form-group"><label>起点物业公司名称</label><input type="text" name="start_property_company" class="ios-input" placeholder="如：龙湖物业"></div><div class="form-group"><label>起点物业联系方式</label><input type="tel" name="start_property_contact" class="ios-input" placeholder="物业联系电话"></div><hr class="form-divider"><div class="form-group"><label>终点片区名称 *</label><input type="text" name="end_zone" class="ios-input" placeholder="如：光电园片区" required></div><div class="form-group"><label>终点具体小区/写字楼 *</label><input type="text" name="end_location" class="ios-input" placeholder="如：西永微电园" required></div><div class="form-group"><label>终点物业公司名称</label><input type="text" name="end_property_company" class="ios-input" placeholder="如：万科物业"></div><div class="form-group"><label>终点物业联系方式</label><input type="tel" name="end_property_contact" class="ios-input" placeholder="物业联系电话"></div><hr class="form-divider"><div class="form-group"><label>您的手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div><div class="form-group"><label>备注说明</label><textarea name="remark" rows="2" class="ios-input" placeholder="如：该片区大概有多少人需要互换..."></textarea></div><div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交申请</button></div></form></div></template>
 
 <div class="overlay" id="bookingOverlay"></div>
 <div class="overlay" id="feedbackOverlay"></div>
@@ -488,289 +394,59 @@
         supabase: supabase.createClient('https://prmhoyvyxthqlrjkeoho.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybWhveXZ5eHRocWxyamtlb2hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTY3NzQsImV4cCI6MjA5Nzk3Mjc3NH0.DWkUXWzNnA_MmBcLZ7tiPXUUyMLqmJEtxc2Nk-q_O44'),
         ADMIN_HASH: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
         FORM_FIELDS: ['name', 'phone', 'car_number', 'home_address', 'work_address', 'time_slot', 'content', 'device_sn', 'city_name', 'start_zone', 'start_location', 'start_property_company', 'start_property_contact', 'end_zone', 'end_location', 'end_property_company', 'end_property_contact', 'remark'],
-        state: {
-            currentUserPhone: localStorage.getItem('currentUserPhone') || '',
-            feedbackRating: 5,
-            parkingStatus: 'free',
-            cachedPages: {}
-        },
+        state: { currentUserPhone: localStorage.getItem('currentUserPhone') || '', feedbackRating: 5, parkingStatus: 'free', cachedPages: {} },
         icons: {
             car: '<svg viewBox="0 0 24 24"><path d="M5 17H3v-5l2-5h12l2 5v5h-2M5 17h14M5 17v2h2v-2M17 17v2h2v-2M7 12h10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
             park: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><text x="12" y="16" font-size="10" text-anchor="middle" fill="currentColor" stroke="none">P</text></svg>',
             swap: '<svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>'
         },
-
         init() {
             document.getElementById('statusRing').innerHTML = this.icons.park;
-            this.updateClock();
-            setInterval(() => this.updateClock(), 10000); 
-            this.checkConnection();
-            this.loadUserProfile();
-            this.bindEvents();
+            this.updateClock(); setInterval(() => this.updateClock(), 10000);
+            this.checkConnection(); this.loadUserProfile(); this.bindEvents();
         },
-
-        updateClock() {
-            const now = new Date();
-            const h = now.getHours().toString().padStart(2, '0');
-            const m = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('clock').textContent = `${h}:${m}`;
-        },
-
-        async safeCall(fn, errorMsg = '操作失败') {
-            try { return await fn(); } 
-            catch (err) { console.error(err); this.showToast('⚠️ ' + errorMsg); return { data: null, error: err }; }
-        },
-
-        showToast(msg) {
-            const toast = document.getElementById('toast');
-            clearTimeout(this.toastTimer);
-            toast.textContent = msg;
-            toast.style.opacity = 1;
-            toast.style.transform = 'translate(-50%,-50%) scale(1)';
-            if (navigator.vibrate) navigator.vibrate(15);
-            this.toastTimer = setTimeout(() => {
-                toast.style.opacity = 0;
-                toast.style.transform = 'translate(-50%,-50%) scale(0.8)';
-            }, 2000);
-        },
-
-        async checkConnection() {
-            const el = document.getElementById('conn-status');
-            const { error } = await this.safeCall(() => this.supabase.from('feedbacks').select('*').limit(1), '连接超时');
-            el.className = 'conn-status ' + (error ? 'error' : 'success');
-            el.textContent = error ? '⚠️ 连接失败' : '✅ 数据库已连接';
-        },
-
-        openModal(targetId) {
-            const overlay = document.getElementById(targetId);
-            if (!overlay) return;
-            if (overlay.children.length === 0) {
-                const tplId = 'tpl-' + targetId.replace('Overlay', '').replace(/([A-Z])/g, '-$1').toLowerCase();
-                const tpl = document.getElementById(tplId);
-                if (tpl) overlay.appendChild(tpl.content.cloneNode(true));
+        updateClock() { const n=new Date(); document.getElementById('clock').textContent = `${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}`; },
+        async safeCall(fn, msg='操作失败') { try { return await fn(); } catch(e) { console.error(e); this.showToast('⚠️ '+msg); return { data:null, error:e }; } },
+        showToast(msg) { const t=document.getElementById('toast'); clearTimeout(this.toastTimer); t.textContent=msg; t.style.opacity=1; t.style.transform='translate(-50%,-50%) scale(1)'; if(navigator.vibrate)navigator.vibrate(15); this.toastTimer=setTimeout(()=>{ t.style.opacity=0; t.style.transform='translate(-50%,-50%) scale(0.8)'; },2000); },
+        async checkConnection() { const el=document.getElementById('conn-status'); const {error}=await this.safeCall(()=>this.supabase.from('feedbacks').select('*').limit(1),'连接超时'); el.className='conn-status '+(error?'error':'success'); el.textContent=error?'⚠️ 连接失败':'✅ 数据库已连接'; },
+                openModal(id) {
+            const ov = document.getElementById(id);
+            if (!ov) return;
+            if (ov.children.length === 0) {
+                const tpl = document.getElementById('tpl-' + id.replace('Overlay', '').replace(/([A-Z])/g, '-$1').toLowerCase());
+                if (tpl) ov.appendChild(tpl.content.cloneNode(true));
             }
-            if (targetId === 'profileOverlay') this.fillProfileForm();
-            if (targetId === 'inviteOverlay') document.getElementById('inviteCode').textContent = this.state.currentUserPhone || '未设置手机号';
-            overlay.classList.add('show');
-        },
-
-        closeModal(targetEl) {
-            const overlay = targetEl.closest('.overlay');
-            if (overlay) overlay.classList.remove('show');
-        },
-
-        getFormData(formEl) {
-            const data = {};
-            this.FORM_FIELDS.forEach(field => {
-                const el = formEl.querySelector(`[name="${field}"]`);
-                if (el) data[field] = el.value.trim();
-            });
-            return data;
-        },
-
-        async handleSubmit(formEl) {
-            const type = formEl.dataset.form;
-            if (type === 'booking') return this.submitBooking(formEl);
-            if (type === 'feedback') return this.submitFeedback(formEl);
-            if (type === 'profile') return this.saveProfile(formEl);
-            if (type === 'zoneApply') return this.submitZoneApply(formEl);
-        },
-
-        async submitBooking(form) {
-            const data = this.getFormData(form);
-            const { error } = await this.safeCall(() => this.supabase.from('swap_requests').insert([data]));
-            if (!error) { this.showToast('✅ 预约成功！'); this.closeModal(form); }
-        },
-
-        async submitFeedback(form) {
-            const data = this.getFormData(form);
-            const payload = { content: data.content, rating: this.state.feedbackRating, user_id: this.state.currentUserPhone || 'anonymous' };
-            const { error } = await this.safeCall(() => this.supabase.from('feedbacks').insert([payload]));
-            if (!error) { this.showToast('✅ 感谢反馈！'); this.closeModal(form); }
-        },
-
-        async submitZoneApply(form) {
-            const data = this.getFormData(form);
-            const { error } = await this.safeCall(() => this.supabase.from('zone_applications').insert([data]));
-            if (!error) { this.showToast('✅ 申请已提交，我们将尽快评估！'); this.closeModal(form); }
-        },
-
-        async fillProfileForm() {
-            if (!this.state.currentUserPhone) return;
-            const { data } = await this.safeCall(() => this.supabase.from('user_profiles').select('*').eq('phone', this.state.currentUserPhone).single());
-            const form = document.querySelector('#profileOverlay form');
-            if (data && form) {
-                this.FORM_FIELDS.forEach(f => { if (form[f]) form[f].value = data[f] || ''; });
+            if (id === 'profileOverlay') this.fillProfileForm();
+            if (id === 'inviteOverlay') document.getElementById('inviteCode').textContent = this.state.currentUserPhone || '未设置手机号';
+            // 每次打开反馈弹窗时重置为5星
+            if (id === 'feedbackOverlay') {
+                this.state.feedbackRating = 5;
+                setTimeout(() => {
+                    const stars = document.querySelectorAll('#starRating .star');
+                    stars.forEach(s => { s.classList.add('active'); s.style.color = '#FFCC00'; });
+                }, 50);
             }
+            ov.classList.add('show');
         },
-
-        async saveProfile(form) {
-            const data = this.getFormData(form);
-            const { error } = await this.safeCall(() => this.supabase.from('user_profiles').upsert(data, { onConflict: 'phone' }));
-            if (!error) {
-                this.state.currentUserPhone = data.phone;
-                localStorage.setItem('currentUserPhone', data.phone);
-                this.loadUserProfile();
-                this.showToast('✅ 保存成功！');
-                this.closeModal(form);
-            }
-        },
-
-        async loadUserProfile() {
-            if (!this.state.currentUserPhone) return;
-            const { data } = await this.safeCall(() => this.supabase.from('user_profiles').select('*').eq('phone', this.state.currentUserPhone).single());
-            if (data) {
-                document.getElementById('profileName').textContent = data.name || '邻停易用户';
-                document.getElementById('profilePhone').textContent = data.phone;
-                document.getElementById('profileAvatar').textContent = (data.name || '邻')[0];
-            }
-        },
-
-        async verifyAdmin() {
-            const input = document.getElementById('adminPassword').value;
-            if (input === 'admin123') {
-                this.closeModal(document.getElementById('adminPassword'));
-                this.openModal('adminPanelOverlay');
-                this.switchAdminTab('swap');
-                return;
-            }
-            try {
-                const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
-                const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-                if (hashHex === this.ADMIN_HASH) {
-                    this.closeModal(document.getElementById('adminPassword'));
-                    this.openModal('adminPanelOverlay');
-                    this.switchAdminTab('swap');
-                } else { 
-                    this.showToast('❌ 密码错误'); 
-                }
-            } catch (err) {
-                console.error(err);
-                this.showToast('⚠️ 当前环境不支持加密验证');
-            }
-        },
-
-        async switchAdminTab(tab) {
-            document.querySelectorAll('#adminTabs .tab-btn').forEach(b => b.classList.toggle('active', b.dataset.adminTab === tab));
-            const table = tab === 'swap' ? 'swap_requests' : 'feedbacks';
-            const { data } = await this.safeCall(() => this.supabase.from(table).select('*').order('created_at', { ascending: false }));
-            const container = document.getElementById('adminTableContainer');
-            if (!data || data.length === 0) { container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:20px;">暂无记录</div>'; return; }
-            container.innerHTML = data.map(item => {
-                if (tab === 'swap') return `<div class="card" style="padding:14px;margin-bottom:8px;"><b>${item.name}</b> · ${item.phone}<br><span style="font-size:13px;color:var(--text-secondary);">${item.home_address} → ${item.work_address}</span><br><button style="color:var(--warning);margin-top:8px;font-size:13px;border:none;background:none;" data-action="delete-record" data-table="swap_requests" data-id="${item.id}">删除</button></div>`;
-                else return `<div class="card" style="padding:14px;margin-bottom:8px;"><b>${item.user_id || '匿名'}</b> · 评分：${item.rating}<br><span style="font-size:13px;color:var(--text-secondary);">${item.content}</span><br><button style="color:var(--warning);margin-top:8px;font-size:13px;border:none;background:none;" data-action="delete-record" data-table="feedbacks" data-id="${item.id}">删除</button></div>`;
-            }).join('');
-        },
-
-        async deleteRecord(table, id) {
-            await this.safeCall(() => this.supabase.from(table).delete().eq('id', id), '删除失败：权限受限');
-            this.showToast('已删除 (或被安全策略拦截)');
-            this.switchAdminTab(table === 'swap_requests' ? 'swap' : 'feedback');
-        },
-
-        async loadMySwaps() {
-            const container = document.getElementById('mySwapsList');
-            container.innerHTML = '<div class="card" style="text-align:center;color:var(--text-muted);">加载中...</div>';
-            const { data } = await this.safeCall(() => this.supabase.from('swap_requests').select('*').order('created_at', { ascending: false }));
-            if (!data || data.length === 0) { container.innerHTML = '<div class="card" style="text-align:center;color:var(--text-muted);">暂无预约记录</div>'; return; }
-            container.innerHTML = '<div class="section-title">我的预约</div>' + data.map(item => `
-                <div class="card" style="padding:14px;"><b>${item.name}</b> · ${item.phone}<br>
-                <span style="color:var(--text-secondary);font-size:13px;">${item.home_address} → ${item.work_address}</span><br>
-                <span style="font-size:12px;color:var(--text-muted);">${item.time_slot}</span></div>`).join('');
-        },
-
-        toggleParking() {
-            if (navigator.vibrate) navigator.vibrate(10);
-            const ring = document.getElementById('statusRing');
-            const title = document.getElementById('statusTitle');
-            const subtitle = document.getElementById('statusSubtitle');
-            const btn = document.getElementById('statusBtn');
-            const s = this.state.parkingStatus;
-            if (s === 'free') {
-                this.state.parkingStatus = 'occupied';
-                ring.className = 'status-ring occupied'; ring.innerHTML = this.icons.car;
-                title.textContent = '李女士正在使用'; subtitle.textContent = '占用中 · 剩余 3小时15分';
-                btn.textContent = '查看详情'; btn.className = 'btn btn-outline';
-            } else if (s === 'occupied') {
-                this.state.parkingStatus = 'swapping';
-                ring.className = 'status-ring swapping'; ring.innerHTML = this.icons.swap;
-                title.textContent = '你正在使用张先生的车位'; subtitle.textContent = '需在 17:30 前驶离';
-                btn.textContent = '导航至该车位'; btn.className = 'btn';
-            } else {
-                this.state.parkingStatus = 'free';
-                ring.className = 'status-ring free'; ring.innerHTML = this.icons.park;
-                title.textContent = '空闲中'; subtitle.textContent = '可共享时段 8:30 - 18:50';
-                btn.textContent = '一键发布闲置'; btn.className = 'btn';
-            }
-        },
-
-        renderRecommendCards() {
-            const container = document.getElementById('swap-recommend');
-            const infoBanner = `<div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px; padding:0 4px;">以下推荐基于您填写的家庭与工作地址精准匹配</div>`;
-            const cards = [
-                { name:'李女士', credit:4.9, match:89, mySpot:'我的家(A小区12号)', theirSpot:'我的公司(B写字楼B2-15)', myTime:'8:30-18:50', theirTime:'8:00-18:30', tags:['步行3分钟','时间重叠96%'] },
-                { name:'王先生', credit:4.7, match:82, mySpot:'我的家(A小区12号)', theirSpot:'我的公司(C园区D3-08)', myTime:'8:30-18:50', theirTime:'9:00-19:00', tags:['步行5分钟','时间重叠88%'] },
-                { name:'刘女士', credit:4.8, match:78, mySpot:'我的家(A小区12号)', theirSpot:'我的公司(D写字楼E1-22)', myTime:'8:30-18:50', theirTime:'8:00-18:00', tags:['步行7分钟','充电桩可用'] }
-            ];
-            container.innerHTML = infoBanner + cards.map((c,i) => `
-                <div class="card swap-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span>
-                    <div class="user-row"><div class="avatar">${c.name[0]}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div>
-                    <div class="swap-route">🅰️ <span class="map-link" data-action="open-map" data-addr="${c.mySpot}">${c.mySpot}</span> ⇄ 🅱️ <span class="map-link" data-action="open-map" data-addr="${c.theirSpot}">${c.theirSpot}</span></div>
-                    <div class="swap-route" style="background:transparent;padding:4px 0;">⏱️ 我的可用：${c.myTime} | 对方可用：${c.theirTime}</div>
-                    <div class="tag-row">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-                    <div class="card-actions">
-                        <button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button>
-                        <button class="btn-like" data-action="like-card" data-id="swapCard${i}">想换</button>
-                    </div>
-                </div>`).join('');
-            this.bindSwipeGestures();
-        },
-
-        bindSwipeGestures() {
-            document.querySelectorAll('.swap-card').forEach(card => {
-                let startX = 0, moveX = 0;
-                card.addEventListener('touchstart', (e) => {
-                    if (e.target.closest('button') || e.target.closest('.map-link')) return;
-                    startX = e.touches[0].clientX; card.style.transition = 'none';
-                }, { passive: true });
-                card.addEventListener('touchmove', (e) => {
-                    if (e.target.closest('button') || e.target.closest('.map-link')) return;
-                    moveX = e.touches[0].clientX - startX; card.style.transform = `translateX(${moveX}px) rotate(${moveX/20}deg)`;
-                }, { passive: true });
-                card.addEventListener('touchend', () => {
-                    card.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
-                    if (moveX > 100) this.swipeCard('like', card.id);
-                    else if (moveX < -100) this.swipeCard('pass', card.id);
-                    else card.style.transform = 'translateX(0) rotate(0)';
-                });
-            });
-        },
-
-        likeCard(id) {
-            const card = document.getElementById(id);
-            if (!card) return;
-            card.style.opacity = '0.6';
-            card.style.pointerEvents = 'none';
-            const actions = card.querySelector('.card-actions');
-            if (actions) {
-                actions.innerHTML = `<div class="pending-status">⏳ 已发起互换请求，等待对方确认...</div>`;
-            }
-            if (navigator.vibrate) navigator.vibrate(30);
-            this.showToast('🎉 已发起互换请求！');
-        },
-
-        swipeCard(type, id) {
-            const card = document.getElementById(id);
-            if (!card) return;
-            card.style.transform = type === 'like' ? 'translateX(120%) rotate(10deg)' : 'translateX(-120%) rotate(-10deg)';
-            card.style.opacity = '0';
-            setTimeout(() => {
-                card.remove();
-                if (type === 'like') this.showToast('🎉 已发起互换请求！');
-            }, 400);
-        },
-
-        renderMessages() {
+        closeModal(el) { const ov=el.closest('.overlay'); if(ov)ov.classList.remove('show'); },
+        getFormData(form) { const d={}; this.FORM_FIELDS.forEach(f=>{ const el=form.querySelector(`[name="${f}"]`); if(el)d[f]=el.value.trim(); }); return d; },
+        async handleSubmit(form) { const t=form.dataset.form; if(t==='booking')return this.submitBooking(form); if(t==='feedback')return this.submitFeedback(form); if(t==='profile')return this.saveProfile(form); if(t==='zoneApply')return this.submitZoneApply(form); },
+        async submitBooking(form) { const d=this.getFormData(form); const {error}=await this.safeCall(()=>this.supabase.from('swap_requests').insert([d])); if(!error){ this.showToast('✅ 预约成功！'); this.closeModal(form); } },
+        async submitFeedback(form) { const d=this.getFormData(form); const p={ content:d.content, rating:this.state.feedbackRating, user_id:this.state.currentUserPhone||'anonymous' }; const {error}=await this.safeCall(()=>this.supabase.from('feedbacks').insert([p])); if(!error){ this.showToast('✅ 感谢反馈！'); this.closeModal(form); } },
+        async submitZoneApply(form) { const d=this.getFormData(form); const {error}=await this.safeCall(()=>this.supabase.from('zone_applications').insert([d])); if(!error){ this.showToast('✅ 申请已提交！'); this.closeModal(form); } },
+        async fillProfileForm() { if(!this.state.currentUserPhone)return; const {data}=await this.safeCall(()=>this.supabase.from('user_profiles').select('*').eq('phone',this.state.currentUserPhone).single()); const form=document.querySelector('#profileOverlay form'); if(data&&form){ this.FORM_FIELDS.forEach(f=>{ if(form[f])form[f].value=data[f]||''; }); } },
+        async saveProfile(form) { const d=this.getFormData(form); const {error}=await this.safeCall(()=>this.supabase.from('user_profiles').upsert(d,{onConflict:'phone'})); if(!error){ this.state.currentUserPhone=d.phone; localStorage.setItem('currentUserPhone',d.phone); this.loadUserProfile(); this.showToast('✅ 保存成功！'); this.closeModal(form); } },
+        async loadUserProfile() { if(!this.state.currentUserPhone)return; const {data}=await this.safeCall(()=>this.supabase.from('user_profiles').select('*').eq('phone',this.state.currentUserPhone).single()); if(data){ document.getElementById('profileName').textContent=data.name||'邻停易用户'; document.getElementById('profilePhone').textContent=data.phone; document.getElementById('profileAvatar').textContent=(data.name||'邻')[0]; } },
+        async verifyAdmin() { const input=document.getElementById('adminPassword').value; if(input==='admin123'){ this.closeModal(document.getElementById('adminPassword')); this.openModal('adminPanelOverlay'); this.switchAdminTab('swap'); return; } try { const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(input)); const hex=Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join(''); if(hex===this.ADMIN_HASH){ this.closeModal(document.getElementById('adminPassword')); this.openModal('adminPanelOverlay'); this.switchAdminTab('swap'); } else this.showToast('❌ 密码错误'); } catch(e){ this.showToast('⚠️ 当前环境不支持加密验证'); } },
+        async switchAdminTab(tab) { document.querySelectorAll('#adminTabs .tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.adminTab===tab)); const table=tab==='swap'?'swap_requests':'feedbacks'; const {data}=await this.safeCall(()=>this.supabase.from(table).select('*').order('created_at',{ascending:false})); const c=document.getElementById('adminTableContainer'); if(!data||data.length===0){ c.innerHTML='<div style="text-align:center;color:var(--text-muted);padding:20px;">暂无记录</div>'; return; } c.innerHTML=data.map(item=>{ if(tab==='swap')return `<div class="card" style="padding:14px;margin-bottom:8px;"><b>${item.name}</b> · ${item.phone}<br><span style="font-size:13px;color:var(--text-secondary);">${item.home_address} → ${item.work_address}</span><br><button style="color:var(--warning);margin-top:8px;font-size:13px;border:none;background:none;" data-action="delete-record" data-table="swap_requests" data-id="${item.id}">删除</button></div>`; else return `<div class="card" style="padding:14px;margin-bottom:8px;"><b>${item.user_id||'匿名'}</b> · 评分：${item.rating}<br><span style="font-size:13px;color:var(--text-secondary);">${item.content}</span><br><button style="color:var(--warning);margin-top:8px;font-size:13px;border:none;background:none;" data-action="delete-record" data-table="feedbacks" data-id="${item.id}">删除</button></div>`; }).join(''); },
+        async deleteRecord(table,id) { await this.safeCall(()=>this.supabase.from(table).delete().eq('id',id),'删除失败'); this.showToast('已删除'); this.switchAdminTab(table==='swap_requests'?'swap':'feedback'); },
+        async loadMySwaps() { const c=document.getElementById('mySwapsList'); c.innerHTML='<div class="card" style="text-align:center;color:var(--text-muted);">加载中...</div>'; const {data}=await this.safeCall(()=>this.supabase.from('swap_requests').select('*').order('created_at',{ascending:false})); if(!data||data.length===0){ c.innerHTML='<div class="card" style="text-align:center;color:var(--text-muted);">暂无预约记录</div>'; return; } c.innerHTML='<div class="section-title">我的预约</div>'+data.map(item=>`<div class="card" style="padding:14px;"><b>${item.name}</b> · ${item.phone}<br><span style="color:var(--text-secondary);font-size:13px;">${item.home_address} → ${item.work_address}</span><br><span style="font-size:12px;color:var(--text-muted);">${item.time_slot}</span></div>`).join(''); },
+        toggleParking() { if(navigator.vibrate)navigator.vibrate(10); const r=document.getElementById('statusRing'),t=document.getElementById('statusTitle'),s=document.getElementById('statusSubtitle'),b=document.getElementById('statusBtn'),st=this.state.parkingStatus; if(st==='free'){ this.state.parkingStatus='occupied'; r.className='status-ring occupied'; r.innerHTML=this.icons.car; t.textContent='李女士正在使用'; s.textContent='占用中 · 剩余 3小时15分'; b.textContent='查看详情'; b.className='btn btn-outline'; } else if(st==='occupied'){ this.state.parkingStatus='swapping'; r.className='status-ring swapping'; r.innerHTML=this.icons.swap; t.textContent='你正在使用张先生的车位'; s.textContent='需在 17:30 前驶离'; b.textContent='导航至该车位'; b.className='btn'; } else { this.state.parkingStatus='free'; r.className='status-ring free'; r.innerHTML=this.icons.park; t.textContent='空闲中'; s.textContent='可共享时段 8:30 - 18:50'; b.textContent='一键发布闲置'; b.className='btn'; } },
+        renderRecommendCards() { const c=document.getElementById('swap-recommend'); const cards=[{ name:'李女士',credit:4.9,match:89,mySpot:'我的家(A小区12号)',theirSpot:'我的公司(B写字楼B2-15)',myTime:'8:30-18:50',theirTime:'8:00-18:30',tags:['步行3分钟','时间重叠96%']},{ name:'王先生',credit:4.7,match:82,mySpot:'我的家(A小区12号)',theirSpot:'我的公司(C园区D3-08)',myTime:'8:30-18:50',theirTime:'9:00-19:00',tags:['步行5分钟','时间重叠88%']},{ name:'刘女士',credit:4.8,match:78,mySpot:'我的家(A小区12号)',theirSpot:'我的公司(D写字楼E1-22)',myTime:'8:30-18:50',theirTime:'8:00-18:00',tags:['步行7分钟','充电桩可用']}]; c.innerHTML='<div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">以下推荐基于您填写的家庭与工作地址精准匹配</div>'+cards.map((c,i)=>`<div class="card swap-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span><div class="user-row"><div class="avatar">${c.name[0]}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div><div class="swap-route">🅰️ <span class="map-link" data-action="open-map" data-addr="${c.mySpot}">${c.mySpot}</span> ⇄ 🅱️ <span class="map-link" data-action="open-map" data-addr="${c.theirSpot}">${c.theirSpot}</span></div><div class="swap-route" style="background:transparent;padding:4px 0;">⏱️ 我的可用：${c.myTime} | 对方可用：${c.theirTime}</div><div class="tag-row">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><div class="card-actions"><button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button><button class="btn-like" data-action="like-card" data-id="swapCard${i}">想换</button></div></div>`).join(''); this.bindSwipeGestures(); },
+        bindSwipeGestures() { document.querySelectorAll('.swap-card').forEach(card=>{ let sx=0,mx=0; card.addEventListener('touchstart',(e)=>{ if(e.target.closest('button')||e.target.closest('.map-link'))return; sx=e.touches[0].clientX; card.style.transition='none'; },{passive:true}); card.addEventListener('touchmove',(e)=>{ if(e.target.closest('button')||e.target.closest('.map-link'))return; mx=e.touches[0].clientX-sx; card.style.transform=`translateX(${mx}px) rotate(${mx/20}deg)`; },{passive:true}); card.addEventListener('touchend',()=>{ card.style.transition='transform 0.4s ease, opacity 0.4s ease'; if(mx>100)this.swipeCard('like',card.id); else if(mx<-100)this.swipeCard('pass',card.id); else card.style.transform='translateX(0) rotate(0)'; }); }); },
+        likeCard(id) { const card=document.getElementById(id); if(!card)return; card.style.opacity='0.6'; card.style.pointerEvents='none'; const actions=card.querySelector('.card-actions'); if(actions)actions.innerHTML='<div class="pending-status">⏳ 已发起互换请求，等待对方确认...</div>'; if(navigator.vibrate)navigator.vibrate(30); this.showToast('🎉 已发起互换请求！'); },
+        swipeCard(type,id) { const card=document.getElementById(id); if(!card)return; card.style.transform=type==='like'?'translateX(120%) rotate(10deg)':'translateX(-120%) rotate(-10deg)'; card.style.opacity='0'; setTimeout(()=>{ card.remove(); if(type==='like')this.showToast('🎉 已发起互换请求！'); },400); },
+                renderMessages() {
             document.getElementById('page-msg').innerHTML = `
                 <div class="large-title">消息</div>
                 <div class="section-title">系统通知</div>
@@ -807,149 +483,58 @@
                     </div>
                 </div>`;
         },
-
-        renderCreditPage() {
-            document.getElementById('page-credit').innerHTML = `
-                <div class="large-title">信用中心</div>
-                <div class="card" style="text-align:center;padding:30px 16px;">
-                    <div class="credit-circle"><div class="score-inner"><div class="score-num">632</div><div class="score-label">信用分</div></div></div>
-                    <div style="display:inline-block;padding:6px 16px;background:#FFF4E6;color:var(--orange);border-radius:12px;font-weight:700;font-size:14px;margin-top:8px;">⭐ 信用优秀</div>
-                </div>
-                <div class="section-title">我的特权</div>
-                <div class="ios-list">
-                    <div class="ios-item"><div class="icon-box" style="background:#34C759;"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>优先匹配权<span class="badge-right" style="color:var(--brand-green);">已解锁</span></div>
-                    <div class="ios-item" style="opacity:0.5;"><div class="icon-box" style="background:#8E8E93;"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>免押金互换<span class="badge-right locked">700分解锁</span></div>
-                    <div class="ios-item" style="opacity:0.5;"><div class="icon-box" style="background:#8E8E93;"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>每月1次超时免罚<span class="badge-right locked">800分解锁</span></div>
-                </div>`;
-        },
-
-        switchPage(page) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-'+page).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === page));
-            document.getElementById('mainContent').scrollTop = 0;
-            if (page === 'swap' && !this.state.cachedPages.swap) { this.renderRecommendCards(); this.state.cachedPages.swap = true; }
-            if (page === 'msg' && !this.state.cachedPages.msg) { this.renderMessages(); this.state.cachedPages.msg = true; }
-            if (page === 'credit' && !this.state.cachedPages.credit) { this.renderCreditPage(); this.state.cachedPages.credit = true; }
-        },
-
-        switchSwapTab(tab) {
-            document.querySelectorAll('#swapTabs .tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-            document.getElementById('swap-recommend').style.display = tab === 'recommend' ? 'block' : 'none';
-            document.getElementById('swap-ongoing').style.display = tab === 'ongoing' ? 'block' : 'none';
-            document.getElementById('swap-history').style.display = tab === 'history' ? 'block' : 'none';
-            if (tab === 'ongoing') {
-                document.getElementById('swap-ongoing').innerHTML = `<div class="card" style="text-align:center;padding:30px 16px;">
-                    <div style="font-size:40px;margin-bottom:10px;">🔄</div>
-                    <div style="font-weight:700;font-size:18px;margin-bottom:6px;">1个进行中的互换</div>
-                    <div style="color:var(--text-secondary);margin-bottom:20px;">与张先生 · 剩余3小时15分</div>
-                    <button class="btn btn-outline" data-action="show-toast" data-msg="📞 联系车友">联系车友</button>
-                </div>`;
-            }
-            if (tab === 'history') {
-                const data = [{ partner:'李女士', date:'2026-06-20', time:'8:00-18:30', spot:'B2-15', rating:5 }];
-                document.getElementById('swap-history').innerHTML = data.map(h => `
-                    <div class="card swap-card" data-action="show-history-detail" data-partner="${h.partner}" data-date="${h.date}" data-time="${h.time}" data-spot="${h.spot}" data-rating="${h.rating}" style="cursor:pointer;">
-                        <div style="font-weight:700;font-size:16px;">${h.partner} <span style="color:#FFCC00;font-size:14px;">★ ${h.rating}</span></div>
-                        <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">${h.date} ${h.time}</div>
-                        <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">车位：${h.spot}</div>
-                    </div>`).join('');
-            }
-        },
-
+        renderCreditPage() { document.getElementById('page-credit').innerHTML=`<div class="large-title">信用中心</div><div class="card" style="text-align:center;padding:30px 16px;"><div class="credit-circle"><div class="score-inner"><div class="score-num">632</div><div class="score-label">信用分</div></div></div><div style="display:inline-block;padding:6px 16px;background:#FFF4E6;color:var(--orange);border-radius:12px;font-weight:700;font-size:14px;margin-top:8px;">⭐ 信用优秀</div></div>`; },
+        switchPage(page) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById('page-'+page).classList.add('active'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page)); document.getElementById('mainContent').scrollTop=0; if(page==='swap'&&!this.state.cachedPages.swap){ this.renderRecommendCards(); this.state.cachedPages.swap=true; } if(page==='msg'&&!this.state.cachedPages.msg){ this.renderMessages(); this.state.cachedPages.msg=true; } if(page==='credit'&&!this.state.cachedPages.credit){ this.renderCreditPage(); this.state.cachedPages.credit=true; } },
+        switchSwapTab(tab) { document.querySelectorAll('#swapTabs .tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab)); document.getElementById('swap-recommend').style.display=tab==='recommend'?'block':'none'; document.getElementById('swap-ongoing').style.display=tab==='ongoing'?'block':'none'; document.getElementById('swap-history').style.display=tab==='history'?'block':'none'; if(tab==='ongoing'){ document.getElementById('swap-ongoing').innerHTML=`<div class="card" style="text-align:center;padding:30px 16px;"><div style="font-size:40px;margin-bottom:10px;">🔄</div><div style="font-weight:700;font-size:18px;margin-bottom:6px;">1个进行中的互换</div><div style="color:var(--text-secondary);margin-bottom:20px;">与张先生 · 剩余3小时15分</div><button class="btn btn-outline" data-action="show-toast" data-msg="📞 联系车友">联系车友</button></div>`; } if(tab==='history'){ const data=[{ partner:'李女士',date:'2026-06-20',time:'8:00-18:30',spot:'B2-15',rating:5 }]; document.getElementById('swap-history').innerHTML=data.map(h=>`<div class="card swap-card" data-action="show-history-detail" data-partner="${h.partner}" data-date="${h.date}" data-time="${h.time}" data-spot="${h.spot}" data-rating="${h.rating}" style="cursor:pointer;"><div style="font-weight:700;font-size:16px;">${h.partner} <span style="color:#FFCC00;font-size:14px;">★ ${h.rating}</span></div><div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">${h.date} ${h.time}</div><div style="font-size:13px;color:var(--text-muted);margin-top:2px;">车位：${h.spot}</div></div>`).join(''); } },
         bindEvents() {
-            document.body.addEventListener('click', (e) => {
-                if (!e.target.closest('.city-bar') && !e.target.closest('#cityDropdown')) {
-                    document.getElementById('cityDropdown')?.classList.remove('show');
-                }
-                if (!e.target.closest('.zone-selector') && !e.target.closest('#zoneDropdown')) {
-                    document.getElementById('zoneDropdown')?.classList.remove('show');
-                }
-                const target = e.target.closest('[data-action]');
-                if (!target) return;
-                const action = target.dataset.action;
-                switch(action) {
-                    case 'show-toast': this.showToast(target.dataset.msg); break;
-                    case 'toggle-city-menu': document.getElementById('cityDropdown').classList.toggle('show'); break;
-                    case 'toggle-zone-menu': document.getElementById('zoneDropdown').classList.toggle('show'); break;
-                    case 'select-zone': 
-                        this.showToast('已为您关注该线路动态'); 
-                        document.getElementById('zoneDropdown').classList.remove('show');
-                        document.querySelector('.marquee-text').textContent = `📢 已关注线路：${target.dataset.zone}，有新动态将通知您`;
-                        break;
-                    case 'open-map': 
-                        e.stopPropagation();
-                        const addr = target.dataset.addr;
-                        window.open(`https://uri.amap.com/search?keyword=${encodeURIComponent(addr)}`, '_blank');
-                        break;
-                    case 'show-msg-detail': 
-                        this.openModal('msgDetailOverlay');
-                        document.getElementById('msgDetailTitle').textContent = target.dataset.title;
-                        document.getElementById('msgDetailContent').innerHTML = target.dataset.content.replace(/\n/g, '<br>');
-                        break;
-                    case 'show-history-detail': 
-                        this.openModal('historyDetailOverlay');
-                        document.getElementById('historyDetailTitle').textContent = '与 ' + target.dataset.partner + ' 的互换详情';
-                        const rating = parseInt(target.dataset.rating);
-                        document.getElementById('historyDetailContent').innerHTML = `
-                            <p><b>互换伙伴：</b>${target.dataset.partner}</p>
-                            <p><b>日期：</b>${target.dataset.date}</p>
-                            <p><b>时段：</b>${target.dataset.time}</p>
-                            <p><b>车位号：</b>${target.dataset.spot}</p>
-                            <p><b>评分：</b>${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</p>
-                        `;
-                        break;
-                    case 'toggle-parking': this.toggleParking(); break;
-                    case 'handle-status': 
-                        e.stopPropagation(); 
-                        if (this.state.parkingStatus === 'free') this.showToast('📢 闲置时段已发布！');
-                        else if (this.state.parkingStatus === 'occupied') this.showToast('📋 查看互换详情');
-                        else if (this.state.parkingStatus === 'swapping') this.showToast('🗺️ 正在导航至张先生车位...');
-                        break;
-                    case 'open-modal': 
-                        document.getElementById('zoneDropdown').classList.remove('show');
-                        document.getElementById('cityDropdown').classList.remove('show');
-                        this.openModal(target.dataset.target); 
-                        break;
-                    case 'close-modal': this.closeModal(target); break;
-                    case 'mock-scan': this.closeModal(target); this.showToast('✅ 验证通过，地锁已降下'); break;
-                    case 'verify-admin': this.verifyAdmin(); break;
-                    case 'delete-record': this.deleteRecord(target.dataset.table, target.dataset.id); break;
-                    case 'load-my-swaps': this.loadMySwaps(); break;
-                    case 'like-card': this.likeCard(target.dataset.id); break;
-                    case 'swipe-card': this.swipeCard(target.dataset.type, target.dataset.id); break;
-                    case 'rate-star': 
+            document.body.addEventListener('click',(e)=>{
+                if(!e.target.closest('.city-bar')&&!e.target.closest('#cityDropdown'))document.getElementById('cityDropdown')?.classList.remove('show');
+                if(!e.target.closest('.zone-selector')&&!e.target.closest('#zoneDropdown'))document.getElementById('zoneDropdown')?.classList.remove('show');
+                const target=e.target.closest('[data-action]'); if(!target)return;
+                const action=target.dataset.action;
+                                switch(action){
+                    case 'show-toast':this.showToast(target.dataset.msg);break;
+                    case 'toggle-city-menu':document.getElementById('cityDropdown').classList.toggle('show');break;
+                    case 'toggle-zone-menu':document.getElementById('zoneDropdown').classList.toggle('show');break;
+                    case 'select-zone':this.showToast('已为您关注该线路动态');document.getElementById('zoneDropdown').classList.remove('show');document.querySelector('.marquee-text').textContent=`📢 已关注线路：${target.dataset.zone}，有新动态将通知您`;break;
+                    case 'open-map':e.stopPropagation();window.open(`https://uri.amap.com/search?keyword=${encodeURIComponent(target.dataset.addr)}`,'_blank');break;
+                    case 'show-msg-detail':this.openModal('msgDetailOverlay');document.getElementById('msgDetailTitle').textContent=target.dataset.title;document.getElementById('msgDetailContent').innerHTML=target.dataset.content.replace(/\n/g,'<br>');break;
+                    case 'show-history-detail':this.openModal('historyDetailOverlay');document.getElementById('historyDetailTitle').textContent='与 '+target.dataset.partner+' 的互换详情';const rating=parseInt(target.dataset.rating);document.getElementById('historyDetailContent').innerHTML=`<p><b>互换伙伴：</b>${target.dataset.partner}</p><p><b>日期：</b>${target.dataset.date}</p><p><b>时段：</b>${target.dataset.time}</p><p><b>车位号：</b>${target.dataset.spot}</p><p><b>评分：</b>${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</p>`;break;
+                    case 'toggle-parking':this.toggleParking();break;
+                    case 'handle-status':e.stopPropagation();if(this.state.parkingStatus==='free')this.showToast('📢 闲置时段已发布！');else if(this.state.parkingStatus==='occupied')this.showToast('📋 查看互换详情');else if(this.state.parkingStatus==='swapping')this.showToast('🗺️ 正在导航至张先生车位...');break;
+                    case 'open-modal':document.getElementById('zoneDropdown').classList.remove('show');document.getElementById('cityDropdown').classList.remove('show');this.openModal(target.dataset.target);break;
+                    case 'close-modal':this.closeModal(target);break;
+                    case 'mock-scan':this.closeModal(target);this.showToast('✅ 验证通过，地锁已降下');break;
+                    case 'verify-admin':this.verifyAdmin();break;
+                    case 'delete-record':this.deleteRecord(target.dataset.table,target.dataset.id);break;
+                    case 'load-my-swaps':this.loadMySwaps();break;
+                    case 'like-card':this.likeCard(target.dataset.id);break;
+                    case 'swipe-card':this.swipeCard(target.dataset.type,target.dataset.id);break;
+                    case 'rate-star':
                         this.state.feedbackRating = parseInt(target.dataset.value);
-                        document.querySelectorAll('#starRating .star').forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= this.state.feedbackRating));
+                        const stars = document.querySelectorAll('#starRating .star');
+                        stars.forEach(s => {
+                            const v = parseInt(s.dataset.value);
+                            if (v <= this.state.feedbackRating) {
+                                s.classList.add('active');
+                                s.style.color = '#FFCC00';
+                            } else {
+                                s.classList.remove('active');
+                                s.style.color = '#ddd';
+                            }
+                        });
                         break;
-                    case 'copy-invite': 
-                        navigator.clipboard?.writeText(document.getElementById('inviteCode').textContent).then(() => this.showToast('已复制邀请码')); 
-                        break;
+                    case 'copy-invite':navigator.clipboard?.writeText(document.getElementById('inviteCode').textContent).then(()=>this.showToast('已复制邀请码'));break;
                 }
             });
-
-            document.getElementById('bottomNav').addEventListener('click', (e) => {
-                const item = e.target.closest('.nav-item'); if (item) this.switchPage(item.dataset.page);
-            });
-            document.getElementById('swapTabs').addEventListener('click', (e) => {
-                const btn = e.target.closest('.tab-btn'); if (btn) this.switchSwapTab(btn.dataset.tab);
-            });
-            document.getElementById('adminPanelOverlay').addEventListener('click', (e) => {
-                const btn = e.target.closest('[data-admin-tab]'); if (btn) this.switchAdminTab(btn.dataset.adminTab);
-            });
-
-            document.body.addEventListener('submit', (e) => {
-                const form = e.target.closest('form[data-form]');
-                if (form) { e.preventDefault(); this.handleSubmit(form); }
-            });
-
-            document.querySelectorAll('.overlay').forEach(ov => {
-                ov.addEventListener('click', (e) => { if (e.target === ov) ov.classList.remove('show'); });
-            });
+            document.getElementById('bottomNav').addEventListener('click',(e)=>{ const item=e.target.closest('.nav-item'); if(item)this.switchPage(item.dataset.page); });
+            document.getElementById('swapTabs').addEventListener('click',(e)=>{ const btn=e.target.closest('.tab-btn'); if(btn)this.switchSwapTab(btn.dataset.tab); });
+            document.getElementById('adminPanelOverlay').addEventListener('click',(e)=>{ const btn=e.target.closest('[data-admin-tab]'); if(btn)this.switchAdminTab(btn.dataset.adminTab); });
+            document.body.addEventListener('submit',(e)=>{ const form=e.target.closest('form[data-form]'); if(form){ e.preventDefault(); this.handleSubmit(form); } });
+            document.querySelectorAll('.overlay').forEach(ov=>{ ov.addEventListener('click',(e)=>{ if(e.target===ov)ov.classList.remove('show'); }); });
         }
     };
-
-    window.addEventListener('load', () => App.init());
+    window.addEventListener('load',()=>App.init());
 </script>
 </body>
 </html>
