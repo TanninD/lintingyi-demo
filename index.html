@@ -351,7 +351,7 @@
                     <div class="dropdown-menu right" id="zoneDropdown">
                         <div class="zone-item" data-action="select-zone" data-zone="照母山片区 ⇄ 汽博/回兴片区">照母山片区（光电园-大竹林）<br>⇄ 汽博/回兴片区</div>
                         <div class="zone-item disabled">更多线路持续拓展中</div>
-                        <div class="zone-item apply" data-action="open-modal" data-target="zoneApplyOverlay">申请开通新片区</div>
+                        <div class="zone-item apply" data-action="open-modal" data-target="zoneApplyOverlay">申请开通新线路</div>
                     </div>
                 </div>
                 <div class="marquee-bar">
@@ -451,8 +451,8 @@
             <input type="radio" name="booking_mode" value="rental" onchange="App.toggleBookingMode()"> 有偿分享
         </label>
     </div>
-    <div class="form-group"><label>手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div>
-    <div class="form-group"><label id="spotLabel">可共享车位 *</label><input type="text" name="home_address" class="ios-input" required></div>
+    <div class="form-group"><label>联系电话 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div>
+    <div class="form-group"><label id="spotLabel">可共享车位 *</label><input type="text" name="home_address" class="ios-input" required readonly style="background:var(--bg); color:var(--text-muted);"></div>
     <div class="form-group"><label>车牌号</label><input type="text" name="car_number" class="ios-input"></div>
     
     <div class="form-group"><label id="timeLabel">可共享时段 *</label>
@@ -480,8 +480,36 @@
         <input type="checkbox" id="accept_rental" name="accept_rental" style="width:18px; height:18px;">
         <label for="accept_rental" style="margin-bottom:0; font-size:14px; color:var(--text-primary); cursor:pointer;">接受有偿分享（无匹配时可付费停放）</label>
     </div>
+    <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+        <input type="checkbox" id="accept_nearby" name="accept_nearby" checked style="width:18px; height:18px;">
+        <label for="accept_nearby" style="margin-bottom:0; font-size:14px; color:var(--text-primary); cursor:pointer;">接受附近车位（推荐范围更广）</label>
+    </div>
 
     <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交预约</button></div>
+</form></div></template>
+
+<template id="tpl-zone-apply"><div class="modal"><div class="modal-title">申请开通线路</div><form data-form="zoneApply">
+    <div class="form-group"><label>申请开通城市 *</label><input type="text" name="city_name" class="ios-input" placeholder="如：成都市" required></div>
+    
+    <div style="border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:16px;">
+        <div style="font-weight:700; margin-bottom:10px; color:var(--brand-blue);">起点</div>
+        <div class="form-group"><label>片区 *</label><input type="text" name="start_zone" class="ios-input" placeholder="如：照母山片区" required></div>
+        <div class="form-group"><label>具体小区/写字楼 *</label><input type="text" name="start_location" class="ios-input" placeholder="如：龙湖悠山郡" required></div>
+        <div class="form-group"><label>物业公司名称</label><input type="text" name="start_property_company" class="ios-input" placeholder="如：龙湖物业"></div>
+        <div class="form-group"><label>物业联系电话</label><input type="tel" name="start_property_contact" class="ios-input" placeholder="物业联系电话"></div>
+    </div>
+
+    <div style="border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:16px;">
+        <div style="font-weight:700; margin-bottom:10px; color:var(--brand-green);">终点</div>
+        <div class="form-group"><label>片区 *</label><input type="text" name="end_zone" class="ios-input" placeholder="如：光电园片区" required></div>
+        <div class="form-group"><label>具体小区/写字楼 *</label><input type="text" name="end_location" class="ios-input" placeholder="如：西永微电园" required></div>
+        <div class="form-group"><label>物业公司名称</label><input type="text" name="end_property_company" class="ios-input" placeholder="如：万科物业"></div>
+        <div class="form-group"><label>物业联系电话</label><input type="tel" name="end_property_contact" class="ios-input" placeholder="物业联系电话"></div>
+    </div>
+
+    <div class="form-group"><label>您的联系方式 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div>
+    <div class="form-group"><label>备注说明</label><textarea name="remark" rows="2" class="ios-input" placeholder="如：该片区大概有多少人需要互换..."></textarea></div>
+    <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交申请</button></div>
 </form></div></template>
 <template id="tpl-feedback"><div class="modal"><div class="modal-title">意见反馈</div><form data-form="feedback"><div class="form-group"><label>反馈内容 *</label><textarea name="content" rows="3" class="ios-input" required></textarea></div><div class="form-group"><label>评分</label><div class="star-rating" id="starRating" style="display:flex;gap:8px;font-size:28px;cursor:pointer;color:#FFCC00;"><span class="star active" data-value="1" data-action="rate-star">★</span><span class="star active" data-value="2" data-action="rate-star">★</span><span class="star active" data-value="3" data-action="rate-star">★</span><span class="star active" data-value="4" data-action="rate-star">★</span><span class="star active" data-value="5" data-action="rate-star">★</span></div></div><div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交反馈</button></div></form></div></template>
 <template id="tpl-scan"><div class="modal"><div class="modal-title">扫码降锁</div><div style="text-align:center;padding:20px 0;color:var(--text-secondary);">将摄像头对准地锁二维码<br><span style="font-size:12px;">(演示模式)</span></div><div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">取消</button><button class="btn" data-action="mock-scan">模拟扫码成功</button></div></div></template>
@@ -679,20 +707,17 @@
         showToast(msg) { const t=document.getElementById('toast'); clearTimeout(this.toastTimer); t.textContent=msg; t.style.opacity=1; t.style.transform='translate(-50%,-50%) scale(1)'; if(navigator.vibrate)navigator.vibrate(15); this.toastTimer=setTimeout(()=>{ t.style.opacity=0; t.style.transform='translate(-50%,-50%) scale(0.8)'; },2000); },
         async checkConnection() { const el=document.getElementById('conn-status'); const {error}=await this.safeCall(()=>this.supabase.from('feedbacks').select('*').limit(1),'连接超时'); el.className='conn-status '+(error?'error':'success'); el.textContent=error?'⚠️ 连接失败':'✅ 数据库已连接'; },
         
-        // 优化预约表单显示与隐藏逻辑
         toggleBookingMode() {
             const mode = document.querySelector('input[name="booking_mode"]:checked').value;
             const expectSpotGroup = document.getElementById('expectSpotGroup');
             const expectTimeGroup = document.getElementById('expectTimeGroup');
             const acceptRentalGroup = document.getElementById('acceptRentalGroup');
-            const spotLabel = document.getElementById('spotLabel');
             
             if (mode === 'rental') {
                 expectSpotGroup.style.display = 'none';
                 expectTimeGroup.style.display = 'none';
                 acceptRentalGroup.style.display = 'none';
                 document.getElementById('expectSpotInput').removeAttribute('required');
-                document.getElementById('expectSpotInput').value = '';
             } else {
                 expectSpotGroup.style.display = 'block';
                 expectTimeGroup.style.display = 'block';
@@ -719,11 +744,9 @@
                 const rt = document.getElementById('ratingText');
                 if (rt) rt.textContent = '非常满意';
             }
-            // 优化1&2：打开预约弹窗时自动填入个人数据
             if (id === 'bookingOverlay') this.fillBookingForm();
             ov.classList.add('show');
         },
-        // 新增：为预约表单填充默认数据
         fillBookingForm() {
             const form = document.querySelector('#bookingOverlay form');
             if(!form) return;
@@ -734,7 +757,6 @@
             if(data.home_address) form.querySelector('[name="home_address"]').value = data.home_address;
             if(data.work_address) form.querySelector('[name="work_address"]').value = data.work_address;
             
-            // 设置默认时间为今天 8:30 - 18:00
             const now = new Date();
             const today830 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 30);
             const today1800 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0);
@@ -755,7 +777,6 @@
         getFormData(form) { 
             const d={}; 
             this.FORM_FIELDS.forEach(f=>{ const el=form.querySelector(`[name="${f}"]`); if(el)d[f]=el.value.trim(); }); 
-            // 收集时间选择器的值并组合
             const st = form.querySelector('[name="start_time"]'); const et = form.querySelector('[name="end_time"]');
             if (st && et) {
                 const fmt = (v) => v ? new Date(v).toLocaleString('zh-CN', {month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'}).replace(/\//g, '-') : '';
@@ -783,7 +804,6 @@
         async submitFeedback(form) { const d=this.getFormData(form); const p={ content:d.content, rating:this.state.feedbackRating, user_id:this.state.currentUserPhone||'anonymous' }; const {error}=await this.safeCall(()=>this.supabase.from('feedbacks').insert([p])); if(!error){ this.showToast('✅ 感谢反馈！'); this.closeModal(form); } },
         async submitZoneApply(form) { const d=this.getFormData(form); const {error}=await this.safeCall(()=>this.supabase.from('zone_applications').insert([d])); if(!error){ this.showToast('✅ 申请已提交！'); this.closeModal(form); } },
         
-        // 优化5：个人资料已认证项锁定不可编辑
         async fillProfileForm() { 
             const form = document.querySelector('#profileOverlay form'); 
             if(!form) return;
@@ -798,7 +818,6 @@
             this.FORM_FIELDS.forEach(f=>{ 
                 if(form[f]) {
                     form[f].value = data[f] || ''; 
-                    // 手机号、车牌号、车位地址锁定
                     if (['phone', 'car_number', 'home_address'].includes(f)) {
                         form[f].setAttribute('readonly', '');
                         form[f].style.backgroundColor = 'var(--bg)';
@@ -817,7 +836,7 @@
             if (!data) {
                 data = { name: '张先生', phone: '13800001234', car_number: '渝A·12345', home_address: '照母山·约克郡', work_address: '汽博·长安福特' };
             }
-            this.state.userProfileData = data; // 缓存数据供其它弹窗调用
+            this.state.userProfileData = data; 
             document.getElementById('profileName').textContent = data.name || '邻停易用户'; 
             const phoneStr = data.phone || '';
             document.getElementById('profilePhone').textContent = phoneStr ? phoneStr.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '未绑定'; 
@@ -957,23 +976,57 @@
                     }
                 }
 
+                // 优化5：订单卡片改为左滑删除结构
                 return `
-                    <div class="card swap-card" style="padding:14px; border-left: 4px solid ${statusInfo.color};">
-                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-muted); border-bottom: 0.5px solid var(--border); padding-bottom: 8px; margin-bottom: 4px;">
-                            <span>${timeStr}</span>
-                            <span style="color:${statusInfo.color}; font-weight:600;">${statusInfo.label}</span>
+                    <div style="position:relative; margin-bottom:12px; border-radius: var(--radius-xl); overflow:hidden; box-shadow: var(--shadow);">
+                        <div class="card order-card" data-id="${item.id}" style="padding:14px; border-left: 4px solid ${statusInfo.color}; position:relative; z-index:1; transition:transform 0.3s ease; margin-bottom:0; box-shadow:none; border-radius:0;"> <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-muted); border-bottom: 0.5px solid var(--border); padding-bottom: 8px; margin-bottom: 4px;">
+                                <span>${timeStr}</span>
+                                <span style="color:${statusInfo.color}; font-weight:600;">${statusInfo.label}</span>
+                            </div>
+                            <div style="font-size:14px; color:var(--text-primary); margin-bottom:4px;">
+                                <b>${item.name || '未填姓名'}</b> · ${maskedPlate} · <span style="font-size:12px; color:var(--brand-blue); font-weight:600;">${modeLabel}</span>
+                                ${isActive ? ' <span style="color:var(--brand-green); font-size:11px;">(当前互换)</span>' : ''}
+                            </div>
+                            ${rowsHtml}
+                            ${ratingHtml ? `<div style="margin-top:10px; font-size:12px; border-top: 0.5px solid var(--border); padding-top: 8px; display:flex; justify-content:space-between; align-items:center;">对方评分：${ratingHtml}</div>` : ''}
                         </div>
-                        <div style="font-size:14px; color:var(--text-primary); margin-bottom:4px;">
-                            <b>${item.name || '未填姓名'}</b> · ${maskedPlate} · <span style="font-size:12px; color:var(--brand-blue); font-weight:600;">${modeLabel}</span>
-                            ${isActive ? ' <span style="color:var(--brand-green); font-size:11px;">(当前互换)</span>' : ''}
-                        </div>
-                        ${rowsHtml}
-                        ${ratingHtml ? `<div style="margin-top:10px; font-size:12px; border-top: 0.5px solid var(--border); padding-top: 8px; display:flex; justify-content:space-between; align-items:center;">对方评分：${ratingHtml}</div>` : ''}
+                        <div data-action="delete-order" data-id="${item.id}" style="position:absolute; right:0; top:0; bottom:0; width:80px; background:var(--warning); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; z-index:0;">删除</div>
                     </div>`;
             }).join('');
+            
+            this.bindOrderSwipeGestures();
         },
 
-        // 优化4：推荐卡片增加日期显示
+        // 优化5：订单卡片左滑逻辑
+        bindOrderSwipeGestures() {
+            document.querySelectorAll('.order-card').forEach(card => {
+                let sx = 0, mx = 0, isSwiping = false;
+                card.addEventListener('touchstart', (e) => {
+                    sx = e.touches[0].clientX;
+                    isSwiping = true;
+                    card.style.transition = 'none';
+                }, {passive: true});
+                card.addEventListener('touchmove', (e) => {
+                    if(!isSwiping) return;
+                    mx = e.touches[0].clientX - sx;
+                    if (mx < 0 && mx > -80) {
+                        card.style.transform = `translateX(${mx}px)`;
+                    }
+                }, {passive: true});
+                card.addEventListener('touchend', () => {
+                    isSwiping = false;
+                    card.style.transition = 'transform 0.3s ease';
+                    if (mx <= -40) {
+                        card.style.transform = 'translateX(-80px)';
+                    } else {
+                        card.style.transform = 'translateX(0)';
+                    }
+                    mx = 0;
+                });
+            });
+        },
+
+        // 优化2&3：推荐卡片水平滑动，文字调整
         renderRecommendCards() { 
             const c=document.getElementById('swap-recommend'); 
             const cards=[
@@ -981,11 +1034,11 @@
                 { name:'王先生',credit:4.7,match:82, provide:'汽博·汽博中心', need:'照母山·约克郡', time:'5月21日 8:30-18:00', tags:['步行5分钟','时间重叠88%']},
                 { name:'刘女士',credit:4.8,match:78, provide:'汽博·金山工业园', need:'照母山·约克郡', time:'5月22日 8:30-18:00', tags:['步行7分钟','充电桩可用']}
             ]; 
-            c.innerHTML='<div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">以下推荐基于您填写的车位信息精准匹配</div>'+cards.map((c,i)=>`<div class="card swap-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span><div class="user-row" data-action="show-user-profile" data-name="${c.name}" style="cursor:pointer;"><div class="avatar">${c.name[0]}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div><div class="swap-route"><div style="display:flex; justify-content:space-between; align-items:center; width:100%;"><span>提供：${c.provide}</span><span style="font-size:11px; color:var(--text-muted);">${c.time}</span></div><div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:6px;"><span>期望：${c.need}</span><span style="font-size:11px; color:var(--text-muted);">${c.time}</span></div></div><div class="tag-row">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><div class="card-actions"><button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button><button class="btn-like" data-action="like-card" data-id="swapCard${i}">想换</button></div></div>`).join(''); 
+            c.innerHTML='<div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">以下推荐基于您填写的车位信息精准匹配</div>'+cards.map((c,i)=>`<div class="card recommend-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span><div class="user-row" data-action="show-user-profile" data-name="${c.name}" style="cursor:pointer;"><div class="avatar">${c.name[0]}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div><div class="swap-route"><div style="display:flex; justify-content:space-between; align-items:center; width:100%;"><span>供：${c.provide}</span><span style="font-size:11px; color:var(--text-muted);">${c.time}</span></div><div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:6px;"><span>求：${c.need}</span><span style="font-size:11px; color:var(--text-muted);">${c.time}</span></div></div><div class="tag-row">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><div class="card-actions"><button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button><button class="btn-like" data-action="like-card" data-id="swapCard${i}">想换</button></div></div>`).join(''); 
             this.bindSwipeGestures(); 
         },
         bindSwipeGestures() { 
-            document.querySelectorAll('.swap-card').forEach(card=>{ 
+            document.querySelectorAll('.recommend-card').forEach(card=>{ 
                 let sx=0,mx=0; 
                 card.addEventListener('touchstart',(e)=>{ 
                     if(e.target.closest('button')||e.target.closest('.map-link')||e.target.closest('[data-action]'))return; 
@@ -995,13 +1048,13 @@
                 card.addEventListener('touchmove',(e)=>{ 
                     if(e.target.closest('button')||e.target.closest('.map-link')||e.target.closest('[data-action]'))return; 
                     mx=e.touches[0].clientX-sx; 
-                    card.style.transform=`translateX(${mx}px) rotate(${mx/20}deg)`; 
+                    card.style.transform=`translateX(${mx}px)`; // 优化2：去掉旋转
                 },{passive:true}); 
                 card.addEventListener('touchend',()=>{ 
                     card.style.transition='transform 0.4s ease, opacity 0.4s ease'; 
-                    if(mx>100)this.swipeCard('like',card.id); 
-                    else if(mx<-100)this.swipeCard('pass',card.id); 
-                    else card.style.transform='translateX(0) rotate(0)'; 
+                    if(mx>100) this.likeCard(card.id); // 优化2：右滑调用 likeCard 不消失
+                    else if(mx<-100) this.swipeCard('pass',card.id); 
+                    else card.style.transform='translateX(0)'; 
                 }); 
             }); 
         },
@@ -1018,7 +1071,7 @@
         swipeCard(type,id) { 
             const card=document.getElementById(id); 
             if(!card)return; 
-            card.style.transform=type==='like'?'translateX(120%) rotate(10deg)':'translateX(-120%) rotate(-10deg)'; 
+            card.style.transform=type==='like'?'translateX(120%)':'translateX(-120%)'; 
             card.style.opacity='0'; 
             setTimeout(()=>{ card.remove(); },400); 
         },
@@ -1125,13 +1178,14 @@
             if (newStatus === 'in-use') {
                 ring.className = 'status-ring swapping';
                 ring.innerHTML = this.icons.swap;
-                title.textContent = '互换使用中';
-                subtitle.textContent = '请按规定时段有序停放';
+                title.textContent = '互换中';
+                subtitle.textContent = '请按约定时段有序停放';
                 
+                // 优化1：增加 white-space:nowrap 防止换行
                 btnArea.innerHTML = `
                     <div style="display:flex; gap:10px; width:100%;">
-                        <button class="btn" style="flex:3; background:var(--brand-blue);" data-action="leave-swap">🚗 我要离场</button>
-                        <button class="btn btn-cancel" style="flex:1; background:var(--bg); color:var(--warning);" data-action="end-swap-warning">强制结束</button>
+                        <button class="btn" style="flex:3; background:var(--brand-blue); white-space:nowrap;" data-action="leave-swap">🚗 我要离场</button>
+                        <button class="btn btn-cancel" style="flex:1.5; background:var(--bg); color:var(--warning); white-space:nowrap;" data-action="end-swap-warning">强制结束</button>
                     </div>`;
                 
                 const myCar = formData?.car_number || '渝A·12345';
@@ -1188,7 +1242,7 @@
                 ring.innerHTML = this.icons.park;
                 title.textContent = '空闲中';
                 subtitle.textContent = '';
-                btnArea.innerHTML = `<button class="btn" id="statusBtn" data-action="handle-status">一键发布</button>`; // 优化3：修改按钮文字
+                btnArea.innerHTML = `<button class="btn" id="statusBtn" data-action="handle-status">一键发布</button>`;
                 swapArea.innerHTML = '';
             }
         },
@@ -1270,6 +1324,18 @@
                         break;
                     case 'force-end-swap':
                         this.forceEndSwap();
+                        break;
+                    // 优化5：处理订单删除
+                    case 'delete-order':
+                        const orderId = target.dataset.id;
+                        if (orderId && !orderId.startsWith('demo_')) {
+                            this.supabase.from('swap_requests').delete().eq('id', orderId).then(() => {
+                                this.showToast('已删除');
+                                this.loadMySwapsInSwap(document.getElementById('swap-myorders'));
+                            });
+                        } else {
+                            this.showToast('演示数据不可删除');
+                        }
                         break;
                     case 'clear-cache':
                         localStorage.clear();
