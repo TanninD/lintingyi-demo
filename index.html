@@ -363,7 +363,9 @@
                     <div class="status-title" id="statusTitle">空闲中</div>
                     <div class="status-subtitle" id="statusSubtitle"></div>
                     <div id="swapStatusArea"></div>
-                    <button class="btn" id="statusBtn" data-action="handle-status">一键发布车位</button>
+                    <div id="statusBtnArea" style="margin-top: 20px;">
+    <button class="btn" id="statusBtn" data-action="handle-status">一键发布车位</button>
+</div>
                 </div>
             </div>
             <div class="page" id="page-swap">
@@ -377,14 +379,19 @@
             </div>
             <div class="page" id="page-msg"></div>
             <div class="page" id="page-me">
-                <div class="card" style="display:flex; align-items:center; gap:16px; cursor:pointer; margin-bottom: 24px;" data-action="open-modal" data-target="profileOverlay">
-                    <div class="avatar" id="profileAvatar" style="width:64px; height:64px; background:linear-gradient(135deg, #34C759, #00C7BE); font-size:24px;">邻</div>
-                    <div style="flex:1;">
-                        <div style="font-weight:700;font-size:20px;" id="profileName">邻停易用户</div>
-                        <div style="font-size:14px;color:var(--text-secondary); margin-top:4px;" id="profilePhone">138****6789</div>
-                    </div>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
+<div class="card" style="display:flex; align-items:center; gap:16px; margin-bottom: 24px;">
+    <div style="display:flex; align-items:center; gap:16px; flex:1; cursor:pointer;" data-action="open-modal" data-target="profileOverlay">
+        <div class="avatar" id="profileAvatar" style="width:64px; height:64px; background:linear-gradient(135deg, #34C759, #00C7BE); font-size:24px;">邻</div>
+        <div style="flex:1;">
+            <div style="font-weight:700;font-size:20px;" id="profileName">邻停易用户</div>
+            <div style="font-size:14px;color:var(--text-secondary); margin-top:4px;" id="profilePhone">138****6789</div>
+        </div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </div>
+    <div data-action="open-modal" data-target="settingsOverlay" style="cursor:pointer; padding:10px; border-radius:10px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+    </div>
+</div>
                 <div class="card" style="text-align:center;padding:20px 16px;">
                     <div class="credit-circle"><div class="score-inner"><div class="score-num">632</div><div class="score-label">信用分</div></div></div>
                     <div style="display:inline-block;padding:6px 16px;background:#FFF4E6;color:var(--orange);border-radius:12px;font-weight:700;font-size:14px;margin-top:8px;">⭐ 信用优秀</div>
@@ -462,7 +469,126 @@
 <template id="tpl-swap-detail"><div class="modal"><div class="modal-title">互换详情</div><div id="swapDetailContent" style="line-height:1.8; color:var(--text-primary); font-size:14px;"></div><button class="btn btn-cancel" style="margin-top:20px;" data-action="close-modal">关闭</button></div></template>
 <template id="tpl-review"><div class="modal"><div class="modal-title">评价互换伙伴</div><form data-form="review"><div class="form-group"><label>评价对象</label><input type="text" name="partner_phone" class="ios-input" id="reviewPartner" readonly></div><div class="form-group"><label>评分</label><div class="star-rating" id="reviewStarRating" style="display:flex;gap:8px;font-size:28px;cursor:pointer;color:#FFCC00;"><span class="star active" data-value="1" data-action="rate-review-star">★</span><span class="star active" data-value="2" data-action="rate-review-star">★</span><span class="star active" data-value="3" data-action="rate-review-star">★</span><span class="star active" data-value="4" data-action="rate-review-star">★</span><span class="star active" data-value="5" data-action="rate-review-star">★</span></div></div><div class="form-group"><label>评价内容</label><textarea name="content" rows="3" class="ios-input" required></textarea></div><div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交评价</button></div></form></div></template>
 <template id="tpl-zone-apply"><div class="modal"><div class="modal-title">申请开通新片区</div><form data-form="zoneApply"><div class="form-group"><label>期望开通的城市 *</label><input type="text" name="city_name" class="ios-input" placeholder="如：成都市" required></div><hr class="form-divider"><div class="form-group"><label>起点片区名称 *</label><input type="text" name="start_zone" class="ios-input" placeholder="如：照母山片区" required></div><div class="form-group"><label>起点具体小区/写字楼 *</label><input type="text" name="start_location" class="ios-input" placeholder="如：龙湖悠山郡" required></div><div class="form-group"><label>起点物业公司名称</label><input type="text" name="start_property_company" class="ios-input" placeholder="如：龙湖物业"></div><div class="form-group"><label>起点物业联系方式</label><input type="tel" name="start_property_contact" class="ios-input" placeholder="物业联系电话"></div><hr class="form-divider"><div class="form-group"><label>终点片区名称 *</label><input type="text" name="end_zone" class="ios-input" placeholder="如：光电园片区" required></div><div class="form-group"><label>终点具体小区/写字楼 *</label><input type="text" name="end_location" class="ios-input" placeholder="如：西永微电园" required></div><div class="form-group"><label>终点物业公司名称</label><input type="text" name="end_property_company" class="ios-input" placeholder="如：万科物业"></div><div class="form-group"><label>终点物业联系方式</label><input type="tel" name="end_property_contact" class="ios-input" placeholder="物业联系电话"></div><hr class="form-divider"><div class="form-group"><label>您的手机号 *</label><input type="tel" name="phone" class="ios-input" required pattern="[0-9]{11}"></div><div class="form-group"><label>备注说明</label><textarea name="remark" rows="2" class="ios-input" placeholder="如：该片区大概有多少人需要互换..."></textarea></div><div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交申请</button></div></form></div></template>
+<template id="tpl-settings"><div class="modal"><div class="modal-title">设置</div>
+<div class="ios-list">
+    <div class="ios-item" data-action="open-modal" data-target="aboutOverlay">
+        <div class="icon-box" style="background:#8E8E93;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></div>
+        关于邻停易<span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+    </div>
+    <div class="ios-item" data-action="open-modal" data-target="agreementOverlay">
+        <div class="icon-box" style="background:#FF9500;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="13" y2="17"></line></svg></div>
+        用户协议与隐私政策<span class="menu-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+    </div>
+    <div class="ios-item" data-action="clear-cache">
+        <div class="icon-box" style="background:#34C759;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div>
+        清除本地缓存<span class="menu-arrow" style="color:var(--text-muted); font-size:13px;">3.2MB</span>
+    </div>
+    <div class="ios-item" data-action="show-toast" data-msg="当前已是最新版本">
+        <div class="icon-box" style="background:#007AFF;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg></div>
+        检查更新<span class="menu-arrow" style="color:var(--text-muted); font-size:13px;">V0.1</span>
+    </div>
+</div>
+<div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">关闭</button></div></div></template>
 
+<template id="tpl-about"><div class="modal"><div class="modal-title">关于邻停易</div>
+<div style="text-align:center; padding:10px 0;">
+    <div style="width:80px; height:80px; border-radius:20px; background:var(--brand-green); color:#fff; display:flex; align-items:center; justify-content:center; font-size:40px; font-weight:bold; margin:0 auto 12px;">P</div>
+    <h2 style="font-size:20px; font-weight:700;">邻停易</h2>
+    <p style="font-size:13px; color:var(--text-secondary); margin-top:4px;">V0.1.0 (Build 1)</p>
+    <p style="font-size:14px; color:var(--text-secondary); margin-top:12px; line-height:1.6;">让闲置车位流转起来<br>邻里互助，停车更易</p>
+</div>
+<div style="border-top: 0.5px solid var(--border); margin-top:20px; padding-top:20px; font-size:13px; color:var(--text-secondary); text-align:center; line-height:1.8;">
+    <p>© 2024 邻停易团队</p>
+    <p>保留所有权利</p>
+</div>
+<div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">关闭</button></div></div></template>
+
+<template id="tpl-agreement"><div class="modal"><div class="modal-title">用户协议与隐私政策</div>
+<div style="font-size:13px; color:var(--text-primary); line-height:1.8; overflow-y:auto; max-height:60vh;">
+    <p><b>一、服务说明</b></p>
+    <p>邻停易（以下简称“本应用”）是一个车位互换与共享平台，旨在为用户提供邻里之间的车位错峰使用服务。使用本应用即代表您同意本协议。</p>
+    <br>
+    <p><b>二、用户责任</b></p>
+    <p>1. 您应保证提供的信息（车牌、车位地址等）真实有效。</p>
+    <p>2. 在互换过程中，请按时到达指定车位，爱护对方车辆及车位设施。</p>
+    <p>3. 不得利用本应用从事任何违法活动。</p>
+    <br>
+    <p><b>三、隐私保护</b></p>
+    <p>1. 本应用收集您的手机号、车牌号、地址信息仅用于车位互换匹配与展示。</p>
+    <p>2. 未经您的许可，我们不会向第三方共享、出售您的个人隐私信息。</p>
+    <p>3. 您的联系方式在未配对成功前会对中间位数进行加密处理。</p>
+    <br>
+    <p><b>四、免责声明</b></p>
+    <p>1. 本应用仅提供信息匹配服务，不参与用户间的实际车辆停放管理。</p>
+    <p>2. 因不可抗力或对方违约导致的停车损失，本应用将协助追偿，但不承担连带赔偿责任。</p>
+    <br>
+    <p><b>五、信用体系</b></p>
+    <p>为保证平台良好运转，本应用实行信用分制度。提前结束互换、恶意占用车位等行为将扣除相应信用分，信用分过低将限制使用部分功能。</p>
+</div>
+<div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">已阅读并同意</button></div></div></template>
+<template id="tpl-verification"><div class="modal"><div class="modal-title">我的认证</div>
+<div class="ios-list">
+    <div class="ios-item">
+        <div class="icon-box" style="background:#34C759;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg></div>
+        <div style="flex:1;">
+            <div style="font-weight:600;">实名认证</div>
+            <div style="font-size:12px; color:var(--brand-green);">已通过 (张*生)</div>
+        </div>
+        <span class="badge-right" style="color:var(--brand-green);">已认证</span>
+    </div>
+    <div class="ios-item">
+        <div class="icon-box" style="background:#007AFF;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
+        <div style="flex:1;">
+            <div style="font-weight:600;">车位信息核实</div>
+            <div style="font-size:12px; color:var(--brand-green);">已核实 (照母山·约克郡)</div>
+        </div>
+        <span class="badge-right" style="color:var(--brand-green);">已核实</span>
+    </div>
+    <div class="ios-item" style="opacity:0.5;">
+        <div class="icon-box" style="background:#8E8E93;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+        <div style="flex:1;">
+            <div style="font-weight:600;">驾驶证认证</div>
+            <div style="font-size:12px; color:var(--text-muted);">未绑定</div>
+        </div>
+        <span class="menu-arrow" style="color:var(--brand-blue);">去绑定</span>
+    </div>
+</div>
+<div style="font-size:12px; color:var(--text-muted); text-align:center; margin-top:16px;">完成更多认证，享受更高信用分与免押金特权</div>
+<div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">关闭</button></div></div></template>
+<template id="tpl-user-profile"><div class="modal" style="text-align:center;">
+    <div class="modal-title">车主主页</div>
+    <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:20px;">
+        <div class="avatar" style="width:80px; height:80px; font-size:32px; margin-bottom:12px; background:linear-gradient(135deg, #5E5CE6, #007AFF);" id="upAvatar">李</div>
+        <h2 style="font-size:20px; font-weight:700;" id="upName">李女士</h2>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+            <span style="font-size:12px; color:var(--brand-green); background:rgba(48,209,88,0.1); padding:4px 10px; border-radius:12px; font-weight:600;">★ 信用 4.9</span>
+            <span style="font-size:12px; color:var(--brand-blue); background:rgba(0,122,255,0.1); padding:4px 10px; border-radius:12px; font-weight:600;">互换 28 次</span>
+        </div>
+    </div>
+    <div class="ios-list" style="text-align:left; margin-bottom:20px;">
+        <div class="ios-item">
+            <div class="icon-box" style="background:#34C759;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg></div>
+            <div style="flex:1;">实名认证 <div style="font-size:12px; color:var(--text-muted);">已通过</div></div>
+            <span style="color:var(--brand-green); font-weight:600;">已认证</span>
+        </div>
+        <div class="ios-item">
+            <div class="icon-box" style="background:#007AFF;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
+            <div style="flex:1;">车位信息 <div style="font-size:12px; color:var(--text-muted);">已核实</div></div>
+            <span style="color:var(--brand-green); font-weight:600;">已核实</span>
+        </div>
+        <div class="ios-item">
+            <div class="icon-box" style="background:#FF9500;"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+            <div style="flex:1;">好评率 <div style="font-size:12px; color:var(--text-muted);">基于 26 次评价</div></div>
+            <span style="font-weight:600;">98%</span>
+        </div>
+    </div>
+    <div class="modal-btns"><button class="btn btn-cancel" data-action="close-modal">关闭</button></div>
+</div></template>
+<template id="tpl-end-warning"><div class="modal"><div class="modal-title" style="color:var(--warning);">⚠️ 提前结束提醒</div><div style="line-height:1.6; color:var(--text-primary); font-size:14px; margin-bottom:20px; text-align:center;">提前结束互换会让对方无处停放。若因此产生额外停车费（约 <b style="color:var(--warning);">20.00 元</b>），需由您自动承担并划转给对方，同时您的信用分将扣除 <b style="color:var(--warning);">5 分</b>。<br><br>为了良好的互换体验，建议双方都到达后再进行“完成互换”操作。</div><div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">再想想</button><button type="button" class="btn" style="background:var(--warning);" data-action="force-end-swap">坚持结束</button></div></div></template>
+
+<template id="tpl-review"><div class="modal"><div class="modal-title">评价互换伙伴</div><form data-form="review"><div class="form-group"><label>评价对象</label><input type="text" name="partner_phone" class="ios-input" id="reviewPartner" readonly></div><div class="form-group"><label>总体评分</label><div class="star-rating" id="reviewStarRating" style="display:flex;gap:8px;font-size:28px;cursor:pointer;color:#FFCC00;"><span class="star active" data-value="1" data-action="rate-review-star">★</span><span class="star active" data-value="2" data-action="rate-review-star">★</span><span class="star active" data-value="3" data-action="rate-review-star">★</span><span class="star active" data-value="4" data-action="rate-review-star">★</span><span class="star active" data-value="5" data-action="rate-review-star">★</span></div><div id="ratingText" style="font-size:13px; color:var(--text-secondary); margin-top:6px; font-weight:600;">非常满意</div></div><div class="form-group"><label>说说您的感受...</label><textarea name="content" rows="3" class="ios-input" required placeholder="车位好找，对方态度好，按时交接..."></textarea></div><div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交评价</button></div></form></div></template>
+
+<template id="tpl-review"><div class="modal"><div class="modal-title">评价互换伙伴</div><form data-form="review"><div class="form-group"><label>评价对象</label><input type="text" name="partner_phone" class="ios-input" id="reviewPartner" readonly></div><div class="form-group"><label>总体评分</label><div class="star-rating" id="reviewStarRating" style="display:flex;gap:8px;font-size:28px;cursor:pointer;color:#FFCC00;"><span class="star active" data-value="1" data-action="rate-review-star">★</span><span class="star active" data-value="2" data-action="rate-review-star">★</span><span class="star active" data-value="3" data-action="rate-review-star">★</span><span class="star active" data-value="4" data-action="rate-review-star">★</span><span class="star active" data-value="5" data-action="rate-review-star">★</span></div><div id="ratingText" style="font-size:13px; color:var(--text-secondary); margin-top:6px; font-weight:600;">非常满意</div></div><div class="form-group"><label>说说您的感受...</label><textarea name="content" rows="3" class="ios-input" required placeholder="车位好找，对方态度好，按时交接..."></textarea></div><div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交评价</button></div></form></div></template>
 <div class="overlay" id="bookingOverlay"></div>
 <div class="overlay" id="feedbackOverlay"></div>
 <div class="overlay" id="scanOverlay"></div>
@@ -475,6 +601,12 @@
 <div class="overlay" id="swapDetailOverlay"></div>
 <div class="overlay" id="reviewOverlay"></div>
 <div class="overlay" id="zoneApplyOverlay"></div>
+<div class="overlay" id="settingsOverlay"></div>
+<div class="overlay" id="aboutOverlay"></div>
+<div class="overlay" id="agreementOverlay"></div>
+<div class="overlay" id="verificationOverlay"></div>
+<div class="overlay" id="userProfileOverlay"></div>
+<div class="overlay" id="endWarningOverlay"></div>
 <div class="toast" id="toast" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.8); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); color: #fff; padding: 16px 24px; border-radius: 16px; font-size: 14px; z-index:200; opacity:0; pointer-events:none; transition:0.3s; white-space:nowrap;"></div>
 <div id="installBanner" style="position: fixed; bottom: 90px; left: 10px; right: 10px; background: rgba(44, 44, 46, 0.95); backdrop-filter: blur(20px); color: #fff; padding: 14px 16px; border-radius: 14px; font-size: 13px; z-index: 150; display: none; align-items: center; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
   <span style="font-size: 24px;">📲</span>
@@ -492,11 +624,13 @@
         supabase: supabase.createClient('https://prmhoyvyxthqlrjkeoho.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybWhveXZ5eHRocWxyamtlb2hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTY3NzQsImV4cCI6MjA5Nzk3Mjc3NH0.DWkUXWzNnA_MmBcLZ7tiPXUUyMLqmJEtxc2Nk-q_O44'),
         ADMIN_HASH: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
         FORM_FIELDS: ['name', 'phone', 'car_number', 'home_address', 'work_address', 'time_slot', 'content', 'device_sn', 'city_name', 'start_zone', 'start_location', 'start_property_company', 'start_property_contact', 'end_zone', 'end_location', 'end_property_company', 'end_property_contact', 'remark', 'partner_phone'],
-        state: { currentUserPhone: localStorage.getItem('currentUserPhone') || '', feedbackRating: 5, reviewRating: 5, parkingStatus: 'free', cachedPages: {} },
+        state: { currentUserPhone: localStorage.getItem('currentUserPhone') || '13800001234', feedbackRating: 5, reviewRating: 5, parkingStatus: 'free', cachedPages: {} },
         icons: {
             car: '<svg viewBox="0 0 24 24"><path d="M5 17H3v-5l2-5h12l2 5v5h-2M5 17h14M5 17v2h2v-2M17 17v2h2v-2M7 12h10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
             park: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><text x="12" y="16" font-size="10" text-anchor="middle" fill="currentColor" stroke="none">P</text></svg>',
-            swap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>'
+            swap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>',
+            carSolid: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>',
+            checkSvg: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>'
         },
         init() {
             document.getElementById('statusRing').innerHTML = this.icons.park;
@@ -529,8 +663,16 @@
             }
             if (id === 'profileOverlay') this.fillProfileForm();
             if (id === 'inviteOverlay') document.getElementById('inviteCode').textContent = this.state.currentUserPhone || '未设置手机号';
-            if (id === 'feedbackOverlay') this.state.feedbackRating = 5;
-            if (id === 'reviewOverlay') this.state.reviewRating = 5;
+            if (id === 'feedbackOverlay') {
+                this.state.feedbackRating = 5;
+                document.querySelectorAll('#starRating .star').forEach(s => { s.classList.add('active'); s.style.color='#FFCC00'; });
+            }
+            if (id === 'reviewOverlay') {
+                this.state.reviewRating = 5;
+                document.querySelectorAll('#reviewStarRating .star').forEach(s => { s.classList.add('active'); s.style.color='#FFCC00'; });
+                const rt = document.getElementById('ratingText');
+                if (rt) rt.textContent = '非常满意';
+            }
             ov.classList.add('show');
         },
         openReviewModal(partner) {
@@ -577,9 +719,71 @@
         async submitReview(form) { const d=this.getFormData(form); const payload={content:d.content, rating:this.state.reviewRating, user_id:d.partner_phone, review_type:'swap_review'}; const {error}=await this.safeCall(()=>this.supabase.from('feedbacks').insert([payload])); if(!error){ this.showToast('✅ 评价成功！'); this.closeModal(form); } },
         async submitFeedback(form) { const d=this.getFormData(form); const p={ content:d.content, rating:this.state.feedbackRating, user_id:this.state.currentUserPhone||'anonymous' }; const {error}=await this.safeCall(()=>this.supabase.from('feedbacks').insert([p])); if(!error){ this.showToast('✅ 感谢反馈！'); this.closeModal(form); } },
         async submitZoneApply(form) { const d=this.getFormData(form); const {error}=await this.safeCall(()=>this.supabase.from('zone_applications').insert([d])); if(!error){ this.showToast('✅ 申请已提交！'); this.closeModal(form); } },
-        async fillProfileForm() { if(!this.state.currentUserPhone)return; const {data}=await this.safeCall(()=>this.supabase.from('user_profiles').select('*').eq('phone',this.state.currentUserPhone).single()); const form=document.querySelector('#profileOverlay form'); if(data&&form){ this.FORM_FIELDS.forEach(f=>{ if(form[f])form[f].value=data[f]||''; }); } },
+        async fillProfileForm() { 
+            const form = document.querySelector('#profileOverlay form'); 
+            if(!form) return;
+            let data = null;
+            if (this.state.currentUserPhone) {
+                const res = await this.safeCall(()=>this.supabase.from('user_profiles').select('*').eq('phone',this.state.currentUserPhone).single()); 
+                data = res.data;
+            }
+            if (!data) {
+                data = { name: '张先生', phone: '13800001234', car_number: '渝A·12345', home_address: '照母山·约克郡', work_address: '汽博·长安福特', device_sn: 'LT-2024-001' };
+            }
+            this.FORM_FIELDS.forEach(f=>{ if(form[f]) form[f].value = data[f] || ''; }); 
+            
+            const inputsToCheck = ['phone', 'car_number', 'home_address'];
+            inputsToCheck.forEach(name => {
+                const input = form.querySelector(`[name="${name}"]`);
+                if (input && input.value) {
+                    let badge = input.nextElementSibling;
+                    if (!badge || !badge.classList.contains('verified-badge')) {
+                        badge = document.createElement('span');
+                        badge.className = 'verified-badge';
+                        badge.style.cssText = 'color:var(--brand-green); font-size:12px; display:inline-flex; align-items:center; gap:2px; margin-left:8px;';
+                        badge.innerHTML = `${this.icons.checkSvg} 已认证`;
+                        input.style.display = 'inline-block';
+                        input.style.width = 'calc(100% - 70px)';
+                        input.insertAdjacentElement('afterend', badge);
+                    }
+                }
+            });
+        },
         async saveProfile(form) { const d=this.getFormData(form); const {error}=await this.safeCall(()=>this.supabase.from('user_profiles').upsert(d,{onConflict:'phone'})); if(!error){ this.state.currentUserPhone=d.phone; localStorage.setItem('currentUserPhone',d.phone); this.loadUserProfile(); this.showToast('✅ 保存成功！'); this.closeModal(form); } },
-        async loadUserProfile() { if(!this.state.currentUserPhone)return; const {data}=await this.safeCall(()=>this.supabase.from('user_profiles').select('*').eq('phone',this.state.currentUserPhone).single()); if(data){ document.getElementById('profileName').textContent=data.name||'邻停易用户'; document.getElementById('profilePhone').textContent=data.phone; document.getElementById('profileAvatar').textContent=(data.name||'邻')[0]; } },
+        async loadUserProfile() { 
+            let data = null;
+            if (this.state.currentUserPhone) {
+                const res = await this.safeCall(()=>this.supabase.from('user_profiles').select('*').eq('phone',this.state.currentUserPhone).single());
+                data = res.data;
+            }
+            if (!data) {
+                data = { name: '张先生', phone: '13800001234', car_number: '渝A·12345', home_address: '照母山·约克郡', work_address: '汽博·长安福特' };
+            }
+            document.getElementById('profileName').textContent = data.name || '邻停易用户'; 
+            const phoneStr = data.phone || '';
+            document.getElementById('profilePhone').textContent = phoneStr ? phoneStr.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '未绑定'; 
+            document.getElementById('profileAvatar').textContent = (data.name || '邻')[0]; 
+
+            // 优化：改用纯图标显示，更简洁不突兀
+            const nameEl = document.getElementById('profileName');
+            let badgeContainer = document.getElementById('profileBadges');
+            if (!badgeContainer) {
+                badgeContainer = document.createElement('div');
+                badgeContainer.id = 'profileBadges';
+                badgeContainer.style.cssText = 'display:flex; gap:6px; margin-top:6px; cursor:pointer;';
+                badgeContainer.dataset.action = 'open-modal';
+                badgeContainer.dataset.target = 'verificationOverlay';
+                nameEl.parentNode.appendChild(badgeContainer);
+            }
+            badgeContainer.innerHTML = `
+                <span title="实名认证" style="display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:rgba(48,209,88,0.15); color:var(--brand-green);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+                <span title="车位已核实" style="display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:rgba(0,122,255,0.15); color:var(--brand-blue);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                </span>
+            `;
+        },
         async verifyAdmin() { const input=document.getElementById('adminPassword').value; if(input==='admin123'){ this.closeModal(document.getElementById('adminPassword')); this.openModal('adminPanelOverlay'); this.switchAdminTab('swap'); return; } try { const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(input)); const hex=Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join(''); if(hex===this.ADMIN_HASH){ this.closeModal(document.getElementById('adminPassword')); this.openModal('adminPanelOverlay'); this.switchAdminTab('swap'); } else this.showToast('❌ 密码错误'); } catch(e){ this.showToast('⚠️ 当前环境不支持加密验证'); } },
         async switchAdminTab(tab) { document.querySelectorAll('#adminTabs .tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.adminTab===tab)); const table=tab==='swap'?'swap_requests':'feedbacks'; const {data}=await this.safeCall(()=>this.supabase.from(table).select('*').order('created_at',{ascending:false})); const c=document.getElementById('adminTableContainer'); if(!data||data.length===0){ c.innerHTML='<div style="text-align:center;color:var(--text-muted);padding:20px;">暂无记录</div>'; return; } c.innerHTML=data.map(item=>{ if(tab==='swap') { const modeLabel=item.mode==='rental'?'有偿分享':'互换'; return `<div class="card" style="padding:14px;margin-bottom:8px;"><b>${item.name||'未填姓名'}</b> · ${item.phone}<br><span style="font-size:13px;color:var(--text-secondary);">${modeLabel} · 共享车位：${item.home_address}${item.work_address?' → 期望车位：'+item.work_address:''}</span><br><button style="color:var(--warning);margin-top:8px;font-size:13px;border:none;background:none;" data-action="delete-record" data-table="swap_requests" data-id="${item.id}">删除</button></div>`; } else return `<div class="card" style="padding:14px;margin-bottom:8px;"><b>${item.user_id||'匿名'}</b> · 评分：${item.rating}<br><span style="font-size:13px;color:var(--text-secondary);">${item.content}</span><br><button style="color:var(--warning);margin-top:8px;font-size:13px;border:none;background:none;" data-action="delete-record" data-table="feedbacks" data-id="${item.id}">删除</button></div>`; }).join(''); },
         async deleteRecord(table,id) { await this.safeCall(()=>this.supabase.from(table).delete().eq('id',id),'删除失败'); this.showToast('已删除'); this.switchAdminTab(table==='swap_requests'?'swap':'feedback'); },
@@ -612,16 +816,11 @@
             const { data } = await this.safeCall(() => this.supabase.from('swap_requests').select('*').order('created_at', { ascending: false }));
             
             if (!data || data.length === 0) {
-                // 修复演示数据：全局只保留1个活跃状态订单
                 const demoData = [
-                    { id: 'demo_1', name: '张先生', phone: '138****1234', car_number: '渝A·12345', home_address: '照母山·约克郡', work_address: '汽博·长安福特', time_slot: '8:30 - 18:00', mode: 'swap', status: 'confirmed', created_at: new Date(Date.now() - 30*60*1000).toISOString() },
-                    { id: 'demo_2', name: '李女士', phone: '139****5678', car_number: '渝B·67890', home_address: '汽博·奥园', work_address: '光电园·互联网产业园', time_slot: '9:00 - 18:30', mode: 'swap', status: 'completed', created_at: new Date(Date.now() - 3*24*60*60*1000).toISOString() },
-                    { id: 'demo_3', name: '王先生', phone: '136****9012', car_number: '渝C·11111', home_address: '照母山·舜山府', work_address: '汽博·汽博中心', time_slot: '8:00 - 17:30', mode: 'swap', status: 'completed', created_at: new Date(Date.now() - 45*60*1000).toISOString() },
-                    { id: 'demo_4', name: '刘女士', phone: '135****3456', car_number: '渝D·22222', home_address: '汽博·奥林匹克花园', work_address: '大竹林·互联网产业园', time_slot: '8:30 - 18:00', mode: 'swap', status: 'cancelled', created_at: new Date(Date.now() - 5*24*60*60*1000).toISOString() },
-                    { id: 'demo_5', name: '陈先生', phone: '137****7890', car_number: '渝E·33333', home_address: '照母山·万科城', work_address: '回兴·工业园区', time_slot: '7:30 - 16:30', mode: 'rental', status: 'completed', created_at: new Date(Date.now() - 15*60*1000).toISOString() },
-                    { id: 'demo_6', name: '赵女士', phone: '135****1111', car_number: '渝F·44444', home_address: '汽博·爱加丽都', work_address: '照母山·两江数字经济产业园', time_slot: '9:00 - 19:00', mode: 'swap', status: 'completed', created_at: new Date(Date.now() - 12*24*60*60*1000).toISOString() },
-                    { id: 'demo_7', name: '孙先生', phone: '138****2222', car_number: '渝G·55555', home_address: '照母山·龙湖好望山', work_address: '汽博·金山工业园', time_slot: '8:00 - 17:00', mode: 'swap', status: 'cancelled', created_at: new Date(Date.now() - 8*24*60*60*1000).toISOString() },
-                    { id: 'demo_8', name: '周女士', phone: '139****3333', car_number: '渝H·66666', home_address: '汽博·保利高尔夫', work_address: '光电园·软件园', time_slot: '8:30 - 18:30', mode: 'swap', status: 'completed', created_at: new Date(Date.now() - 120*60*1000).toISOString() },
+                    { id: 'demo_1', name: '李女士', phone: '13900005678', car_number: '渝B·67890', home_address: '汽博·长安福特', work_address: '照母山·约克郡', time_slot: '8:30 - 18:00', mode: 'swap', status: 'confirmed', created_at: new Date(Date.now() - 30*60*1000).toISOString() },
+                    { id: 'demo_2', name: '王先生', phone: '13600009012', car_number: '渝C·11111', home_address: '汽博·汽博中心', work_address: '照母山·舜山府', time_slot: '8:00 - 17:30', mode: 'swap', status: 'pending', created_at: new Date(Date.now() - 45*60*1000).toISOString() },
+                    { id: 'demo_3', name: '刘女士', phone: '13500003456', car_number: '渝A·12345', home_address: '照母山·约克郡', work_address: '汽博·金山工业园', time_slot: '8:30 - 18:00', mode: 'rental', status: 'completed', created_at: new Date(Date.now() - 5*24*60*60*1000).toISOString() },
+                    { id: 'demo_4', name: '陈先生', phone: '13700007890', car_number: '渝E·33333', home_address: '照母山·龙湖好望山', work_address: '汽博·长安福特', time_slot: '7:30 - 16:30', mode: 'rental', status: 'completed', created_at: new Date(Date.now() - 8*24*60*60*1000).toISOString() },
                 ];
                 this.renderOrderList(demoData, container);
                 return;
@@ -635,18 +834,16 @@
                 return;
             }
 
-            // 修复逻辑：全局只保留最新的1个活跃订单，其他活跃订单不展示
             const activeOrders = orders.filter(item => item.status === 'pending' || item.status === 'confirmed');
             const historyOrders = orders.filter(item => item.status === 'completed' || item.status === 'cancelled');
 
             let displayOrders = [];
             if (activeOrders.length > 0) {
                 activeOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                displayOrders.push(activeOrders[0]); // 只取最新的1个
+                displayOrders.push(activeOrders[0]); 
             }
-            displayOrders.push(...historyOrders); // 历史订单全部展示
+            displayOrders.push(...historyOrders); 
 
-            // 排序：活跃订单置顶，历史订单按时间倒序
             displayOrders.sort((a, b) => {
                 const aActive = a.status === 'pending' || a.status === 'confirmed';
                 const bActive = b.status === 'pending' || b.status === 'confirmed';
@@ -655,39 +852,65 @@
                 return new Date(b.created_at) - new Date(a.created_at);
             });
 
+            const myCarNumber = '渝A·12345'; 
+
             container.innerHTML = displayOrders.map((item, index) => {
                 const modeLabel = item.mode === 'rental' ? '有偿分享' : '互换';
                 const statusMap = { 
-                    'pending': { label: '⏳ 待确认', color: 'var(--brand-blue)', desc: '等待对方确认中...' },
-                    'confirmed': { label: '✅ 已确认', color: 'var(--brand-green)', desc: '已配对，等待执行' },
-                    'completed': { label: '✔️ 已完成', color: 'var(--brand-green)', desc: '互换已圆满结束' },
-                    'cancelled': { label: '❌ 已取消', color: 'var(--warning)', desc: '已取消' }
+                    'pending': { label: '确认中', color: 'var(--brand-blue)' },
+                    'confirmed': { label: '互换中', color: 'var(--brand-green)' },
+                    'completed': { label: '已完成', color: 'var(--brand-green)' },
+                    'cancelled': { label: '已取消', color: 'var(--warning)' }
                 };
                 const statusInfo = statusMap[item.status] || statusMap['pending'];
                 const timeStr = this.generateRealisticTime(index, item.status);
                 const isActive = item.status === 'pending' || item.status === 'confirmed';
+                
+                const maskedPlate = item.car_number ? item.car_number.slice(0,2) + '***' + item.car_number.slice(-2) : '无车牌';
+                
+                let ratingHtml = '';
+                let rowsHtml = '';
+
+                if (item.status !== 'cancelled') {
+                    let myTime = '08:32 / 18:00';
+                    let partnerTime = '08:35 / 18:02';
+                    
+                    const mySpotAddr = item.home_address || '-';
+                    const partnerSpotAddr = item.work_address || '-';
+
+                    if (item.mode === 'rental') {
+                        const isMyRequest = item.car_number === myCarNumber;
+                        if (isMyRequest) { 
+                            partnerTime = '- / -';
+                        } else { 
+                            myTime = '- / -';
+                        }
+                    }
+
+                    rowsHtml += `<div style="font-size:13px; color:var(--text-primary); margin-top:8px; display:flex; align-items:center; gap:4px;"><span>📍</span> <b>我的车位：</b>${mySpotAddr}</div>`;
+                    rowsHtml += `<div style="font-size:11px; color:var(--text-muted); padding-left:20px; margin-top:2px;">对方进出场 ${partnerTime}</div>`;
+
+                    rowsHtml += `<div style="font-size:13px; color:var(--text-primary); margin-top:6px; display:flex; align-items:center; gap:4px;"><span>→</span> <b>对方车位：</b>${partnerSpotAddr}</div>`;
+                    rowsHtml += `<div style="font-size:11px; color:var(--text-muted); padding-left:20px; margin-top:2px;">我的进出场 ${myTime}</div>`;
+
+                    if (item.status === 'completed') {
+                        const rating = (index % 2 === 0) ? 5 : 0;
+                        ratingHtml = rating > 0 ? `<span style="color:var(--orange);">★★★★★</span>` : `<button class="btn btn-outline" style="padding:4px 10px; font-size:11px; width:auto; background:rgba(0,122,255,0.05);" onclick="App.openReviewModal('${item.name}')">📝 待评价，点击评价</button>`;
+                    }
+                }
+
                 return `
-                    <div class="card swap-card" style="padding:14px; border-left: 4px solid ${isActive ? 'var(--brand-green)' : 'var(--border)'};">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                            <b style="font-size:16px;">${item.name || '未填姓名'}</b>
-                            <span style="font-size:12px; color:${statusInfo.color}; font-weight:600;">${statusInfo.label}</span>
+                    <div class="card swap-card" style="padding:14px; border-left: 4px solid ${statusInfo.color};">
+                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-muted); border-bottom: 0.5px solid var(--border); padding-bottom: 8px; margin-bottom: 4px;">
+                            <span>${timeStr}</span>
+                            <span style="color:${statusInfo.color}; font-weight:600;">${statusInfo.label}</span>
                         </div>
-                        <div style="font-size:13px; color:var(--text-secondary); margin-bottom:6px;">
-                            ${item.car_number ? '🚗 ' + item.car_number + ' · ' : ''}${modeLabel}
-                            ${isActive ? ' <span style="color:var(--brand-blue); font-size:11px;">(当前互换)</span>' : ''}
+                        <div style="font-size:14px; color:var(--text-primary); margin-bottom:4px;">
+                            <b>${item.name || '未填姓名'}</b> · ${maskedPlate} · <span style="font-size:12px; color:var(--brand-blue); font-weight:600;">${modeLabel}</span>
+                            ${isActive ? ' <span style="color:var(--brand-green); font-size:11px;">(当前互换)</span>' : ''}
                         </div>
-                        <div class="swap-route">
-                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-                                <span>📍 ${item.home_address}</span>
-                                <span style="font-size:11px; color:var(--text-muted);">${item.time_slot || ''}</span>
-                            </div>
-                            ${item.work_address ? `<div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:6px;"><span>→ ${item.work_address}</span></div>` : ''}
-                        </div>
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-                            <span style="font-size:10px; color:var(--text-muted);">${timeStr}</span>
-                            ${isActive ? '<span style="font-size:11px; color:var(--brand-green); font-weight:600;">● 进行中</span>' : ''}
-                        </div>
-                        ${item.status === 'completed' ? `<div style="margin-top:8px; text-align:right;"><button class="btn btn-outline" style="padding:6px 14px; font-size:12px; width:auto; background:rgba(0,122,255,0.05);" onclick="App.openReviewModal('${item.name}')">📝 评价</button></div>` : ''}
+                        ${rowsHtml}
+                        ${ratingHtml ? `<div style="margin-top:10px; font-size:12px; border-top: 0.5px solid var(--border); padding-top: 8px; display:flex; justify-content:space-between; align-items:center;">对方评分：${ratingHtml}</div>` : ''}
                     </div>`;
             }).join('');
         },
@@ -695,23 +918,24 @@
         renderRecommendCards() { 
             const c=document.getElementById('swap-recommend'); 
             const cards=[
-                { name:'李女士',credit:4.9,match:89,mySpot:'共享车位(光电园·B写字楼)',theirSpot:'期望车位(照母山·A小区)',myTime:'8:30-18:50',theirTime:'8:00-18:30',tags:['步行3分钟','时间重叠96%']},
-                { name:'王先生',credit:4.7,match:82,mySpot:'共享车位(光电园·C园区)',theirSpot:'期望车位(照母山·A小区)',myTime:'8:30-18:50',theirTime:'9:00-19:00',tags:['步行5分钟','时间重叠88%']},
-                { name:'刘女士',credit:4.8,match:78,mySpot:'共享车位(光电园·D写字楼)',theirSpot:'期望车位(照母山·A小区)',myTime:'8:30-18:50',theirTime:'8:00-18:00',tags:['步行7分钟','充电桩可用']}
+                { name:'李女士',credit:4.9,match:89, provide:'汽博·长安福特', need:'照母山·约克郡', time:'8:30-18:00', tags:['步行3分钟','时间重叠96%']},
+                { name:'王先生',credit:4.7,match:82, provide:'汽博·汽博中心', need:'照母山·约克郡', time:'8:30-18:00', tags:['步行5分钟','时间重叠88%']},
+                { name:'刘女士',credit:4.8,match:78, provide:'汽博·金山工业园', need:'照母山·约克郡', time:'8:30-18:00', tags:['步行7分钟','充电桩可用']}
             ]; 
-            c.innerHTML='<div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">以下推荐基于您填写的车位信息精准匹配</div>'+cards.map((c,i)=>`<div class="card swap-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span><div class="user-row"><div class="avatar">${c.name[0]}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div><div class="swap-route"><div style="display:flex; justify-content:space-between; align-items:center; width:100%;"><span>${c.mySpot}</span><span style="font-size:11px; color:var(--text-muted);">${c.myTime}</span></div><div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:6px;"><span>${c.theirSpot}</span><span style="font-size:11px; color:var(--text-muted);">${c.theirTime}</span></div></div><div class="tag-row">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><div class="card-actions"><button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button><button class="btn-like" data-action="like-card" data-id="swapCard${i}">想换</button></div></div>`).join(''); 
+            // 优化1：头像和名字增加点击事件
+            c.innerHTML='<div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">以下推荐基于您填写的车位信息精准匹配</div>'+cards.map((c,i)=>`<div class="card swap-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span><div class="user-row" data-action="show-user-profile" data-name="${c.name}" style="cursor:pointer;"><div class="avatar">${c.name[0]}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div><div class="swap-route"><div style="display:flex; justify-content:space-between; align-items:center; width:100%;"><span>提供：${c.provide}</span><span style="font-size:11px; color:var(--text-muted);">${c.time}</span></div><div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:6px;"><span>期望：${c.need}</span><span style="font-size:11px; color:var(--text-muted);">${c.time}</span></div></div><div class="tag-row">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><div class="card-actions"><button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button><button class="btn-like" data-action="like-card" data-id="swapCard${i}">想换</button></div></div>`).join(''); 
             this.bindSwipeGestures(); 
         },
         bindSwipeGestures() { 
             document.querySelectorAll('.swap-card').forEach(card=>{ 
                 let sx=0,mx=0; 
                 card.addEventListener('touchstart',(e)=>{ 
-                    if(e.target.closest('button')||e.target.closest('.map-link'))return; 
+                    if(e.target.closest('button')||e.target.closest('.map-link')||e.target.closest('[data-action]'))return; 
                     sx=e.touches[0].clientX; 
                     card.style.transition='none'; 
                 },{passive:true}); 
                 card.addEventListener('touchmove',(e)=>{ 
-                    if(e.target.closest('button')||e.target.closest('.map-link'))return; 
+                    if(e.target.closest('button')||e.target.closest('.map-link')||e.target.closest('[data-action]'))return; 
                     mx=e.touches[0].clientX-sx; 
                     card.style.transform=`translateX(${mx}px) rotate(${mx/20}deg)`; 
                 },{passive:true}); 
@@ -723,14 +947,13 @@
                 }); 
             }); 
         },
-        // 修复：点击想换后不消失，仅切换状态并禁用操作
         likeCard(id) { 
             const card = document.getElementById(id);
             if (!card) return;
             const actions = card.querySelector('.card-actions');
             if (actions) actions.innerHTML = '<div class="pending-status">⏳ 已发起互换请求，等待对方确认...</div>';
             card.style.opacity = '0.6';
-            card.style.pointerEvents = 'none'; // 禁用点击防止重复操作
+            card.style.pointerEvents = 'none'; 
             if (navigator.vibrate) navigator.vibrate(30);
             this.showToast('🎉 已发起互换请求！');
         },
@@ -782,7 +1005,6 @@
                     </div>
                 </div>`;
         },
-        // 修复：进入互换页面默认强制渲染推荐 Tab
         switchPage(page) { 
             document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); 
             document.getElementById('page-'+page).classList.add('active'); 
@@ -801,7 +1023,7 @@
             document.getElementById('swap-recommend').style.display = tab === 'recommend' ? 'block' : 'none';
             document.getElementById('swap-myorders').style.display = tab === 'myorders' ? 'block' : 'none';
             if (tab === 'recommend') {
-                this.renderRecommendCards(); // 每次点击推荐都重新渲染，保证卡片完整
+                this.renderRecommendCards(); 
             }
             if (tab === 'myorders') {
                 const container = document.getElementById('swap-myorders');
@@ -813,13 +1035,30 @@
         async loadMyReviews() {
             this.openModal('historyDetailOverlay');
             document.getElementById('historyDetailTitle').textContent = '我的评价';
-            document.getElementById('historyDetailContent').innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:30px 0;">暂无评价记录</div>';
+            document.getElementById('historyDetailContent').innerHTML = `
+                <div class="card" style="padding:14px; margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <b>李女士</b>
+                        <span style="color:var(--orange);">★★★★★</span>
+                    </div>
+                    <div style="font-size:13px; color:var(--text-secondary); line-height:1.5;">车位好找，对方态度很好，按时交接，非常满意的互换体验！</div>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:8px; text-align:right;">2024-05-20 18:05</div>
+                </div>
+                <div class="card" style="padding:14px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <b>王先生</b>
+                        <span style="color:var(--orange);">★★★★☆</span>
+                    </div>
+                    <div style="font-size:13px; color:var(--text-secondary); line-height:1.5;">整体不错，就是出场时稍微堵了一下。</div>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:8px; text-align:right;">2024-05-15 19:30</div>
+                </div>
+            `;
         },
         toggleParking(forceStatus, formData) {
             const ring = document.getElementById('statusRing');
             const title = document.getElementById('statusTitle');
             const subtitle = document.getElementById('statusSubtitle');
-            const btn = document.getElementById('statusBtn');
+            const btnArea = document.getElementById('statusBtnArea');
             const swapArea = document.getElementById('swapStatusArea');
             
             const newStatus = forceStatus || (this.state.parkingStatus === 'free' ? 'in-use' : 'free');
@@ -830,40 +1069,109 @@
                 ring.innerHTML = this.icons.swap;
                 title.textContent = '互换使用中';
                 subtitle.textContent = '请按规定时段有序停放';
-                btn.textContent = '结束互换使用';
-                btn.style.background = 'var(--orange)';
                 
-                const myCar = formData?.car_number || '渝A·88888';
-                const mySpotAddr = formData?.home_address || '照母山·约克郡 A区-105';
-                const myTime = formData?.time_slot || '8:30 - 18:00';
+                btnArea.innerHTML = `
+                    <div style="display:flex; gap:10px; width:100%;">
+                        <button class="btn" style="flex:3; background:var(--brand-blue);" data-action="leave-swap">🚗 我要离场</button>
+                        <button class="btn btn-cancel" style="flex:1; background:var(--bg); color:var(--warning);" data-action="end-swap-warning">强制结束</button>
+                    </div>`;
+                
+                const myCar = formData?.car_number || '渝A·12345';
+                const myHome = formData?.home_address || '照母山·约克郡';
+                const myWork = formData?.work_address || '汽博·长安福特';
+                const partnerCar = '渝B·67890';
+                const swapTime = formData?.time_slot || '8:30 - 18:00';
+                
+                const myCarIcon = this.icons.carSolid.replace('fill="currentColor"', 'fill="var(--brand-blue)"');
+                const partnerCarIcon = this.icons.carSolid.replace('fill="currentColor"', 'fill="var(--brand-green)"');
                 
                 swapArea.innerHTML = `
-                    <div class="swap-info-block mine">
-                        <div class="block-line">
-                            <span class="car-icon">🚗</span>
-                            <span>我的车位借给：张先生</span>
-                            <span class="time">${myTime}</span>
+                    <div style="margin-top:16px; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow);">
+                        <div style="background: rgba(48, 209, 88, 0.1); padding: 14px; border-bottom: 1px solid var(--border);">
+                            <div style="display:flex; justify-content:space-between; align-items:center; color:var(--brand-green); font-weight:700;">
+                                <span style="display:flex; align-items:center; gap:4px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                    <b style="font-size:14px;">${myWork}</b>
+                                </span>
+                                <span style="font-size:12px; color:var(--text-muted); font-weight:500;">${swapTime}</span>
+                            </div>
+                            <div style="margin-top:10px; display:flex; align-items:center; gap:6px;">
+                                ${myCarIcon}
+                                <b style="color:var(--text-primary); font-size:13px;">${myCar}</b>
+                            </div>
+                            <div style="margin-top:8px; display:flex; justify-content:space-between; color:var(--text-muted); font-size:12px;">
+                                <span>入场 08:35</span>
+                                <span style="color:var(--brand-green); font-weight:600;">剩余: <span id="myRemainingTime">-</span></span>
+                            </div>
                         </div>
-                        <div class="block-addr">${mySpotAddr} (对方车牌: 渝B·12345)</div>
-                    </div>
-                    <div class="swap-info-block partner">
-                        <div class="block-line">
-                            <span class="car-icon">📍</span>
-                            <span>我停在：李女士的车位</span>
-                            <span class="time">${myTime}</span>
+                        <div style="background: rgba(0, 122, 255, 0.1); padding: 14px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; color:var(--brand-blue); font-weight:700;">
+                                <span style="display:flex; align-items:center; gap:4px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                    <b style="font-size:14px;">${myHome}</b>
+                                </span>
+                                <span style="font-size:12px; color:var(--text-muted); font-weight:500;">${swapTime}</span>
+                            </div>
+                            <div style="margin-top:10px; display:flex; align-items:center; gap:6px;">
+                                ${partnerCarIcon}
+                                <b style="color:var(--text-primary); font-size:13px;">${partnerCar}</b>
+                            </div>
+                            <div style="margin-top:8px; display:flex; justify-content:space-between; color:var(--text-muted); font-size:12px;">
+                                <span>入场 08:32</span>
+                                <span style="color:var(--brand-blue); font-weight:600;">剩余: <span id="partnerRemainingTime">-</span></span>
+                            </div>
                         </div>
-                        <div class="block-addr">汽博·长安福特 B2-12 (我的车牌: ${myCar})</div>
                     </div>
                 `;
+                this.startSwapCountdown();
             } else {
+                this.stopSwapCountdown();
                 ring.className = 'status-ring free';
                 ring.innerHTML = this.icons.park;
                 title.textContent = '空闲中';
                 subtitle.textContent = '';
-                btn.textContent = '一键发布车位';
-                btn.style.background = '';
+                btnArea.innerHTML = `<button class="btn" id="statusBtn" data-action="handle-status">一键发布车位</button>`;
                 swapArea.innerHTML = '';
             }
+        },
+        startSwapCountdown() {
+            this.stopSwapCountdown();
+            const endTime = new Date().getTime() + (8 * 60 * 60 * 1000);
+            this.swapTimer = setInterval(() => {
+                const now = new Date().getTime();
+                const diff = endTime - now;
+                if (diff <= 0) {
+                    this.stopSwapCountdown();
+                    this.leaveSwap(true);
+                    return;
+                }
+                const h = Math.floor(diff / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                const timeStr = `${h}h ${m}m ${s}s`;
+                
+                const myTimeEl = document.getElementById('myRemainingTime');
+                const partnerTimeEl = document.getElementById('partnerRemainingTime');
+                if (myTimeEl) myTimeEl.textContent = timeStr;
+                if (partnerTimeEl) partnerTimeEl.textContent = timeStr;
+            }, 1000);
+        },
+        stopSwapCountdown() {
+            if (this.swapTimer) clearInterval(this.swapTimer);
+        },
+        leaveSwap(isAuto) {
+            this.stopSwapCountdown();
+            this.toggleParking('free');
+            this.openModal('historyDetailOverlay');
+            document.getElementById('historyDetailTitle').textContent = '✅ 互换圆满完成';
+            document.getElementById('historyDetailTitle').style.color = 'var(--brand-green)';
+            document.getElementById('historyDetailContent').innerHTML = `<div style="text-align:center; line-height:2;">本次互换已顺利结束。<br>${isAuto ? '系统检测到您已离场，自动为您结束互换。' : ''}<br>信用分 <span style="color:var(--brand-green); font-weight:bold; font-size:18px;">+5</span><br><br><button class="btn" data-action="close-modal">确认</button></div>`;
+        },
+        forceEndSwap() {
+            this.stopSwapCountdown();
+            this.closeModal(document.querySelector('#endWarningOverlay .btn')); 
+            this.toggleParking('free');
+            this.showToast('⚠️ 已强制结束，扣除信用分5分及停车费20元');
         },
         bindEvents() {
             document.body.addEventListener('click',(e)=>{
@@ -879,7 +1187,12 @@
                     case 'open-map':e.stopPropagation();window.open(`https://uri.amap.com/search?keyword=${encodeURIComponent(target.dataset.addr)}`,'_blank');break;
                     case 'show-msg-detail':this.openModal('msgDetailOverlay');document.getElementById('msgDetailTitle').textContent=target.dataset.title;document.getElementById('msgDetailContent').innerHTML=target.dataset.content.replace(/\n/g,'<br>');break;
                     case 'show-history-detail':this.openModal('historyDetailOverlay');document.getElementById('historyDetailTitle').textContent='与 '+target.dataset.partner+' 的互换详情';const rating=parseInt(target.dataset.rating);document.getElementById('historyDetailContent').innerHTML=`<p><b>互换伙伴：</b>${target.dataset.partner}</p><p><b>日期：</b>${target.dataset.date}</p><p><b>时段：</b>${target.dataset.time}</p><p><b>车位号：</b>${target.dataset.spot}</p><p><b>评分：</b>${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</p>`;break;
-                    // 修复：卡片点击与按钮点击彻底分离
+                    // 优化1：处理查看车主主页事件
+                    case 'show-user-profile':
+                        this.openModal('userProfileOverlay');
+                        document.getElementById('upName').textContent = target.dataset.name;
+                        document.getElementById('upAvatar').textContent = target.dataset.name[0];
+                        break;
                     case 'toggle-parking':
                         this.toggleParking(this.state.parkingStatus === 'free' ? 'in-use' : 'free');
                         break;
@@ -891,6 +1204,22 @@
                         } else {
                             this.openModal('bookingOverlay');
                         }
+                        break;
+                    case 'leave-swap':
+                        this.leaveSwap(false);
+                        break;
+                    case 'end-swap-warning':
+                        this.openModal('endWarningOverlay');
+                        break;
+                    case 'force-end-swap':
+                        this.forceEndSwap();
+                        break;
+                    case 'clear-cache':
+                        localStorage.clear();
+                        this.state.currentUserPhone = '';
+                        this.showToast('✅ 缓存已清除');
+                        this.closeModal(target);
+                        setTimeout(() => location.reload(), 1000);
                         break;
                     case 'open-modal':document.getElementById('zoneDropdown').classList.remove('show');document.getElementById('cityDropdown').classList.remove('show');this.openModal(target.dataset.target);break;
                     case 'close-modal':this.closeModal(target);break;
@@ -911,6 +1240,9 @@
                     case 'rate-review-star':
                         this.state.reviewRating = parseInt(target.dataset.value);
                         const reviewStars = document.querySelectorAll('#reviewStarRating .star');
+                        const ratingTexts = ['', '非常不满意', '不满意', '一般', '满意', '非常满意'];
+                        const rt = document.getElementById('ratingText');
+                        if (rt) rt.textContent = ratingTexts[this.state.reviewRating];
                         reviewStars.forEach(s => {
                             const v = parseInt(s.dataset.value);
                             if (v <= this.state.reviewRating) { s.classList.add('active'); s.style.color='#FFCC00'; } else { s.classList.remove('active'); s.style.color='#ddd'; }
