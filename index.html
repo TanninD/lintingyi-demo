@@ -457,9 +457,21 @@
     
     <div class="form-group"><label id="timeLabel">可共享时段 *</label>
         <div style="display:flex; align-items:center; gap:8px;">
-            <input type="datetime-local" name="start_time" class="ios-input" style="flex:1;" required>
+            <div class="dt-wrap" style="flex:1;">
+                <input type="datetime-local" name="start_time" required>
+                <div class="dt-display">
+                    <div class="dt-date">--</div>
+                    <div class="dt-time">--:--</div>
+                </div>
+            </div>
             <span style="color:var(--text-muted);">-</span>
-            <input type="datetime-local" name="end_time" class="ios-input" style="flex:1;" required>
+            <div class="dt-wrap" style="flex:1;">
+                <input type="datetime-local" name="end_time" required>
+                <div class="dt-display">
+                    <div class="dt-date">--</div>
+                    <div class="dt-time">--:--</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -470,19 +482,69 @@
     <div class="form-group" id="expectTimeGroup">
         <label>期望时段 *</label>
         <div style="display:flex; align-items:center; gap:8px;">
-            <input type="datetime-local" name="expect_start_time" class="ios-input" style="flex:1;" required>
+            <div class="dt-wrap" style="flex:1;">
+                <input type="datetime-local" name="expect_start_time" required>
+                <div class="dt-display">
+                    <div class="dt-date">--</div>
+                    <div class="dt-time">--:--</div>
+                </div>
+            </div>
             <span style="color:var(--text-muted);">-</span>
-            <input type="datetime-local" name="expect_end_time" class="ios-input" style="flex:1;" required>
+            <div class="dt-wrap" style="flex:1;">
+                <input type="datetime-local" name="expect_end_time" required>
+                <div class="dt-display">
+                    <div class="dt-date">--</div>
+                    <div class="dt-time">--:--</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="form-group" id="acceptRentalGroup" style="display:flex; align-items:center; gap:8px; margin-top:20px;">
-        <input type="checkbox" id="accept_rental" name="accept_rental" style="width:18px; height:18px;">
-        <label for="accept_rental" style="margin-bottom:0; font-size:14px; color:var(--text-primary); cursor:pointer;">接受有偿分享（无匹配时可付费停放）</label>
+    <div id="rentalPriceGroup" style="display:none; background: rgba(255,149,0,0.05); border: 0.5px solid rgba(255,149,0,0.2); border-radius: 12px; padding: 12px; margin-bottom: 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-secondary);">
+            <span>分享单价</span>
+            <span><b style="font-size:16px; color:var(--orange);">1.05</b> 元/小时</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-secondary); margin-top:8px; border-top: 0.5px dashed var(--border); padding-top:8px;">
+            <span>预计收入</span>
+            <span style="color:var(--brand-green); font-weight:600;" id="rentalIncomeDisplay">¥ 10.50 / 次</span>
+        </div>
     </div>
-    <div class="form-group" style="display:flex; align-items:center; gap:8px;">
-        <input type="checkbox" id="accept_nearby" name="accept_nearby" checked style="width:18px; height:18px;">
-        <label for="accept_nearby" style="margin-bottom:0; font-size:14px; color:var(--text-primary); cursor:pointer;">接受附近车位（推荐范围更广）</label>
+
+    <!-- 互换模式特有选项 -->
+    <div id="swapOptionsGroup">
+        <div class="form-group" style="display:flex; align-items:center; gap:8px; margin-top:20px;">
+            <input type="checkbox" id="accept_nearby" name="accept_nearby" checked style="width:18px; height:18px;">
+            <label for="accept_nearby" style="margin-bottom:0; font-size:14px; color:var(--text-primary); cursor:pointer;">同意推送至附近小区（扩大匹配范围）</label>
+        </div>
+        <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="accept_rental" name="accept_rental" style="width:18px; height:18px;">
+            <label for="accept_rental" style="margin-bottom:0; font-size:14px; color:var(--text-primary); cursor:pointer;">同意推送给有偿分享（无匹配时可付费停放）</label>
+        </div>
+    </div>
+
+    <!-- 有偿分享模式特有选项 -->
+    <div id="rentalOptionsGroup" style="display:none;">
+        <div class="form-group" style="display:flex; align-items:center; gap:8px; margin-top:20px;">
+            <input type="checkbox" id="auto_accept" name="auto_accept" checked style="width:18px; height:18px;">
+            <label for="auto_accept" style="margin-bottom:0; font-size:14px; color:var(--text-primary); cursor:pointer;">如有订单自动接受（提升车位周转率）</label>
+        </div>
+        <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="auto_release" name="auto_release" checked style="width:18px; height:18px;">
+            <label for="auto_release" style="margin-bottom:0; font-size:14px; color:var(--text-primary); cursor:pointer;">余时自动发布（对方早退时，剩余时段自动降价发布）</label>
+        </div>
+    </div>
+
+    <!-- 互换协议（必选，默认不勾选） -->
+    <div class="form-group" id="agreementSwapGroup" style="display:flex; align-items:center; gap:8px; margin-top:20px;">
+        <input type="checkbox" id="agreement_swap" name="agreement_swap" style="width:18px; height:18px;">
+        <label for="agreement_swap" style="margin-bottom:0; font-size:14px; color:var(--text-primary); cursor:pointer; font-weight:600;">我已阅读并同意《车位互换协议》</label>
+    </div>
+
+    <!-- 有偿分享协议（必选，默认不勾选） -->
+    <div class="form-group" id="agreementRentalGroup" style="display:none; align-items:center; gap:8px; margin-top:20px;">
+        <input type="checkbox" id="agreement_rental" name="agreement_rental" style="width:18px; height:18px;">
+        <label for="agreement_rental" style="margin-bottom:0; font-size:14px; color:var(--text-primary); cursor:pointer; font-weight:600;">我已阅读并同意《车位有偿分享协议》，授权平台控制地锁及结算收益</label>
     </div>
 
     <div class="modal-btns"><button type="button" class="btn btn-cancel" data-action="close-modal">取消</button><button type="submit" class="btn">提交预约</button></div>
@@ -685,7 +747,7 @@
         supabase: supabase.createClient('https://prmhoyvyxthqlrjkeoho.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybWhveXZ5eHRocWxyamtlb2hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTY3NzQsImV4cCI6MjA5Nzk3Mjc3NH0.DWkUXWzNnA_MmBcLZ7tiPXUUyMLqmJEtxc2Nk-q_O44'),
         ADMIN_HASH: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
         FORM_FIELDS: ['name', 'phone', 'car_number', 'home_address', 'work_address', 'time_slot', 'content', 'device_sn', 'city_name', 'start_zone', 'start_location', 'start_property_company', 'start_property_contact', 'end_zone', 'end_location', 'end_property_company', 'end_property_contact', 'remark', 'partner_phone'],
-        state: { currentUserPhone: localStorage.getItem('currentUserPhone') || '13800001234', feedbackRating: 5, reviewRating: 5, parkingStatus: 'free', cachedPages: {}, userProfileData: null },
+        state: { currentUserPhone: localStorage.getItem('currentUserPhone') || '13800001234', feedbackRating: 5, reviewRating: 5, parkingStatus: 'free', cachedPages: {}, userProfileData: null, currentSwapData: null },
         icons: {
             car: '<svg viewBox="0 0 24 24"><path d="M5 17H3v-5l2-5h12l2 5v5h-2M5 17h14M5 17v2h2v-2M17 17v2h2v-2M7 12h10" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
             park: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><text x="12" y="16" font-size="10" text-anchor="middle" fill="currentColor" stroke="none">P</text></svg>',
@@ -693,15 +755,13 @@
             carSolid: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>'
         },
         init() {
-            this.cleanSystemDarkMode(); // 彻底移除 HTML 中写死的系统深色媒体查询
+            this.cleanSystemDarkMode();
             this.injectStyles();
             this.initTheme();
             document.getElementById('statusRing').innerHTML = this.icons.park;
             this.updateClock(); setInterval(() => this.updateClock(), 10000);
             this.checkConnection(); this.loadUserProfile(); this.bindEvents();
-            this.showInstallPrompt();
         },
-        // 新增：清理原生 CSS 中的 @media (prefers-color-scheme: dark)
         cleanSystemDarkMode() {
             for (let i = 0; i < document.styleSheets.length; i++) {
                 const styleSheet = document.styleSheets[i];
@@ -712,44 +772,45 @@
                             styleSheet.deleteRule(j);
                         }
                     }
-                } catch(e) { console.warn('Cannot access stylesheet rules', e); }
+                } catch(e) {}
             }
         },
         initTheme() {
-            // 默认浅色模式，不再读取系统
             const savedTheme = localStorage.getItem('theme') || 'light';
             this.applyTheme(savedTheme);
         },
         applyTheme(theme) {
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark-mode');
-            } else {
-                document.documentElement.classList.remove('dark-mode');
-            }
+            if (theme === 'dark') document.documentElement.classList.add('dark-mode');
+            else document.documentElement.classList.remove('dark-mode');
         },
         injectStyles() {
             const style = document.createElement('style');
             style.textContent = `
                 body, .page, .card, .ios-list, .ios-item, .modal, .swap-card, .timeline-card { color: var(--text-primary); }
                 .tag { background: rgba(120, 120, 128, 0.2) !important; color: var(--text-secondary) !important; }
-                .text-muted { color: var(--text-muted) !important; }
-                .text-secondary { color: var(--text-secondary) !important; }
-                
-                /* 开关样式 */
+                input[type="checkbox"] { -webkit-appearance: none; width: 20px; height: 20px; border: 1.5px solid var(--text-muted); border-radius: 5px; background: transparent; cursor: pointer; position: relative; transition: all 0.2s; flex-shrink: 0; margin: 0; }
+                input[type="checkbox"]:checked { background-color: var(--brand-green); border-color: var(--brand-green); }
+                input[type="checkbox"]:checked::after { content: ''; position: absolute; left: 6px; top: 2px; width: 5px; height: 10px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
                 .switch { position: relative; display: inline-block; width: 44px; height: 26px; }
                 .switch input { opacity: 0; width: 0; height: 0; }
                 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 26px; }
                 .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
                 input:checked + .slider { background-color: var(--brand-green); }
                 input:checked + .slider:before { transform: translateX(18px); }
-                
-                /* 深色模式手动控制类 */
+                .dt-wrap { position: relative; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); overflow: hidden; cursor: pointer; flex:1; display:flex; align-items:center; justify-content:center; min-height: 48px; }
+                .dt-wrap input[type="datetime-local"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; margin:0; padding:0; border:none; z-index: 10; }
+                .dt-display { display: flex; flex-direction: row; align-items: center; gap: 4px; pointer-events: none; padding-right: 16px; }
+                /* 优化：统一日期和时间的颜色和粗细 */
+                .dt-display .dt-date { font-size: 14px; color: var(--text-primary); font-weight: 600; line-height: 1.2; }
+                .dt-display .dt-time { font-size: 14px; color: var(--text-primary); font-weight: 600; line-height: 1.2; }
+                .dt-wrap::after { content: ""; position: absolute; right: 10px; top: 50%; transform: translateY(-50%) rotate(45deg); width: 6px; height: 6px; border-right: 1.5px solid var(--text-muted); border-bottom: 1.5px solid var(--text-muted); pointer-events: none; }
                 .dark-mode { --bg: #1C1C1E; --card: #2C2C2E; --text-primary: #FFFFFF; --text-secondary: #EBEBF5; --text-muted: #98989D; --border: #38383A; --brand-green: #30D158; --brand-blue: #0A84FF; --warning: #FF453A; --orange: #FF9F0A; --shadow: 0 2px 10px rgba(0,0,0,0.3); --shadow-lg: 0 10px 30px rgba(0,0,0,0.5); }
                 .dark-mode body, .dark-mode .page { background: var(--bg) !important; color: var(--text-primary) !important; }
                 .dark-mode .card, .dark-mode .ios-list, .dark-mode .timeline-card { background: var(--card) !important; color: var(--text-primary) !important; border-color: var(--border) !important; }
                 .dark-mode .modal { background: rgba(44, 44, 46, 0.95) !important; color: var(--text-primary) !important; }
                 .dark-mode .ios-input { background: #3A3A3C !important; color: var(--text-primary) !important; border-color: transparent !important; }
                 .dark-mode .ios-input:focus { background: #2C2C2E !important; border-color: var(--brand-blue) !important; }
+                .dark-mode .dt-wrap { background: #3A3A3C !important; border-color: transparent !important; }
                 .dark-mode .dropdown-menu { background: rgba(44, 44, 46, 0.95) !important; border: 0.5px solid var(--border) !important; }
                 .dark-mode .zone-item { color: var(--text-primary); }
                 .dark-mode .zone-item.disabled { color: var(--text-muted); }
@@ -783,24 +844,10 @@
                 .dark-mode .status-title { color: var(--text-primary) !important; }
                 .dark-mode .status-subtitle { color: var(--text-secondary) !important; }
                 .dark-mode #installBanner { background: rgba(44, 44, 46, 0.95) !important; }
-                .dark-mode input[type="datetime-local"] { color: var(--text-primary); }
-                .dark-mode input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(0.8); }
                 .dark-mode .ios-item { border-bottom-color: var(--border) !important; }
                 .dark-mode .form-divider { border-top-color: var(--border) !important; }
             `;
             document.head.appendChild(style);
-        },
-        showInstallPrompt() {
-            const isAndroid = /android/i.test(navigator.userAgent);
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-            if (!isAndroid || isStandalone) return;
-            if (localStorage.getItem('installBannerClosed')) return;
-            const banner = document.getElementById('installBanner');
-            banner.style.display = 'flex';
-            document.getElementById('closeInstallBanner').addEventListener('click', () => {
-                banner.style.display = 'none';
-                localStorage.setItem('installBannerClosed', '1');
-            });
         },
         updateClock() { const n=new Date(); document.getElementById('clock').textContent = `${n.getHours().toString().padStart(2,'0')}:${n.getMinutes().toString().padStart(2,'0')}`; },
         async safeCall(fn, msg='操作失败') { try { return await fn(); } catch(e) { console.error(e); this.showToast('⚠️ '+msg); return { data:null, error:e }; } },
@@ -811,18 +858,66 @@
             const mode = document.querySelector('input[name="booking_mode"]:checked').value;
             const expectSpotGroup = document.getElementById('expectSpotGroup');
             const expectTimeGroup = document.getElementById('expectTimeGroup');
-            const acceptRentalGroup = document.getElementById('acceptRentalGroup');
+            const rentalPriceGroup = document.getElementById('rentalPriceGroup');
+            const swapOptionsGroup = document.getElementById('swapOptionsGroup');
+            const rentalOptionsGroup = document.getElementById('rentalOptionsGroup');
+            const agreementSwapGroup = document.getElementById('agreementSwapGroup');
+            const agreementRentalGroup = document.getElementById('agreementRentalGroup');
             
             if (mode === 'rental') {
                 expectSpotGroup.style.display = 'none';
                 expectTimeGroup.style.display = 'none';
-                acceptRentalGroup.style.display = 'none';
+                rentalPriceGroup.style.display = 'block';
+                swapOptionsGroup.style.display = 'none';
+                rentalOptionsGroup.style.display = 'block';
+                agreementSwapGroup.style.display = 'none';
+                agreementRentalGroup.style.display = 'flex';
                 document.getElementById('expectSpotInput').removeAttribute('required');
             } else {
                 expectSpotGroup.style.display = 'block';
                 expectTimeGroup.style.display = 'block';
-                acceptRentalGroup.style.display = 'flex';
+                rentalPriceGroup.style.display = 'none';
+                swapOptionsGroup.style.display = 'block';
+                rentalOptionsGroup.style.display = 'none';
+                agreementSwapGroup.style.display = 'flex';
+                agreementRentalGroup.style.display = 'none';
                 document.getElementById('expectSpotInput').setAttribute('required', '');
+            }
+        },
+        initDateTimePickers() {
+            document.querySelectorAll('.dt-wrap input[type="datetime-local"]').forEach(input => {
+                const updateDisplay = () => {
+                    const wrap = input.closest('.dt-wrap');
+                    const dateEl = wrap.querySelector('.dt-date');
+                    const timeEl = wrap.querySelector('.dt-time');
+                    if (input.value) {
+                        const date = new Date(input.value);
+                        const pad = (n) => n.toString().padStart(2, '0');
+                        dateEl.textContent = `${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+                        timeEl.textContent = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+                    } else {
+                        dateEl.textContent = '选择日期';
+                        timeEl.textContent = '选择时间';
+                    }
+                };
+                input.removeEventListener('input', updateDisplay); 
+                input.addEventListener('input', updateDisplay);
+                updateDisplay(); 
+            });
+        },
+        calculateRentalIncome() {
+            const form = document.querySelector('#bookingOverlay form');
+            if(!form) return;
+            const st = form.querySelector('[name="start_time"]').value;
+            const et = form.querySelector('[name="end_time"]').value;
+            const display = document.getElementById('rentalIncomeDisplay');
+            if (st && et && display) {
+                const start = new Date(st);
+                const end = new Date(et);
+                const hours = Math.max(0, (end - start) / (1000 * 60 * 60));
+                let totalPrice = Math.min(hours * 1.5, 15); 
+                let ownerIncome = (totalPrice * 0.7).toFixed(2); 
+                display.textContent = `¥ ${ownerIncome} / 次`;
             }
         },
         openModal(id) {
@@ -844,7 +939,11 @@
                 const rt = document.getElementById('ratingText');
                 if (rt) rt.textContent = '非常满意';
             }
-            if (id === 'bookingOverlay') this.fillBookingForm();
+            if (id === 'bookingOverlay') {
+                this.fillBookingForm();
+                this.initDateTimePickers();
+                setTimeout(() => this.calculateRentalIncome(), 100);
+            }
             if (id === 'settingsOverlay') {
                 const theme = localStorage.getItem('theme') || 'light';
                 const toggle = document.getElementById('themeToggle');
@@ -856,7 +955,6 @@
             const form = document.querySelector('#bookingOverlay form');
             if(!form) return;
             const data = this.state.userProfileData || {};
-            
             if(data.phone) form.querySelector('[name="phone"]').value = data.phone;
             if(data.car_number) form.querySelector('[name="car_number"]').value = data.car_number;
             if(data.home_address) form.querySelector('[name="home_address"]').value = data.home_address;
@@ -873,6 +971,10 @@
             form.querySelector('[name="end_time"]').value = formatLocal(today1800);
             form.querySelector('[name="expect_start_time"]').value = formatLocal(today830);
             form.querySelector('[name="expect_end_time"]').value = formatLocal(today1800);
+            
+            form.querySelectorAll('.dt-wrap input').forEach(input => {
+                input.dispatchEvent(new Event('input'));
+            });
         },
         openReviewModal(partner) {
             this.openModal('reviewOverlay');
@@ -882,26 +984,53 @@
         getFormData(form) { 
             const d={}; 
             this.FORM_FIELDS.forEach(f=>{ const el=form.querySelector(`[name="${f}"]`); if(el)d[f]=el.value.trim(); }); 
-            const st = form.querySelector('[name="start_time"]'); const et = form.querySelector('[name="end_time"]');
+            
+            const st = form.querySelector('[name="start_time"]').value;
+            const et = form.querySelector('[name="end_time"]').value;
             if (st && et) {
                 const fmt = (v) => v ? new Date(v).toLocaleString('zh-CN', {month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'}).replace(/\//g, '-') : '';
-                d.time_slot = `${fmt(st.value)} - ${fmt(et.value)}`;
+                d.time_slot = `${fmt(st)} - ${fmt(et)}`;
+            }
+            const mode = form.querySelector('input[name="booking_mode"]:checked').value;
+            if (mode === 'rental' && st && et) {
+                const hours = Math.max(0, (new Date(et) - new Date(st)) / (1000 * 60 * 60));
+                d.price = Math.min(hours * 1.5, 15);
+            } else {
+                d.price = 0;
             }
             return d; 
         },
         async handleSubmit(form) { const t=form.dataset.form; if(t==='booking')return this.submitBooking(form); if(t==='feedback')return this.submitFeedback(form); if(t==='review')return this.submitReview(form); if(t==='profile')return this.saveProfile(form); if(t==='zoneApply')return this.submitZoneApply(form); },
         async submitBooking(form) { 
-            const d=this.getFormData(form); 
             const mode=document.querySelector('input[name="booking_mode"]:checked').value; 
-            const payload={...d, mode:mode}; 
+            
+            if (mode === 'rental' && !document.getElementById('agreement_rental').checked) {
+                this.showToast('⚠️ 请先勾选同意有偿分享协议');
+                return;
+            }
+            if (mode === 'swap' && !document.getElementById('agreement_swap').checked) {
+                this.showToast('⚠️ 请先勾选同意车位互换协议');
+                return;
+            }
+
+            const d=this.getFormData(form); 
+            const userRole = (mode === 'rental') ? 'provider' : 'swapper';
+            const payload={...d, mode:mode, user_role: userRole, phone: this.state.currentUserPhone}; 
             if(mode==='rental')payload.work_address=payload.work_address||null; 
-            const {error}=await this.safeCall(()=>this.supabase.from('swap_requests').insert([payload])); 
+            
+            this.showToast('⏳ 正在提交预约...');
+            const {error}=await this.safeCall(()=>this.supabase.from('swap_requests').insert([payload]), '提交失败'); 
             if(!error){ 
                 this.showToast('✅ 预约成功！'); 
                 this.closeModal(form); 
                 setTimeout(() => {
-                    this.toggleParking('in-use', d);
-                    this.showToast('🎉 匹配成功，已进入互换状态');
+                    if (mode === 'rental') {
+                        this.toggleParking('rental-sharing', d); 
+                        this.showToast('🎉 匹配成功，已进入有偿分享状态');
+                    } else {
+                        this.toggleParking('in-use', d); 
+                        this.showToast('🎉 匹配成功，已进入互换状态');
+                    }
                 }, 1500);
             } 
         },
@@ -995,18 +1124,7 @@
 
         async loadMySwapsInSwap(container) {
             container.innerHTML = '<div class="card" style="text-align:center;color:var(--text-muted);">加载中...</div>';
-            const { data } = await this.safeCall(() => this.supabase.from('swap_requests').select('*').order('created_at', { ascending: false }));
-            
-            if (!data || data.length === 0) {
-                const demoData = [
-                    { id: 'demo_1', name: '李女士', phone: '13900005678', car_number: '渝B·67890', home_address: '汽博·长安福特', work_address: '照母山·约克郡', time_slot: '8:30 - 18:00', mode: 'swap', status: 'confirmed', created_at: new Date(Date.now() - 30*60*1000).toISOString() },
-                    { id: 'demo_2', name: '王先生', phone: '13600009012', car_number: '渝C·11111', home_address: '汽博·汽博中心', work_address: '照母山·舜山府', time_slot: '8:00 - 17:30', mode: 'swap', status: 'pending', created_at: new Date(Date.now() - 45*60*1000).toISOString() },
-                    { id: 'demo_3', name: '刘女士', phone: '13500003456', car_number: '渝A·12345', home_address: '照母山·约克郡', work_address: '汽博·金山工业园', time_slot: '8:30 - 18:00', mode: 'rental', status: 'completed', created_at: new Date(Date.now() - 5*24*60*60*1000).toISOString() },
-                    { id: 'demo_4', name: '陈先生', phone: '13700007890', car_number: '渝E·33333', home_address: '照母山·龙湖好望山', work_address: '汽博·长安福特', time_slot: '7:30 - 16:30', mode: 'rental', status: 'completed', created_at: new Date(Date.now() - 8*24*60*60*1000).toISOString() },
-                ];
-                this.renderOrderList(demoData, container);
-                return;
-            }
+            const { data } = await this.safeCall(() => this.supabase.from('swap_requests').select('*').eq('phone', this.state.currentUserPhone).order('created_at', { ascending: false }));
             this.renderOrderList(data, container);
         },
         
@@ -1015,17 +1133,14 @@
                 container.innerHTML = '<div class="card" style="text-align:center;color:var(--text-muted);">暂无预约记录</div>';
                 return;
             }
-
             const activeOrders = orders.filter(item => item.status === 'pending' || item.status === 'confirmed');
             const historyOrders = orders.filter(item => item.status === 'completed' || item.status === 'cancelled');
-
             let displayOrders = [];
             if (activeOrders.length > 0) {
                 activeOrders.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 displayOrders.push(activeOrders[0]); 
             }
             displayOrders.push(...historyOrders); 
-
             displayOrders.sort((a, b) => {
                 const aActive = a.status === 'pending' || a.status === 'confirmed';
                 const bActive = b.status === 'pending' || b.status === 'confirmed';
@@ -1033,11 +1148,19 @@
                 if (!aActive && bActive) return 1;
                 return new Date(b.created_at) - new Date(a.created_at);
             });
-
-            const myCarNumber = '渝A·12345'; 
-
+            
             container.innerHTML = displayOrders.map((item, index) => {
-                const modeLabel = item.mode === 'rental' ? '有偿分享' : '互换';
+                const isOwner = item.user_role === 'provider'; 
+                const isRenter = item.user_role === 'consumer'; 
+                
+                let modeLabel = '';
+                if (item.mode === 'rental') {
+                    modeLabel = isOwner ? '有偿分享' : '有偿使用';
+                    if (item.is_pickup) modeLabel = '⚡限时捡漏';
+                } else {
+                    modeLabel = '互换';
+                }
+
                 const statusMap = { 
                     'pending': { label: '确认中', color: 'var(--brand-blue)' },
                     'confirmed': { label: '互换中', color: 'var(--brand-green)' },
@@ -1047,40 +1170,72 @@
                 const statusInfo = statusMap[item.status] || statusMap['pending'];
                 const timeStr = this.generateRealisticTime(index, item.status);
                 const isActive = item.status === 'pending' || item.status === 'confirmed';
-                
                 const maskedPlate = item.car_number ? item.car_number.slice(0,2) + '***' + item.car_number.slice(-2) : '无车牌';
-                
                 let ratingHtml = '';
+                let amountHtml = '';
                 let rowsHtml = '';
-
+                
                 if (item.status !== 'cancelled') {
-                    let myTime = '08:32 / 18:00';
-                    let partnerTime = '08:35 / 18:02';
+                    const mySpotAddr = isOwner ? item.home_address : '-';
+                    const partnerSpotAddr = isRenter ? item.work_address : (item.mode === 'swap' ? item.work_address : '-');
                     
-                    const mySpotAddr = item.home_address || '-';
-                    const partnerSpotAddr = item.work_address || '-';
-
-                    if (item.mode === 'rental') {
-                        const isMyRequest = item.car_number === myCarNumber;
-                        if (isMyRequest) { 
-                            partnerTime = '- / -';
-                        } else { 
-                            myTime = '- / -';
-                        }
+                    let myTime = '- / -';
+                    let partnerTime = '- / -';
+                    const startStr = item.time_slot ? item.time_slot.split(' - ')[0].split(':') : ['08','00'];
+                    const actualHours = item.actual_hours || 0;
+                    const endHour = parseInt(startStr[0]) + actualHours;
+                    const calculatedTime = `${startStr[0]}:${startStr[1]} / ${endHour.toString().padStart(2,'0')}:${startStr[1]}`;
+                    
+                    if (item.mode === 'swap') {
+                        myTime = calculatedTime;
+                        partnerTime = calculatedTime;
+                    } else if (isRenter) { 
+                        myTime = calculatedTime;
+                        partnerTime = '- / -';
+                    } else if (isOwner) { 
+                        myTime = '- / -';
+                        partnerTime = calculatedTime;
                     }
-
+                    
                     rowsHtml += `<div style="font-size:13px; color:var(--text-primary); margin-top:8px; display:flex; align-items:center; gap:4px;"><span>📍</span> <b>我的车位：</b>${mySpotAddr}</div>`;
                     rowsHtml += `<div style="font-size:11px; color:var(--text-muted); padding-left:20px; margin-top:2px;">对方进出场 ${partnerTime}</div>`;
-
                     rowsHtml += `<div style="font-size:13px; color:var(--text-primary); margin-top:6px; display:flex; align-items:center; gap:4px;"><span>→</span> <b>对方车位：</b>${partnerSpotAddr}</div>`;
                     rowsHtml += `<div style="font-size:11px; color:var(--text-muted); padding-left:20px; margin-top:2px;">我的进出场 ${myTime}</div>`;
-
+                    
+                    if (item.status === 'completed' && item.mode === 'rental') {
+                        if (isOwner) {
+                            const income = (Math.min(actualHours * 1.5, 15) * 0.7).toFixed(2);
+                            amountHtml = `
+                                <div style="margin-top:8px; padding-top:8px; border-top: 0.5px dashed var(--border); font-size:13px; color:var(--brand-green); font-weight:600; text-align:right;">
+                                    本次收益: ¥ ${income}
+                                    ${item.is_auto_release ? '<div style="color:var(--brand-green); font-size:11px; font-weight:normal;">⚡ 余时已自动发布并成交</div>' : ''}
+                                </div>
+                            `;
+                        } else if (isRenter) {
+                            const expectedHours = item.expected_hours || actualHours;
+                            const baseFee = Math.min(actualHours * 1.5, 15);
+                            const minFee = 4.5; 
+                            const finalBase = Math.max(baseFee, minFee);
+                            let extraFee = 0;
+                            if (actualHours < expectedHours * 0.5) {
+                                extraFee = (expectedHours - actualHours) * 1.5 * 0.2;
+                            }
+                            const totalFee = (finalBase + extraFee).toFixed(2);
+                            amountHtml = `
+                                <div style="margin-top:8px; padding-top:8px; border-top: 0.5px dashed var(--border); font-size:13px; color:var(--orange); font-weight:600; text-align:right;">
+                                    本次费用: ¥ ${totalFee}
+                                    ${extraFee > 0 ? '<div style="color:var(--warning); font-size:11px; font-weight:normal;">* 含空置补偿费，余时已自动释放</div>' : ''}
+                                </div>
+                            `;
+                        }
+                    }
+                    
                     if (item.status === 'completed') {
                         const rating = (index % 2 === 0) ? 5 : 0;
                         ratingHtml = rating > 0 ? `<span style="color:var(--orange);">★★★★★</span>` : `<button class="btn btn-outline" style="padding:4px 10px; font-size:11px; width:auto; background:rgba(0,122,255,0.05);" onclick="App.openReviewModal('${item.name}')">📝 待评价，点击评价</button>`;
                     }
                 }
-
+                
                 return `
                     <div style="position:relative; margin-bottom:12px; border-radius: var(--radius-xl); overflow:hidden; box-shadow: var(--shadow);">
                         <div class="card order-card" data-id="${item.id}" style="padding:14px; border-left: 4px solid ${statusInfo.color}; position:relative; z-index:1; transition:transform 0.3s ease; margin-bottom:0; box-shadow:none; border-radius:0;">
@@ -1093,39 +1248,38 @@
                                 ${isActive ? ' <span style="color:var(--brand-green); font-size:11px;">(当前互换)</span>' : ''}
                             </div>
                             ${rowsHtml}
+                            ${amountHtml}
                             ${ratingHtml ? `<div style="margin-top:10px; font-size:12px; border-top: 0.5px solid var(--border); padding-top: 8px; display:flex; justify-content:space-between; align-items:center;">对方评分：${ratingHtml}</div>` : ''}
                         </div>
                         <div data-action="delete-order" data-id="${item.id}" style="position:absolute; right:0; top:0; bottom:0; width:80px; background:var(--warning); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; z-index:0;">删除</div>
                     </div>`;
             }).join('');
-            
             this.bindOrderSwipeGestures();
         },
 
         bindOrderSwipeGestures() {
             document.querySelectorAll('.order-card').forEach(card => {
-                let sx = 0, mx = 0, isSwiping = false;
+                let sx = 0, sy = 0, mx = 0, my = 0, isSwiping = false;
                 card.addEventListener('touchstart', (e) => {
-                    sx = e.touches[0].clientX;
-                    isSwiping = true;
-                    card.style.transition = 'none';
+                    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+                    isSwiping = true; card.style.transition = 'none';
                 }, {passive: true});
                 card.addEventListener('touchmove', (e) => {
                     if(!isSwiping) return;
-                    mx = e.touches[0].clientX - sx;
-                    if (mx < 0 && mx > -80) {
-                        card.style.transform = `translateX(${mx}px)`;
+                    mx = e.touches[0].clientX - sx; my = e.touches[0].clientY - sy;
+                    if (Math.abs(my) > Math.abs(mx)) {
+                        card.style.transition = 'transform 0.3s ease';
+                        card.style.transform = 'translateX(0)';
+                        isSwiping = false; return;
                     }
+                    if (mx < 0 && mx > -80) { card.style.transform = `translateX(${mx}px)`; }
                 }, {passive: true});
                 card.addEventListener('touchend', () => {
-                    isSwiping = false;
-                    card.style.transition = 'transform 0.3s ease';
-                    if (mx <= -40) {
-                        card.style.transform = 'translateX(-80px)';
-                    } else {
-                        card.style.transform = 'translateX(0)';
-                    }
-                    mx = 0;
+                    if(!isSwiping) return;
+                    isSwiping = false; card.style.transition = 'transform 0.3s ease';
+                    if (mx <= -40) { card.style.transform = 'translateX(-80px)'; } 
+                    else { card.style.transform = 'translateX(0)'; }
+                    mx = 0; my = 0;
                 });
             });
         },
@@ -1133,24 +1287,33 @@
         renderRecommendCards() { 
             const c=document.getElementById('swap-recommend'); 
             const cards=[
-                { name:'李女士',credit:4.9,match:89, provide:'汽博·长安福特', need:'照母山·约克郡', time:'5月20日 8:30-18:00', tags:['步行3分钟','时间重叠96%']},
-                { name:'王先生',credit:4.7,match:82, provide:'汽博·汽博中心', need:'照母山·约克郡', time:'5月21日 8:30-18:00', tags:['步行5分钟','时间重叠88%']},
-                { name:'刘女士',credit:4.8,match:78, provide:'汽博·金山工业园', need:'照母山·约克郡', time:'5月22日 8:30-18:00', tags:['步行7分钟','充电桩可用']}
+                { name:'李女士', mode:'swap', credit:4.9, match:89, provide:'汽博·长安福特', need:'照母山·约克郡', time:'5月20日 8:30-18:00', tags:['步行3分钟','时间重叠96%'], price: 0},
+                { name:'刘先生', mode:'rental', credit:4.8, match:95, provide:'光电园·B写字楼', need:'', time:'5月20日 8:30-18:00', tags:['有偿分享','充电桩可用'], price: 15.0},
+                { name:'王先生', mode:'swap', credit:4.7, match:82, provide:'汽博·汽博中心', need:'照母山·约克郡', time:'5月21日 8:30-18:00', tags:['步行5分钟','时间重叠88%'], price: 0},
+                { name:'张女士', mode:'rental', credit:4.9, match:91, provide:'大竹林·互联网产业园', need:'', time:'5月22日 9:00-18:00', tags:['有偿分享','保安24小时'], price: 15.0},
+                { name:'刘女士', mode:'swap', credit:4.8, match:78, provide:'汽博·金山工业园', need:'照母山·约克郡', time:'5月22日 8:30-18:00', tags:['步行7分钟','时间重叠80%'], price: 0}
             ]; 
-            c.innerHTML='<div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">以下推荐基于您填写的车位信息精准匹配</div>'+cards.map((c,i)=>`<div class="card recommend-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span><div class="user-row" data-action="show-user-profile" data-name="${c.name}" style="cursor:pointer;"><div class="avatar">${c.name[0]}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div><div class="swap-route"><div style="display:flex; justify-content:space-between; align-items:center; width:100%;"><span>供：${c.provide}</span><span style="font-size:11px; color:var(--text-muted);">${c.time}</span></div><div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:6px;"><span>求：${c.need}</span><span style="font-size:11px; color:var(--text-muted);">${c.time}</span></div></div><div class="tag-row">${c.tags.map(t=>`<span class="tag" style="background:rgba(120,120,128,0.2); color:var(--text-secondary);">${t}</span>`).join('')}</div><div class="card-actions"><button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button><button class="btn-like" data-action="like-card" data-id="swapCard${i}">想换</button></div></div>`).join(''); 
+            c.innerHTML='<div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">以下推荐基于您填写的车位信息精准匹配</div>'+cards.map((c,i)=>{
+                const priceHtml = c.mode === 'rental' 
+                    ? `<div style="margin-top:8px; font-size:14px; color:var(--orange); font-weight:700;">¥1.5/小时 <span style="font-size:11px; color:var(--text-muted); font-weight:normal;">(15元封顶)</span></div>`
+                    : '';
+                const needText = c.mode === 'rental' ? '无' : c.need;
+                return `<div class="card recommend-card" id="swapCard${i}"><span class="match-badge">${c.match}% 匹配</span><div class="user-row" data-action="show-user-profile" data-name="${c.name}" style="cursor:pointer;"><div class="avatar">${c.name[0]}</div><div><b style="font-size:16px;">${c.name}</b><div style="font-size:12px;color:var(--brand-green);font-weight:600;">★ ${c.credit} 信用分</div></div></div><div class="swap-route"><div style="display:flex; justify-content:space-between; align-items:center; width:100%;"><span>供：${c.provide}</span><span style="font-size:11px; color:var(--text-muted);">${c.time}</span></div><div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:6px;"><span>求：${needText}</span><span style="font-size:11px; color:var(--text-muted);">${c.mode === 'rental' ? '只供不求' : c.time}</span></div></div>${priceHtml}<div class="tag-row">${c.tags.map(t=>`<span class="tag" style="background:rgba(120,120,128,0.2); color:var(--text-secondary);">${t}</span>`).join('')}</div><div class="card-actions"><button class="btn-pass" data-action="swipe-card" data-type="pass" data-id="swapCard${i}">忽略</button><button class="btn-like" data-action="like-card" data-id="swapCard${i}" data-mode="${c.mode}" data-provide="${c.provide}" data-price="${c.price}">${c.mode === 'rental' ? '想用' : '想换'}</button></div></div>`;
+            }).join(''); 
             this.bindSwipeGestures(); 
         },
         bindSwipeGestures() { 
             document.querySelectorAll('.recommend-card').forEach(card=>{ 
-                let sx=0,mx=0; 
+                let sx=0,mx=0,sy=0,my=0; 
                 card.addEventListener('touchstart',(e)=>{ 
                     if(e.target.closest('button')||e.target.closest('.map-link')||e.target.closest('[data-action]'))return; 
-                    sx=e.touches[0].clientX; 
+                    sx=e.touches[0].clientX; sy=e.touches[0].clientY;
                     card.style.transition='none'; 
                 },{passive:true}); 
                 card.addEventListener('touchmove',(e)=>{ 
                     if(e.target.closest('button')||e.target.closest('.map-link')||e.target.closest('[data-action]'))return; 
-                    mx=e.touches[0].clientX-sx; 
+                    mx=e.touches[0].clientX-sx; my=e.touches[0].clientY-sy;
+                    if (Math.abs(my) > Math.abs(mx)) return; 
                     card.style.transform=`translateX(${mx}px)`; 
                 },{passive:true}); 
                 card.addEventListener('touchend',()=>{ 
@@ -1166,11 +1329,28 @@
             if (!card) return;
             card.style.transform = 'translateX(0)';
             const actions = card.querySelector('.card-actions');
-            if (actions) actions.innerHTML = '<div class="pending-status">⏳ 已发起互换请求，等待对方确认...</div>';
-            card.style.opacity = '0.6';
-            card.style.pointerEvents = 'none'; 
+            const btn = card.querySelector('.btn-like');
+            const isRental = btn && btn.dataset.mode === 'rental';
+            const provide = btn ? btn.dataset.provide : '光电园·B写字楼';
+            const price = btn ? parseFloat(btn.dataset.price) : 15.0;
+            
             if (navigator.vibrate) navigator.vibrate(30);
-            this.showToast('🎉 已发起互换请求！');
+            
+            if (isRental) {
+                this.showToast('🎉 预订成功，入场后开始计费');
+                if (actions) actions.innerHTML = '<div class="pending-status" style="color:var(--brand-green);">✅ 预订成功，等待入场</div>';
+                card.style.opacity = '0.8';
+                card.style.pointerEvents = 'none'; 
+                
+                setTimeout(() => {
+                    this.toggleParking('rental-using', { work_address: provide, car_number: '渝A·12345', price: price, time_slot: '8:30 - 18:00' });
+                }, 1500);
+            } else {
+                if (actions) actions.innerHTML = '<div class="pending-status">⏳ 已发起互换请求，等待对方确认...</div>';
+                card.style.opacity = '0.6';
+                card.style.pointerEvents = 'none'; 
+                this.showToast('🎉 已发起互换请求！');
+            }
         },
         swipeCard(type,id) { 
             const card=document.getElementById(id); 
@@ -1270,36 +1450,39 @@
             `;
         },
         toggleParking(forceStatus, formData) {
+            if (formData) this.state.currentSwapData = formData; 
             const ring = document.getElementById('statusRing');
             const title = document.getElementById('statusTitle');
             const subtitle = document.getElementById('statusSubtitle');
             const btnArea = document.getElementById('statusBtnArea');
             const swapArea = document.getElementById('swapStatusArea');
             
-            const newStatus = forceStatus || (this.state.parkingStatus === 'free' ? 'in-use' : 'free');
+            let newStatus = forceStatus;
+            if (!newStatus) {
+                if (this.state.parkingStatus === 'free') newStatus = 'in-use';
+                else if (this.state.parkingStatus === 'in-use') newStatus = 'rental-sharing';
+                else if (this.state.parkingStatus === 'rental-sharing') newStatus = 'rental-using';
+                else if (this.state.parkingStatus === 'rental-using') newStatus = 'free';
+            }
             this.state.parkingStatus = newStatus;
             
             if (newStatus === 'in-use') {
                 ring.className = 'status-ring swapping';
                 ring.innerHTML = this.icons.swap;
-                title.textContent = '互换中';
+                title.textContent = '互换使用中';
                 subtitle.textContent = '请按规定时段有序停放';
-                
                 btnArea.innerHTML = `
                     <div style="display:flex; gap:10px; width:100%;">
                         <button class="btn" style="flex:3; background:var(--brand-blue); white-space:nowrap;" data-action="leave-swap">🚗 我要离场</button>
                         <button class="btn btn-cancel" style="flex:1.5; background:var(--bg); color:var(--warning); white-space:nowrap;" data-action="end-swap-warning">强制结束</button>
                     </div>`;
-                
                 const myCar = formData?.car_number || '渝A·12345';
                 const myHome = formData?.home_address || '照母山·约克郡';
                 const myWork = formData?.work_address || '汽博·长安福特';
                 const partnerCar = '渝B·67890';
                 const swapTime = formData?.time_slot || '8:30 - 18:00';
-                
                 const myCarIcon = this.icons.carSolid.replace('fill="currentColor"', 'fill="var(--brand-blue)"');
                 const partnerCarIcon = this.icons.carSolid.replace('fill="currentColor"', 'fill="var(--brand-green)"');
-                
                 swapArea.innerHTML = `
                     <div style="margin-top:16px; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow);">
                         <div style="background: rgba(48, 209, 88, 0.1); padding: 14px; border-bottom: 1px solid var(--border);">
@@ -1339,6 +1522,70 @@
                     </div>
                 `;
                 this.startSwapCountdown();
+            } else if (newStatus === 'rental-sharing') {
+                ring.className = 'status-ring swapping';
+                ring.innerHTML = this.icons.car;
+                title.textContent = '有偿分享中';
+                subtitle.textContent = '车位正在为您赚取收益';
+                btnArea.innerHTML = `<button class="btn" style="background:var(--orange);" data-action="end-rental-sharing">结束分享</button>`;
+                
+                const myHome = formData?.home_address || '照母山·约克郡';
+                const partnerCar = formData?.car_number || '渝B·67890';
+                const swapTime = formData?.time_slot || '8:30 - 18:00';
+                const income = formData?.price ? (formData.price * 0.7).toFixed(2) : '10.50';
+                
+                swapArea.innerHTML = `
+                    <div style="margin-top:16px; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); background: rgba(255, 149, 0, 0.1); padding: 14px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; color:var(--orange); font-weight:700;">
+                            <span style="display:flex; align-items:center; gap:4px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <b style="font-size:14px;">${myHome}</b>
+                            </span>
+                            <span style="font-size:12px; color:var(--text-muted); font-weight:500;">${swapTime}</span>
+                        </div>
+                        <div style="margin-top:10px; display:flex; align-items:center; gap:6px; color:var(--text-primary); font-size:13px;">
+                            <b>停入车辆:</b> ${partnerCar}
+                        </div>
+                        <div style="margin-top:8px; display:flex; justify-content:space-between; color:var(--text-muted); font-size:12px;">
+                            <span>入场 08:35</span>
+                            <span style="color:var(--orange); font-weight:600;">剩余: <span id="myRemainingTime">-</span></span>
+                        </div>
+                    </div>
+                    <div style="margin-top:10px; text-align:center; color:var(--brand-green); font-weight:bold; font-size:16px;">预计实得收益: ¥ ${income}</div>
+                `;
+                this.startSwapCountdown();
+            } else if (newStatus === 'rental-using') {
+                ring.className = 'status-ring swapping';
+                ring.innerHTML = this.icons.car;
+                title.textContent = '有偿使用中';
+                subtitle.textContent = '请按时离场，避免产生超时费';
+                btnArea.innerHTML = `<button class="btn" style="background:var(--brand-blue);" data-action="leave-swap">🚗 我要离场</button>`;
+                
+                const myWork = formData?.work_address || '光电园·B写字楼';
+                const myCar = formData?.car_number || '渝A·12345';
+                const swapTime = formData?.time_slot || '8:30 - 18:00';
+                const cost = formData?.price ? formData.price.toFixed(2) : '15.00';
+                
+                swapArea.innerHTML = `
+                    <div style="margin-top:16px; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); background: rgba(0, 122, 255, 0.1); padding: 14px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; color:var(--brand-blue); font-weight:700;">
+                            <span style="display:flex; align-items:center; gap:4px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                <b style="font-size:14px;">${myWork}</b>
+                            </span>
+                            <span style="font-size:12px; color:var(--text-muted); font-weight:500;">${swapTime}</span>
+                        </div>
+                        <div style="margin-top:10px; display:flex; align-items:center; gap:6px; color:var(--text-primary); font-size:13px;">
+                            <b>我的车辆:</b> ${myCar}
+                        </div>
+                        <div style="margin-top:8px; display:flex; justify-content:space-between; color:var(--text-muted); font-size:12px;">
+                            <span>入场 08:35</span>
+                            <span style="color:var(--brand-blue); font-weight:600;">剩余: <span id="myRemainingTime">-</span></span>
+                        </div>
+                    </div>
+                    <div style="margin-top:10px; text-align:center; color:var(--orange); font-weight:bold; font-size:16px;">预计总费用: ¥ ${cost}</div>
+                `;
+                this.startSwapCountdown();
             } else {
                 this.stopSwapCountdown();
                 ring.className = 'status-ring free';
@@ -1364,29 +1611,87 @@
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const s = Math.floor((diff % (1000 * 60)) / 1000);
                 const timeStr = `${h}h ${m}m ${s}s`;
-                
                 const myTimeEl = document.getElementById('myRemainingTime');
                 const partnerTimeEl = document.getElementById('partnerRemainingTime');
                 if (myTimeEl) myTimeEl.textContent = timeStr;
                 if (partnerTimeEl) partnerTimeEl.textContent = timeStr;
             }, 1000);
         },
-        stopSwapCountdown() {
-            if (this.swapTimer) clearInterval(this.swapTimer);
-        },
+        stopSwapCountdown() { if (this.swapTimer) clearInterval(this.swapTimer); },
         leaveSwap(isAuto) {
             this.stopSwapCountdown();
+            const currentStatus = this.state.parkingStatus; 
             this.toggleParking('free');
             this.openModal('historyDetailOverlay');
-            document.getElementById('historyDetailTitle').textContent = '✅ 互换圆满完成';
-            document.getElementById('historyDetailTitle').style.color = 'var(--brand-green)';
-            document.getElementById('historyDetailContent').innerHTML = `<div style="text-align:center; line-height:2;">本次互换已顺利结束。<br>${isAuto ? '系统检测到您已离场，自动为您结束互换。' : ''}<br>信用分 <span style="color:var(--brand-green); font-weight:bold; font-size:18px;">+5</span><br><br><button class="btn" data-action="close-modal">确认</button></div>`;
+            
+            const titleEl = document.getElementById('historyDetailTitle');
+            const contentEl = document.getElementById('historyDetailContent');
+            
+            let titleText = '✅ 订单已结束';
+            let contentHtml = '';
+
+            const isRenter = currentStatus === 'rental-using'; 
+            const isOwner = currentStatus === 'rental-sharing'; 
+
+            if (isRenter) {
+                titleText = '✅ 有偿使用结束';
+                const expectedHours = 10; 
+                const actualHours = 4; 
+                const baseFee = Math.min(actualHours * 1.5, 15);
+                const minFee = 4.5; 
+                const finalBase = Math.max(baseFee, minFee);
+                let extraFee = 0;
+                if (actualHours < expectedHours * 0.5) {
+                    extraFee = (expectedHours - actualHours) * 1.5 * 0.2; 
+                }
+                const totalFee = (finalBase + extraFee).toFixed(2);
+
+                contentHtml = `
+                    <div style="text-align:left; line-height:1.8; font-size:14px;">
+                        <div style="display:flex; justify-content:space-between;"><span>实际停放时长:</span> <b>${actualHours} 小时</b></div>
+                        <div style="display:flex; justify-content:space-between;"><span>基础计费 (¥1.5/h):</span> <span>¥ ${baseFee.toFixed(2)}</span></div>
+                        <div style="display:flex; justify-content:space-between;"><span>起步价保底 (3小时):</span> <span>¥ ${minFee.toFixed(2)}</span></div>
+                        <div style="display:flex; justify-content:space-between; color:var(--warning);"><span>空置补偿费 (20%):</span> <span>¥ ${extraFee.toFixed(2)}</span></div>
+                        <hr class="form-divider" style="margin:10px 0;">
+                        <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold;">
+                            <span>需支付总费用:</span> <span style="color:var(--orange);">¥ ${totalFee}</span>
+                        </div>
+                        <div style="font-size:12px; color:var(--text-muted); margin-top:8px;">* 因您提前离场，触发了余时自动释放，平台已给予部分费用减免。</div>
+                    </div>
+                    <button class="btn" data-action="close-modal" style="margin-top:20px;">确认支付</button>
+                `;
+            } else if (isOwner) {
+                titleText = '✅ 有偿分享结束';
+                const actualHours = 4; 
+                const baseIncome = (Math.min(actualHours * 1.5, 15) * 0.7).toFixed(2);
+                
+                contentHtml = `
+                    <div style="text-align:left; line-height:1.8; font-size:14px;">
+                        <div style="display:flex; justify-content:space-between;"><span>本次分享时长:</span> <b>${actualHours} 小时</b></div>
+                        <div style="display:flex; justify-content:space-between;"><span>实得收益 (70%):</span> <span style="color:var(--brand-green); font-weight:bold;">¥ ${baseIncome}</span></div>
+                        <hr class="form-divider" style="margin:10px 0;">
+                        <div style="color:var(--brand-green); font-weight:600;">⚡ 余时已自动发布</div>
+                        <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">对方提前离场，剩余 6 小时已自动降价发布，等待新用户停放中...</div>
+                    </div>
+                    <button class="btn" data-action="close-modal" style="margin-top:20px;">确认</button>
+                `;
+            } else {
+                titleText = '✅ 互换圆满完成';
+                contentHtml = `<div style="text-align:center; line-height:2;">本次互换已顺利结束。<br>${isAuto ? '系统检测到您已离场，自动为您结束互换。' : ''}<br>信用分 <span style="color:var(--brand-green); font-weight:bold; font-size:18px;">+5</span><br><br><button class="btn" data-action="close-modal">确认</button></div>`;
+            }
+
+            titleEl.textContent = titleText;
+            titleEl.style.color = 'var(--brand-green)';
+            contentEl.innerHTML = contentHtml;
         },
         forceEndSwap() {
             this.stopSwapCountdown();
             this.closeModal(document.querySelector('#endWarningOverlay .btn')); 
+            const baseFee = this.state.currentSwapData?.price > 0 ? this.state.currentSwapData.price : 15.00;
+            const penalty = 5.00;
+            const totalFee = (baseFee + penalty).toFixed(2);
             this.toggleParking('free');
-            this.showToast('⚠️ 已强制结束，扣除信用分5分及停车费20元');
+            this.showToast(`⚠️ 已强制结束，扣除信用分5分及停车费${totalFee}元`);
         },
         bindEvents() {
             document.body.addEventListener('click',(e)=>{
@@ -1408,36 +1713,27 @@
                         document.getElementById('upAvatar').textContent = target.dataset.name[0];
                         break;
                     case 'toggle-parking':
-                        this.toggleParking(this.state.parkingStatus === 'free' ? 'in-use' : 'free');
+                        this.toggleParking();
                         break;
                     case 'handle-status': 
-                        e.stopPropagation(); 
-                        if (this.state.parkingStatus === 'in-use') {
-                            this.toggleParking('free');
-                            this.showToast('✅ 已结束互换');
-                        } else {
+                        if (this.state.parkingStatus === 'free') {
                             this.openModal('bookingOverlay');
+                        } else {
+                            this.toggleParking();
                         }
                         break;
-                    case 'leave-swap':
-                        this.leaveSwap(false);
-                        break;
-                    case 'end-swap-warning':
-                        this.openModal('endWarningOverlay');
-                        break;
-                    case 'force-end-swap':
-                        this.forceEndSwap();
+                    case 'leave-swap': this.leaveSwap(false); break;
+                    case 'end-swap-warning': this.openModal('endWarningOverlay'); break;
+                    case 'force-end-swap': this.forceEndSwap(); break;
+                    case 'end-rental-sharing':
+                        this.leaveSwap(false); 
                         break;
                     case 'delete-order':
                         const orderId = target.dataset.id;
-                        if (orderId && !orderId.startsWith('demo_')) {
-                            this.supabase.from('swap_requests').delete().eq('id', orderId).then(() => {
-                                this.showToast('已删除');
-                                this.loadMySwapsInSwap(document.getElementById('swap-myorders'));
-                            });
-                        } else {
-                            this.showToast('演示数据不可删除');
-                        }
+                        this.supabase.from('swap_requests').delete().eq('id', orderId).then(() => {
+                            this.showToast('已删除');
+                            this.loadMySwapsInSwap(document.getElementById('swap-myorders'));
+                        });
                         break;
                     case 'toggle-theme':
                         const isDark = target.checked;
@@ -1445,11 +1741,12 @@
                         this.applyTheme(isDark ? 'dark' : 'light');
                         break;
                     case 'clear-cache':
+                        const theme = localStorage.getItem('theme');
                         localStorage.clear();
-                        this.state.currentUserPhone = '';
-                        this.showToast('✅ 缓存已清除');
-                        this.closeModal(target);
-                        setTimeout(() => location.reload(), 1000);
+                        if(theme) localStorage.setItem('theme', theme); 
+                        this.state.currentUserPhone = '13800001234'; 
+                        this.state.cachedPages = {}; 
+                        this.showToast('✅ 缓存已清理');
                         break;
                     case 'open-modal':document.getElementById('zoneDropdown').classList.remove('show');document.getElementById('cityDropdown').classList.remove('show');this.openModal(target.dataset.target);break;
                     case 'close-modal':this.closeModal(target);break;
@@ -1481,6 +1778,13 @@
                     case 'copy-invite':navigator.clipboard?.writeText(document.getElementById('inviteCode').textContent).then(()=>this.showToast('已复制邀请码'));break;
                 }
             });
+            
+            document.body.addEventListener('change', (e) => {
+                if (e.target.matches('[name="start_time"], [name="end_time"]')) {
+                    this.calculateRentalIncome();
+                }
+            });
+
             document.getElementById('bottomNav').addEventListener('click',(e)=>{ const item=e.target.closest('.nav-item'); if(item)this.switchPage(item.dataset.page); });
             document.getElementById('swapTabs').addEventListener('click',(e)=>{ const btn=e.target.closest('.tab-btn'); if(btn)this.switchSwapTab(btn.dataset.tab); });
             document.getElementById('adminPanelOverlay').addEventListener('click',(e)=>{ const btn=e.target.closest('[data-admin-tab]'); if(btn)this.switchAdminTab(btn.dataset.adminTab); });
@@ -1489,5 +1793,7 @@
         }
     };
     window.addEventListener('load',()=>App.init());
-</script></body>
+</script>
+
+</body>
 </html>
